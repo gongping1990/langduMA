@@ -96,12 +96,72 @@ if (false) {(function () {
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 
 
 /* harmony default export */ __webpack_exports__["a"] = ({
   data: function data() {
     return {
+      swiperIndex: 0,
+      classIndex: 0,
+      newsList: ['跟着老师一起朗读了《天地人》，获得新成就', '跟着老师一起朗读了《天', '了《天地人》，获得新成就'],
       bannerList: ['https://pub.file.k12.vip/2019/03/04/1102390948861579266.png', 'https://pub.file.k12.vip/2018/11/17/d1615b9fa20ee58a38b87a6ed02b96b.png', "https://pub.file.k12.vip/2019/03/04/1102391104851939329.png"]
     };
   },
@@ -112,17 +172,14 @@ if (false) {(function () {
   },
 
   methods: {
-    bindViewTap: function bindViewTap() {
-      var url = '../logs/main';
-      if (global.mpvuePlatform === 'wx') {
-        global.mpvue.switchTab({ url: url });
-      } else {
-        global.mpvue.navigateTo({ url: url });
-      }
+    swiperChange: function swiperChange(e) {
+      this.swiperIndex = e.mp.detail.current;
     },
-    clickHandle: function clickHandle(ev) {
-      console.log('clickHandle:', ev);
-      // throw {message: 'custom test'}
+    changeClassIndex: function changeClassIndex(e) {
+      this.classIndex = e.mp.detail.current;
+    },
+    tapClassItem: function tapClassItem(index) {
+      this.classIndex = index;
     }
   },
 
@@ -140,30 +197,115 @@ if (false) {(function () {
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
   return _c('div', {
     staticClass: "home"
+  }, [_c('div', {
+    staticClass: "home-banner"
   }, [_c('swiper', {
-    staticClass: "home-scroll",
+    staticClass: "swiper-block",
     attrs: {
-      "indicator-dots": "",
-      "circular": ""
+      "previous-margin": "48rpx",
+      "next-margin": "48rpx",
+      "current": "0",
+      "circular": true,
+      "eventid": '0'
+    },
+    on: {
+      "change": _vm.swiperChange
     }
   }, _vm._l((_vm.bannerList), function(item, index) {
     return _c('block', {
       key: item
     }, [_c('swiper-item', {
-      staticClass: "home-scroll-item",
+      staticClass: "swiper-item",
       attrs: {
         "mpcomid": '0_' + index
       }
     }, [_c('image', {
-      staticClass: "banner-image",
+      staticClass: "slide-image",
+      class: _vm.swiperIndex == index ? 'active' : '',
       attrs: {
         "mode": "widthFix",
         "src": item
       }
     })])], 1)
-  }))], 1)
+  })), _vm._v(" "), _c('div', {
+    staticClass: "news"
+  }, [_c('div', {
+    staticClass: "news-image"
+  }), _vm._v(" "), _c('swiper', {
+    staticClass: "news-swiper",
+    attrs: {
+      "current": "0",
+      "circular": "",
+      "vertical": "",
+      "autoplay": ""
+    }
+  }, _vm._l((_vm.newsList), function(item, index) {
+    return _c('block', {
+      key: item
+    }, [_c('swiper-item', {
+      staticClass: "news-swiper-item",
+      attrs: {
+        "mpcomid": '1_' + index
+      }
+    }, [_c('text', {
+      staticClass: "news-text"
+    }, [_vm._v(_vm._s(item))])])], 1)
+  }))], 1)], 1), _vm._v(" "), _c('div', {
+    staticClass: "class-list"
+  }, [_c('swiper', {
+    staticClass: "class-list_swiper",
+    attrs: {
+      "previous-margin": "280rpx",
+      "next-margin": "280rpx",
+      "current": _vm.classIndex,
+      "eventid": '2'
+    },
+    on: {
+      "change": _vm.changeClassIndex
+    }
+  }, _vm._l((10), function(item, index) {
+    return _c('block', {
+      key: item
+    }, [_c('swiper-item', {
+      staticClass: "class-list_swiper__item",
+      attrs: {
+        "mpcomid": '2_' + index
+      }
+    }, [_c('div', {
+      staticClass: "class-list_item",
+      class: _vm.classIndex == index ? 'active' : '',
+      attrs: {
+        "eventid": '1_' + index
+      },
+      on: {
+        "tap": function($event) {
+          _vm.tapClassItem(index)
+        }
+      }
+    }, [_c('text', {
+      staticClass: "class-name"
+    }, [_vm._v("四年级")]), _vm._v(" "), _c('text', {
+      staticClass: "class-text"
+    }, [_vm._v("下册")])])])], 1)
+  }))], 1), _vm._v(" "), _vm._m(0)])
 }
-var staticRenderFns = []
+var staticRenderFns = [function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
+  return _c('div', {
+    staticClass: "home-good_list"
+  }, [_c('div', {
+    staticClass: "home-good_item"
+  }, [_c('div', {
+    staticClass: "home-good_left"
+  }, [_c('text', {
+    staticClass: "home-good_title"
+  }, [_vm._v("《天地人》")]), _vm._v(" "), _c('text', {
+    staticClass: "home-good_text"
+  }, [_vm._v("朗读老师：李林")]), _vm._v(" "), _c('div', {
+    staticClass: "home-good_num"
+  }, [_vm._v("2368 位同学已会读")])]), _vm._v(" "), _c('div', {
+    staticClass: "home-good_right"
+  })])])
+}]
 render._withStripped = true
 var esExports = { render: render, staticRenderFns: staticRenderFns }
 /* harmony default export */ __webpack_exports__["a"] = (esExports);

@@ -1,11 +1,38 @@
 <template name="51c250e3">
   <view class="_div data-v-1932e983 home">
-    <swiper class="_swiper data-v-1932e983 home-scroll" indicator-dots circular>
-      <block wx:key="item" key="{{item}}" wx:for="{{bannerList}}" wx:for-index="index" wx:for-item="item">
-        <swiper-item class="_swiper-item data-v-1932e983 home-scroll-item">
-          <image class="_image data-v-1932e983 banner-image" mode="widthFix" src="{{item}}"></image>
-        </swiper-item>
-      </block>
-    </swiper>
+    <view class="_div data-v-1932e983 home-banner">
+      <swiper class="_swiper data-v-1932e983 swiper-block" previous-margin="48rpx" next-margin="48rpx" current="0" circular="{{true}}" bindchange="handleProxy" data-eventid="{{'0'}}" data-comkey="{{$k}}">
+        <block wx:key="item" key="{{item}}" wx:for="{{bannerList}}" wx:for-index="index" wx:for-item="item">
+          <swiper-item class="_swiper-item data-v-1932e983 swiper-item">
+            <image mode="widthFix" src="{{item}}" class="_image data-v-1932e983 slide-image {{swiperIndex == index ? 'active' : ''}}"></image>
+          </swiper-item>
+        </block>
+      </swiper>
+      <view class="_div data-v-1932e983 news">
+        <view class="_div data-v-1932e983 news-image"></view>
+        <swiper class="_swiper data-v-1932e983 news-swiper" current="0" circular vertical autoplay>
+          <block wx:key="item" key="{{item}}" wx:for="{{newsList}}" wx:for-index="index" wx:for-item="item">
+            <swiper-item class="_swiper-item data-v-1932e983 news-swiper-item"><text class="_text data-v-1932e983 news-text">{{item}}</text></swiper-item>
+          </block>
+        </swiper>
+      </view>
+    </view>
+    <view class="_div data-v-1932e983 class-list">
+      <swiper class="_swiper data-v-1932e983 class-list_swiper" previous-margin="280rpx" next-margin="280rpx" current="{{classIndex}}" bindchange="handleProxy" data-eventid="{{'2'}}" data-comkey="{{$k}}">
+        <block wx:key="item" key="{{item}}" wx:for="{{10}}" wx:for-index="index" wx:for-item="item">
+          <swiper-item class="_swiper-item data-v-1932e983 class-list_swiper__item">
+            <view bindtap="handleProxy" class="_div data-v-1932e983 class-list_item {{classIndex == index ? 'active' : ''}}" data-eventid="{{'1_'+index}}" data-comkey="{{$k}}"><text class="_text data-v-1932e983 class-name">四年级</text> <text class="_text data-v-1932e983 class-text">下册</text></view>
+          </swiper-item>
+        </block>
+      </swiper>
+    </view>
+    <view class="_div data-v-1932e983 home-good_list">
+      <view class="_div data-v-1932e983 home-good_item">
+        <view class="_div data-v-1932e983 home-good_left"><text class="_text data-v-1932e983 home-good_title">《天地人》</text> <text class="_text data-v-1932e983 home-good_text">朗读老师：李林</text>
+          <view class="_div data-v-1932e983 home-good_num">2368 位同学已会读</view>
+        </view>
+        <view class="_div data-v-1932e983 home-good_right"></view>
+      </view>
+    </view>
   </view>
 </template>

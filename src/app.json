@@ -3,7 +3,9 @@
     "pages/index/main",
     "pages/ranking/main",
     "pages/user/main",
-    "pages/counter/main"
+    "pages/counter/main",
+    "pages/details/main",
+    "pages/read/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

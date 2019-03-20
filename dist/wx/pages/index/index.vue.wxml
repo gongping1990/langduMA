@@ -1,0 +1,11 @@
+<template name="51c250e3">
+  <view class="_div data-v-1932e983 home">
+    <swiper class="_swiper data-v-1932e983 home-scroll" indicator-dots circular>
+      <block wx:key="item" key="{{item}}" wx:for="{{bannerList}}" wx:for-index="index" wx:for-item="item">
+        <swiper-item class="_swiper-item data-v-1932e983 home-scroll-item">
+          <image class="_image data-v-1932e983 banner-image" mode="widthFix" src="{{item}}"></image>
+        </swiper-item>
+      </block>
+    </swiper>
+  </view>
+</template>

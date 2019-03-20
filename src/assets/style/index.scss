@@ -1,0 +1,259 @@
+
+$G_Green: #39ba5c;
+$G_Orange: #f48336;
+$G_Red: #f33a51;
+$G_White: #ffffff;
+$G_Line: #efefef;
+$G_Gray: #b3b5b8;
+$G_Block: #2b2828;
+$G_yellow: #fad362;
+// 文字超出后用省略号显示
+@mixin text-overflow($width: 100px) {
+  width: $width;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+@mixin line-clamp($line: 2) {
+  ext-overflow: -o-ellipsis-lastline;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: -webkit-box;
+  -webkit-line-clamp: $line;
+  line-clamp: $line;
+  -webkit-box-orient: vertical;
+  white-space: normal;
+}
+
+// 垂直水平居中
+@mixin flex-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+// 水平居中
+@mixin flex-x-center {
+  display: flex;
+  justify-content: center;
+}
+
+// 垂直居中
+@mixin flex-y-center {
+  display: flex;
+  align-items: center;
+}
+
+// 垂直布局
+@mixin flex-column {
+  display: flex;
+  flex-direction: column;
+}
+
+// 垂直布局垂直水平居中
+@mixin flex-column-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+// 垂直布局水平居中
+@mixin flex-column-x-center {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+// 垂直布局垂直居中
+@mixin flex-column-y-center {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/**
+* px单位转rem
+* rem计算方式：设计图尺寸px / 100 = 实际rem  例: 100px = 1rem
+*/
+
+@function pxtorem($px) {
+  $size: 100px;
+  @return $px / $size * 1rem;
+}
+
+@font-face {
+  font-family: "iconfont";
+  /* project id 811343 */
+  src: url("//at.alicdn.com/t/font_811343_l2gy6uca8bg.eot");
+  src: url("//at.alicdn.com/t/font_811343_l2gy6uca8bg.eot?#iefix") format("embedded-opentype"), url("//at.alicdn.com/t/font_811343_l2gy6uca8bg.woff") format("woff"), url("//at.alicdn.com/t/font_811343_l2gy6uca8bg.ttf") format("truetype"), url("//at.alicdn.com/t/font_811343_l2gy6uca8bg.svg#iconfont") format("svg");
+}
+
+.iconfont {
+  font-family: "iconfont" !important;
+  font-size: 16px;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: 0.2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.van-icon {
+  font-family: "vant-icon", "iconfont" !important;
+}
+
+.van-icon-tips-new:before {
+  content: "\e7da";
+}
+
+.van-icon-control-prev:before {
+  content: "\e7d9";
+}
+
+.van-icon-control-play:before {
+  content: "\e7d8";
+}
+
+.van-icon-control-pause:before {
+  content: "\e7d7";
+}
+
+.van-icon-control-speed:before {
+  content: "\e7d6";
+}
+
+.van-icon-control-next:before {
+  content: "\e7d5";
+}
+
+.van-icon-control-pause:before {
+  content: "\e7d4";
+}
+
+.van-icon-control-close:before {
+  content: "\e7d3";
+}
+
+.van-icon-control-fast-back:before {
+  content: "\e7d2";
+}
+
+.van-icon-control-list:before {
+  content: "\e7d1";
+}
+
+.van-icon-vedioplay:before {
+  content: "\e7e4";
+}
+
+.van-icon-audioplay:before {
+  content: "\e7e3";
+}
+
+.van-icon-wodedingdan:before {
+  content: "\e7ce";
+}
+
+.van-icon-wodepinke:before {
+  content: "\e7cd";
+}
+
+.van-icon-xuanzhong:before {
+  content: "\e7cc";
+}
+
+.van-icon-bofang:before {
+  content: "\e696";
+}
+
+.van-icon-period:before {
+  content: "\e7cb";
+}
+
+.van-icon-tabbar-my-sel:before {
+  content: "\e7ca";
+}
+
+.van-icon-tabbar-my-def:before {
+  content: "\e7c9";
+}
+
+.van-icon-tabbar-index-sel:before {
+  content: "\e7c8";
+}
+
+.van-icon-tabbar-index-def:before {
+  content: "\e7c7";
+}
+
+.van-icon-my-list:before {
+  content: "\e7c6";
+}
+
+.van-icon-tabbar-class-sel:before {
+  content: "\e7c5";
+}
+
+.van-icon-tabbar-class-def:before {
+  content: "\e7c4";
+}
+
+.van-icon-function-unfold:before {
+  content: "\e7c3";
+}
+
+.van-icon-my-gor:before {
+  content: "\e7c2";
+}
+
+.van-icon-function-up:before {
+  content: "\e7c1";
+}
+
+.van-icon-classbutton-play:before {
+  content: "\e7c0";
+}
+
+.van-icon-function-right:before {
+  content: "\e7bf";
+}
+
+.van-icon-function-close:before {
+  content: "\e7be";
+}
+
+.van-icon-button-pause:before {
+  content: "\e7bd";
+}
+
+.van-icon-buttn-share::before {
+  content: "\e7b9";
+}
+
+.van-icon-buttn-share::before {
+  content: "\e7b9";
+}
+
+.van-icon-buttn-share::before {
+  content: "\e7b9";
+}
+
+.van-icon-sale::before {
+  content: "\e7e2";
+  transform: translateY(-2px);
+}
+
+.back-btn {
+  @include flex-center;
+  position: absolute;
+  padding-top: 4px;
+  left: 10px;
+  top: 7px;
+  width: 28px;
+  height: 24px;
+  z-index: 99;
+  color: #fff;
+  border-radius: 50%;
+  background-color: rgba($color: #000000, $alpha: 0.1);
+}

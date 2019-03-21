@@ -30,7 +30,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 1,
+			"current": 3,
 			"list": [
 				{
 					"id": -1,
@@ -41,8 +41,22 @@
 				},
 				{
 					"id": -1,
+					"name": "风采",
+					"pathName": "pages/ranking/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
 					"name": "详情",
-					"pathName": "pages/details/main"
+					"pathName": "pages/details/main",
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "人气排行",
+					"pathName": "pages/popularityRank/main",
+					"scene": null
 				}
 			]
 		}

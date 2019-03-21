@@ -5,7 +5,8 @@
     "pages/user/main",
     "pages/counter/main",
     "pages/details/main",
-    "pages/read/main"
+    "pages/read/main",
+    "pages/popularityRank/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

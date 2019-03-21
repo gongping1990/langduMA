@@ -8,8 +8,10 @@
     </div>
 
     <read ref="read" v-if="show">
-      <div class="read-wrap" slot="footer-content">
-        <text class="read-wrap_text">请阅读课文，准备朗读</text>
+      <div  slot="footer-content">
+        <div class="read-wrap">
+          <text class="read-wrap_text">请阅读课文，准备朗读</text>
+        </div>
       </div>
     </read>
     <wux-popup position="bottom"

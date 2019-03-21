@@ -1,6 +1,6 @@
 require("./common/manifest.js")
 require("./common/vendor.js")
-global.webpackJsonpMpvue([7],[
+global.webpackJsonpMpvue([8],[
 /* 0 */,
 /* 1 */,
 /* 2 */,
@@ -20,6 +20,10 @@ __WEBPACK_IMPORTED_MODULE_1__App__["a" /* default */].mpType = 'app';
 
 var app = new __WEBPACK_IMPORTED_MODULE_0_vue___default.a(__WEBPACK_IMPORTED_MODULE_1__App__["a" /* default */]);
 app.$mount();
+getApp().globalData = {
+  audio: wx.createInnerAudioContext()
+};
+__WEBPACK_IMPORTED_MODULE_0_vue___default.a.prototype.globalData = getApp().globalData;
 
 /***/ }),
 /* 4 */,

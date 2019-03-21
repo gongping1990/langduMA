@@ -1,5 +1,6 @@
-global.webpackJsonpMpvue([0],[
-/* 0 */
+global.webpackJsonpMpvue([0],{
+
+/***/ 0:
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {// fix env
@@ -5869,7 +5870,8 @@ return Vue$3;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(4)))
 
 /***/ }),
-/* 1 */
+
+/***/ 1:
 /***/ (function(module, exports) {
 
 /* globals __VUE_SSR_CONTEXT__ */
@@ -5966,94 +5968,8 @@ module.exports = function normalizeComponent (
 
 
 /***/ }),
-/* 2 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-"use strict";
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_mpvue_loader_lib_selector_type_script_index_0_card_vue__ = __webpack_require__(25);
-/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_mpvue_loader_lib_template_compiler_index_id_data_v_7c7b55bc_hasScoped_false_transformToRequire_video_src_source_src_img_src_image_xlink_href_fileExt_template_wxml_script_js_style_wxss_platform_wx_node_modules_mpvue_loader_lib_selector_type_template_index_0_card_vue__ = __webpack_require__(26);
-var disposed = false
-function injectStyle (ssrContext) {
-  if (disposed) return
-  __webpack_require__(24)
-}
-var normalizeComponent = __webpack_require__(1)
-/* script */
-
-/* template */
-
-/* styles */
-var __vue_styles__ = injectStyle
-/* scopeId */
-var __vue_scopeId__ = null
-/* moduleIdentifier (server only) */
-var __vue_module_identifier__ = null
-var Component = normalizeComponent(
-  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_mpvue_loader_lib_selector_type_script_index_0_card_vue__["a" /* default */],
-  __WEBPACK_IMPORTED_MODULE_1__node_modules_mpvue_loader_lib_template_compiler_index_id_data_v_7c7b55bc_hasScoped_false_transformToRequire_video_src_source_src_img_src_image_xlink_href_fileExt_template_wxml_script_js_style_wxss_platform_wx_node_modules_mpvue_loader_lib_selector_type_template_index_0_card_vue__["a" /* default */],
-  __vue_styles__,
-  __vue_scopeId__,
-  __vue_module_identifier__
-)
-Component.options.__file = "src/components/card.vue"
-if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
-if (Component.options.functional) {console.error("[vue-loader] card.vue: functional components are not supported with templates, they should use render functions.")}
-
-/* hot reload */
-if (false) {(function () {
-  var hotAPI = require("vue-hot-reload-api")
-  hotAPI.install(require("vue"), false)
-  if (!hotAPI.compatible) return
-  module.hot.accept()
-  if (!module.hot.data) {
-    hotAPI.createRecord("data-v-7c7b55bc", Component.options)
-  } else {
-    hotAPI.reload("data-v-7c7b55bc", Component.options)
-  }
-  module.hot.dispose(function (data) {
-    disposed = true
-  })
-})()}
-
-/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
-
-
-/***/ }),
-/* 3 */,
-/* 4 */
-/***/ (function(module, exports) {
-
-var g;
-
-// This works in non-strict mode
-g = (function() { return typeof global !== 'undefined' ? global : this; })();
-
-try {
-	// This works if eval is allowed (see CSP)
-	g = g || Function("return this")() || (1,eval)("this");
-} catch(e) {
-	// This works if the window reference is available
-	if(typeof window === "object")
-		g = window;
-}
-
-// g can still be undefined, but nothing to do about it...
-// We return undefined, instead of nothing here, so it's
-// easier to handle this case. if(!global) { ...}
-
-module.exports = g;
-
-
-/***/ }),
-/* 5 */,
-/* 6 */,
-/* 7 */,
-/* 8 */,
-/* 9 */,
-/* 10 */,
-/* 11 */,
-/* 12 */,
-/* 13 */
+/***/ 13:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7066,26 +6982,131 @@ var index_esm = {
 
 
 /***/ }),
-/* 14 */,
-/* 15 */,
-/* 16 */,
-/* 17 */,
-/* 18 */,
-/* 19 */,
-/* 20 */,
-/* 21 */,
-/* 22 */,
-/* 23 */,
-/* 24 */
+
+/***/ 2:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_mpvue_loader_lib_selector_type_script_index_0_read_vue__ = __webpack_require__(30);
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_1__node_modules_mpvue_loader_lib_template_compiler_index_id_data_v_e2eafeb0_hasScoped_true_transformToRequire_video_src_source_src_img_src_image_xlink_href_fileExt_template_wxml_script_js_style_wxss_platform_wx_node_modules_mpvue_loader_lib_selector_type_template_index_0_read_vue__ = __webpack_require__(31);
+var disposed = false
+function injectStyle (ssrContext) {
+  if (disposed) return
+  __webpack_require__(29)
+}
+var normalizeComponent = __webpack_require__(1)
+/* script */
+
+/* template */
+
+/* styles */
+var __vue_styles__ = injectStyle
+/* scopeId */
+var __vue_scopeId__ = "data-v-e2eafeb0"
+/* moduleIdentifier (server only) */
+var __vue_module_identifier__ = null
+var Component = normalizeComponent(
+  __WEBPACK_IMPORTED_MODULE_0__babel_loader_node_modules_mpvue_loader_lib_selector_type_script_index_0_read_vue__["a" /* default */],
+  __WEBPACK_IMPORTED_MODULE_1__node_modules_mpvue_loader_lib_template_compiler_index_id_data_v_e2eafeb0_hasScoped_true_transformToRequire_video_src_source_src_img_src_image_xlink_href_fileExt_template_wxml_script_js_style_wxss_platform_wx_node_modules_mpvue_loader_lib_selector_type_template_index_0_read_vue__["a" /* default */],
+  __vue_styles__,
+  __vue_scopeId__,
+  __vue_module_identifier__
+)
+Component.options.__file = "src/components/read.vue"
+if (Component.esModule && Object.keys(Component.esModule).some(function (key) {return key !== "default" && key.substr(0, 2) !== "__"})) {console.error("named exports are not supported in *.vue files.")}
+if (Component.options.functional) {console.error("[vue-loader] read.vue: functional components are not supported with templates, they should use render functions.")}
+
+/* hot reload */
+if (false) {(function () {
+  var hotAPI = require("vue-hot-reload-api")
+  hotAPI.install(require("vue"), false)
+  if (!hotAPI.compatible) return
+  module.hot.accept()
+  if (!module.hot.data) {
+    hotAPI.createRecord("data-v-e2eafeb0", Component.options)
+  } else {
+    hotAPI.reload("data-v-e2eafeb0", Component.options)
+  }
+  module.hot.dispose(function (data) {
+    disposed = true
+  })
+})()}
+
+/* harmony default export */ __webpack_exports__["a"] = (Component.exports);
+
+
+/***/ }),
+
+/***/ 29:
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin
 
 /***/ }),
-/* 25 */
+
+/***/ 30:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 //
 //
 //
@@ -7096,18 +7117,346 @@ var index_esm = {
 //
 
 /* harmony default export */ __webpack_exports__["a"] = ({
-  props: ['text']
+  props: {
+    lyricText: {
+      type: String,
+      default: '[00:00.00]\u65F6\u949F\u4E0D\u8981\u8D70\n[00:04.22]\u8BA9\u6211\u8106\u5F31\u4E00\u5206\u949F\n[00:07.44]\u8981\u591A\u4E45\u624D\u80FD\u4E60\u60EF\u88AB\u653E\u624B\n[00:15.80]\u9A6C\u514B\u676F\u7A7A\u4E86 \u6696\u6696\u7684\u6E29\u70ED\n[00:22.66]\u5374\u8FD8\u5728\u6211\u624B\u4E2D\u505C\u7559\n[00:27.96]\n[00:29.79]\u52C7\u6C14\u4E0D\u8981\u8D70\n[00:32.20]\u7ED9\u6211\u7406\u7531\u518D\u51B2\u52A8\n[00:35.69]\u53BB\u76F8\u4FE1\u7231\u60C5 \u5C31\u7B97\u8FD8\u5728\u75DB\n[00:43.96]\u5982\u679C\u6211\u4E0D\u8BF4\u4E0D\u4F1A\u6709\u4EBA\u61C2\n[00:50.72]\u5931\u53BB\u4F60\u6211\u6709\u591A\u5BC2\u5BDE\n[00:55.61]\u8FD8\u662F\u613F\u610F\n[00:57.58]\u4ED8\u51FA\u4E00\u5207\u4EC5\u4EC5\u4E3A\u4E86\u4E00\u4E2A\u597D\u68A6\n[01:03.98]\u68A6\u91CC\u6709\u4EBA\u771F\u5FC3\u7231\u6211 \u966A\u6211\u5FEB\u4E50\u4E5F\u966A\u6211\u6C89\u9ED8\n[01:11.26]\u6CA1\u6709\u65E0\u7F18\u65E0\u6545\u7684\u75DB\u627F\u53D7\u8D8A\u591A\u8D8A\u6210\u719F\n[01:18.63]\u80FD\u8BA9\u4F60\u62E5\u62B1\u66F4\u597D\u7684\u6211\n[01:25.03] \u8C01\u4E5F\u4E0D\u8981\u8D70\n[01:28.27]\u5E94\u8BE5\u662F\u4E00\u79CD\u5962\u6C42\n[01:31.90]\u53EF\u662F\u6211\u53EA\u60F3 \u63E1\u7D27\u4F60\u7684\u624B\n[01:39.78]\u6211\u5B81\u613F\u7B49\u5019 \u4E5F\u4E0D\u613F\u9519\u8FC7\n[01:46.63]\u4F60\u5BF9\u6211\u5FAE\u7B11\u7684\u65F6\u5019\n[01:56.78]\n[02:18.91]\u8FD8\u662F\u613F\u610F\n[02:21.32]\u7528\u5C3D\u5168\u529B\u4EC5\u4EC5\u4E3A\u4E86\u4E00\u4E2A\u4EE5\u540E\n[02:27.87]\u54EA\u6015\u751F\u547D\u5E76\u4E0D\u6E29\u67D4\u54EA\u6015\u88AB\u5E78\u798F\u4E00\u518D\u53CD\u9A73\n[02:34.87]\u4E5F\u8981\u76F8\u4FE1\u4F24\u75D5\u7D2F\u7D2F \u5176\u5B9E\u53EA\u662F\u5728\u7422\u78E8\n[02:42.07]\u80FD\u8BA9\u4F60\u4E3A\u4E4B\u4E00\u4EAE \u7684\u6211'
+    },
+    showControl: {
+      type: Boolean,
+      default: true
+    },
+    showList: {
+      type: Boolean,
+      default: true
+    },
+    showLine: {
+      type: Boolean,
+      default: true
+    },
+    swiperHeight: {
+      type: Number,
+      default: 210
+    },
+    disabled: {
+      type: Boolean,
+      default: true
+    },
+    autoplay: {
+      type: Boolean,
+      default: false
+    }
+  },
+  data: function data() {
+    return {
+      indexArr: ['一', '二', '三', '四', '五', '六', '七', '八', '九', '十', '十一', '十二', '十三', '十四', '十五', '十六', '十七', '十八', '十九', '二十', '二十一', '二十二', '二十三', '二十四', '二十五', '二十六', '二十七', '二十八', '二十九', '三十', '三十一', '三十二', '三十三', '三十四', '三十五', '三十六', '三十七', '三十八', '三十九', '四十', '四十一', '四十二', '四十三', '四十四', '四十五', '四十六', '四十七', '四十八', '四十九', '五十'],
+      lyricIndex: 0,
+      lyricArr: [],
+      startTime: '00:00',
+      endTime: '00:00',
+      progress: 0,
+      proIndex: 0,
+      tapSwiper: false,
+      timer: null
+    };
+  },
+
+  methods: {
+    catchtouchmove: function catchtouchmove() {
+      return true;
+    },
+    clickPlay: function clickPlay() {
+      console.log(this.audio.paused);
+      if (this.audio.paused) {
+        this.audio.play();
+      } else {
+        this.audio.pause();
+      }
+      this.$emit('paused', this.audio.paused);
+    },
+    clickNext: function clickNext() {
+      this.lyricIndex += 1;
+      console.log(this.lyricArr[this.lyricIndex][0]);
+      this.audio.seek(this.lyricArr[this.lyricIndex][0]);
+      this.$emit('next');
+    },
+    clickPrev: function clickPrev() {
+      this.lyricIndex -= 1;
+      console.log(this.lyricArr[this.lyricIndex][0]);
+      this.audio.seek(this.lyricArr[this.lyricIndex][0]);
+      this.$emit('prev');
+    },
+    touchend: function touchend() {
+      var _this = this;
+
+      clearTimeout(this.timer);
+      this.timer = setTimeout(function () {
+        console.log('end');
+        _this.tapSwiper = false;
+      }, 4000);
+    },
+    touchstart: function touchstart() {
+      console.log('start');
+      this.tapSwiper = true;
+    },
+    changeLyric: function changeLyric(e) {
+      this.lyricIndex = e.mp.detail.current;
+      this.$emit('changeLyric');
+    },
+    parseLyric: function parseLyric(text) {
+      var result = [];
+      var lines = text.split('\n'),
+          //切割每一行
+      pattern = /\[\d{2}:\d{2}.\d{2}\]/g; //用于匹配时间的正则表达式，匹配的结果类似[xx:xx.xx]
+
+      //去掉不含时间的行
+      while (!pattern.test(lines[0])) {
+        lines = lines.slice(1);
+      };
+
+      //上面用'\n'生成数组时，结果中最后一个为空元素，这里将去掉
+      lines[lines.length - 1].length === 0 && lines.pop();
+      lines.forEach(function (v /*数组元素值*/, i /*元素索引*/, a /*数组本身*/) {
+        //提取出时间[xx:xx.xx]
+        var time = v.match(pattern),
+
+        //提取歌词
+        value = v.replace(pattern, '');
+        // 因为一行里面可能有多个时间，所以time有可能是[xx:xx.xx][xx:xx.xx][xx:xx.xx]的形式，需要进一步分隔
+        time.forEach(function (v1, i1, a1) {
+          //去掉时间里的中括号得到xx:xx.xx
+          var t = v1.slice(1, -1).split(':');
+          //将结果压入最终数组
+          result.push([parseInt(t[0], 10) * 60 + parseFloat(t[1]), value]);
+        });
+      });
+      //最后将结果数组中的元素按时间大小排序，以便保存之后正常显示歌词
+      result.sort(function (a, b) {
+        return a[0] - b[0];
+      });
+      return result;
+    },
+    sliceNull: function sliceNull(lrc) {
+      var result = [];
+      for (var i = 0; i < lrc.length; i++) {
+        if (lrc[i][1] == "") {} else {
+          result.push(lrc[i]);
+        }
+      }
+      return result;
+    },
+    initAudio: function initAudio() {
+      var _this2 = this;
+
+      console.log(111);
+      this.audio.src = 'http://h5player.bytedance.com/video/music/audio.mp3';
+      this.audio.autoplay = this.autoplay;
+
+      if (this.autoplay) {
+        setTimeout(function () {
+          _this2.audio.play();
+        }, 1000);
+      }
+
+      this.audio.onPlay(function () {
+        _this2.$emit('play');
+      });
+
+      this.audio.onEnded(function () {
+        _this2.$emit('ended');
+      });
+
+      this.audio.onTimeUpdate(function () {
+        _this2.$emit('timeUpdate');
+        if (_this2.endTime == '00:00') {
+          _this2.endTime = _this2.timeToFormat(_this2.audio.duration);
+        }
+        _this2.startTime = _this2.timeToFormat(_this2.audio.currentTime);
+        _this2.progress = Math.floor(_this2.audio.currentTime / _this2.audio.duration * 100);
+        console.log(_this2.tapSwiper);
+        if (_this2.proIndex != _this2.lyricIndex && !_this2.tapSwiper) {
+          _this2.lyricIndex = _this2.proIndex;
+        }
+        if (_this2.lyricIndex != _this2.lyricArr.length - 1 && !_this2.tapSwiper) {
+          var j = 0;
+          for (var j = _this2.lyricIndex; j < _this2.lyricArr.length; j++) {
+            // 当前时间与前一行，后一行时间作比较， j:代表当前行数
+            if (_this2.lyricIndex == _this2.lyricArr.length - 2) {
+              //最后一行只能与前一行时间比较
+              if (parseFloat(_this2.audio.currentTime) > parseFloat(_this2.lyricArr[_this2.lyricArr.length - 1][0])) {
+                _this2.lyricIndex = _this2.lyricArr.length - 1;
+                _this2.proIndex = _this2.lyricArr.length - 1;
+                return;
+              }
+            } else {
+              if (parseFloat(_this2.audio.currentTime) > parseFloat(_this2.lyricArr[j][0]) && parseFloat(_this2.audio.currentTime) < parseFloat(_this2.lyricArr[j + 1][0])) {
+                _this2.lyricIndex = j;
+                _this2.proIndex = j;
+                return;
+              }
+            }
+          }
+        }
+      });
+    },
+    timeToFormat: function timeToFormat(times) {
+      var result = '00:00';
+      var hour, minute, second;
+      if (times > 0) {
+
+        minute = Math.floor(times / 60);
+        if (minute < 10) {
+          minute = "0" + minute;
+        }
+
+        second = Math.floor((times - 60 * minute) % 60);
+        if (second < 10) {
+          second = "0" + second;
+        }
+        result = minute + ':' + second;
+      }
+      return result;
+    }
+  },
+  created: function created() {
+    this.lyricArr = this.sliceNull(this.parseLyric(this.lyricText));
+    this.audio = this.globalData.audio;
+    this.initAudio();
+  },
+  destroyed: function destroyed() {
+    this.audio.stop();
+    console.log('destroyed');
+  },
+  onHide: function onHide() {
+    this.audio.stop();
+    console.log('hide');
+  }
 });
 
 /***/ }),
-/* 26 */
+
+/***/ 31:
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
 var render = function () {var _vm=this;var _h=_vm.$createElement;var _c=_vm._self._c||_h;
-  return _c('div', [_c('p', {
-    staticClass: "card"
-  }, [_vm._v("\n    " + _vm._s(_vm.text) + "\n  ")])], 1)
+  return _c('div', {
+    staticClass: "read-component"
+  }, [_c('div', {
+    staticClass: "lyric"
+  }, [_c('text', {
+    staticClass: "lyric-title"
+  }, [_vm._v("《天地人》")]), _vm._v(" "), _c('text', {
+    staticClass: "lyric-subtitle"
+  }, [_vm._v("人教版·一年级·下册")]), _vm._v(" "), _c('div', {
+    staticClass: "lyric-scroll",
+    attrs: {
+      "eventid": '1'
+    },
+    on: {
+      "touchend": _vm.touchend,
+      "touchstart": _vm.touchstart
+    }
+  }, [(_vm.showLine) ? _c('div', {
+    staticClass: "lyric-index"
+  }, [_c('text', {
+    staticClass: "lyric-index_text"
+  }, [_vm._v("第" + _vm._s(_vm.indexArr[_vm.lyricIndex]) + "句")]), _vm._v(" "), _c('div', {
+    staticClass: "lyric-index_line"
+  })]) : _vm._e(), _vm._v(" "), _c('div', {
+    staticClass: "mask-top"
+  }), _vm._v(" "), _c('div', {
+    staticClass: "mask-bottom"
+  }), _vm._v(" "), _c('swiper', {
+    staticClass: "lyric-swiper",
+    style: ({
+      'height': _vm.swiperHeight + 'px'
+    }),
+    attrs: {
+      "previous-margin": "178rpx",
+      "next-margin": "178rpx",
+      "current": _vm.lyricIndex,
+      "vertical": "",
+      "eventid": '0'
+    },
+    on: {
+      "change": _vm.changeLyric
+    }
+  }, _vm._l((_vm.lyricArr), function(item, index) {
+    return _c('block', {
+      key: index
+    }, [(_vm.disabled) ? _c('swiper-item', {
+      staticClass: "lyric-swiper_item",
+      attrs: {
+        "catchtouchmove": "catchtouchmove",
+        "mpcomid": '1_' + index
+      }
+    }, [_c('text', {
+      staticClass: "lyric-text",
+      class: _vm.lyricIndex == index ? 'active' : ''
+    }, [_vm._v(_vm._s(item[1]))])]) : _c('swiper-item', {
+      staticClass: "lyric-swiper_item",
+      attrs: {
+        "mpcomid": '0_' + index
+      }
+    }, [_c('text', {
+      staticClass: "lyric-text",
+      class: _vm.lyricIndex == index ? 'active' : ''
+    }, [_vm._v(_vm._s(item[1]))])])], 1)
+  }))], 1)]), _vm._v(" "), (_vm.showControl) ? _c('div', {
+    staticClass: "control"
+  }, [_c('div', {
+    staticClass: "control-header"
+  }, [_c('div', {
+    staticClass: "control-progress"
+  }, [_c('text', {
+    staticClass: "start-time"
+  }, [_vm._v(_vm._s(_vm.startTime))]), _vm._v(" "), _c('div', {
+    staticClass: "progress"
+  }, [_c('div', {
+    staticClass: "progress-bar",
+    style: ({
+      'width': _vm.progress + '%'
+    })
+  })]), _vm._v(" "), _c('text', {
+    staticClass: "end-time"
+  }, [_vm._v(_vm._s(_vm.endTime))])]), _vm._v(" "), (_vm.showList) ? _c('div', {
+    staticClass: "control-list",
+    attrs: {
+      "eventid": '2'
+    },
+    on: {
+      "tap": _vm.changePopup
+    }
+  }) : _vm._e()]), _vm._v(" "), _c('div', {
+    staticClass: "control-content"
+  }, [_c('div', {
+    staticClass: "control-btn",
+    attrs: {
+      "eventid": '3'
+    },
+    on: {
+      "tap": _vm.clickPrev
+    }
+  }, [_vm._v("上一句")]), _vm._v(" "), _c('div', {
+    staticClass: "play-btn",
+    attrs: {
+      "eventid": '4'
+    },
+    on: {
+      "tap": _vm.clickPlay
+    }
+  }), _vm._v(" "), _c('div', {
+    staticClass: "control-btn",
+    attrs: {
+      "eventid": '5'
+    },
+    on: {
+      "tap": _vm.clickNext
+    }
+  }, [_vm._v("下一句")])]), _vm._v(" "), _vm._t("footer-content", null, {
+    mpcomid: '2'
+  })], 2) : _vm._e()])
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -7116,9 +7465,388 @@ var esExports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {
   module.hot.accept()
   if (module.hot.data) {
-     require("vue-hot-reload-api").rerender("data-v-7c7b55bc", esExports)
+     require("vue-hot-reload-api").rerender("data-v-e2eafeb0", esExports)
   }
 }
 
+/***/ }),
+
+/***/ 4:
+/***/ (function(module, exports) {
+
+var g;
+
+// This works in non-strict mode
+g = (function() { return typeof global !== 'undefined' ? global : this; })();
+
+try {
+	// This works if eval is allowed (see CSP)
+	g = g || Function("return this")() || (1,eval)("this");
+} catch(e) {
+	// This works if the window reference is available
+	if(typeof window === "object")
+		g = window;
+}
+
+// g can still be undefined, but nothing to do about it...
+// We return undefined, instead of nothing here, so it's
+// easier to handle this case. if(!global) { ...}
+
+module.exports = g;
+
+
+/***/ }),
+
+/***/ 49:
+/***/ (function(module, exports) {
+
+/*
+	MIT License http://www.opensource.org/licenses/mit-license.php
+	Author Tobias Koppers @sokra
+*/
+// css base code, injected by the css-loader
+module.exports = function(useSourceMap) {
+	var list = [];
+
+	// return the list of modules as css string
+	list.toString = function toString() {
+		return this.map(function (item) {
+			var content = cssWithMappingToString(item, useSourceMap);
+			if(item[2]) {
+				return "@media " + item[2] + "{" + content + "}";
+			} else {
+				return content;
+			}
+		}).join("");
+	};
+
+	// import a list of modules into the list
+	list.i = function(modules, mediaQuery) {
+		if(typeof modules === "string")
+			modules = [[null, modules, ""]];
+		var alreadyImportedModules = {};
+		for(var i = 0; i < this.length; i++) {
+			var id = this[i][0];
+			if(typeof id === "number")
+				alreadyImportedModules[id] = true;
+		}
+		for(i = 0; i < modules.length; i++) {
+			var item = modules[i];
+			// skip already imported module
+			// this implementation is not 100% perfect for weird media query combinations
+			//  when a module is imported multiple times with different media queries.
+			//  I hope this will never occur (Hey this way we have smaller bundles)
+			if(typeof item[0] !== "number" || !alreadyImportedModules[item[0]]) {
+				if(mediaQuery && !item[2]) {
+					item[2] = mediaQuery;
+				} else if(mediaQuery) {
+					item[2] = "(" + item[2] + ") and (" + mediaQuery + ")";
+				}
+				list.push(item);
+			}
+		}
+	};
+	return list;
+};
+
+function cssWithMappingToString(item, useSourceMap) {
+	var content = item[1] || '';
+	var cssMapping = item[3];
+	if (!cssMapping) {
+		return content;
+	}
+
+	if (useSourceMap && typeof btoa === 'function') {
+		var sourceMapping = toComment(cssMapping);
+		var sourceURLs = cssMapping.sources.map(function (source) {
+			return '/*# sourceURL=' + cssMapping.sourceRoot + source + ' */'
+		});
+
+		return [content].concat(sourceURLs).concat([sourceMapping]).join('\n');
+	}
+
+	return [content].join('\n');
+}
+
+// Adapted from convert-source-map (MIT)
+function toComment(sourceMap) {
+	// eslint-disable-next-line no-undef
+	var base64 = btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap))));
+	var data = 'sourceMappingURL=data:application/json;charset=utf-8;base64,' + base64;
+
+	return '/*# ' + data + ' */';
+}
+
+
+/***/ }),
+
+/***/ 50:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+/* harmony export (immutable) */ __webpack_exports__["default"] = addStylesClient;
+/* harmony import */ var __WEBPACK_IMPORTED_MODULE_0__listToStyles__ = __webpack_require__(51);
+/*
+  MIT License http://www.opensource.org/licenses/mit-license.php
+  Author Tobias Koppers @sokra
+  Modified by Evan You @yyx990803
+*/
+
+
+
+var hasDocument = typeof document !== 'undefined'
+
+if (typeof DEBUG !== 'undefined' && DEBUG) {
+  if (!hasDocument) {
+    throw new Error(
+    'vue-style-loader cannot be used in a non-browser environment. ' +
+    "Use { target: 'node' } in your Webpack config to indicate a server-rendering environment."
+  ) }
+}
+
+/*
+type StyleObject = {
+  id: number;
+  parts: Array<StyleObjectPart>
+}
+
+type StyleObjectPart = {
+  css: string;
+  media: string;
+  sourceMap: ?string
+}
+*/
+
+var stylesInDom = {/*
+  [id: number]: {
+    id: number,
+    refs: number,
+    parts: Array<(obj?: StyleObjectPart) => void>
+  }
+*/}
+
+var head = hasDocument && (document.head || document.getElementsByTagName('head')[0])
+var singletonElement = null
+var singletonCounter = 0
+var isProduction = false
+var noop = function () {}
+var options = null
+var ssrIdKey = 'data-vue-ssr-id'
+
+// Force single-tag solution on IE6-9, which has a hard limit on the # of <style>
+// tags it will allow on a page
+var isOldIE = typeof navigator !== 'undefined' && /msie [6-9]\b/.test(navigator.userAgent.toLowerCase())
+
+function addStylesClient (parentId, list, _isProduction, _options) {
+  isProduction = _isProduction
+
+  options = _options || {}
+
+  var styles = Object(__WEBPACK_IMPORTED_MODULE_0__listToStyles__["a" /* default */])(parentId, list)
+  addStylesToDom(styles)
+
+  return function update (newList) {
+    var mayRemove = []
+    for (var i = 0; i < styles.length; i++) {
+      var item = styles[i]
+      var domStyle = stylesInDom[item.id]
+      domStyle.refs--
+      mayRemove.push(domStyle)
+    }
+    if (newList) {
+      styles = Object(__WEBPACK_IMPORTED_MODULE_0__listToStyles__["a" /* default */])(parentId, newList)
+      addStylesToDom(styles)
+    } else {
+      styles = []
+    }
+    for (var i = 0; i < mayRemove.length; i++) {
+      var domStyle = mayRemove[i]
+      if (domStyle.refs === 0) {
+        for (var j = 0; j < domStyle.parts.length; j++) {
+          domStyle.parts[j]()
+        }
+        delete stylesInDom[domStyle.id]
+      }
+    }
+  }
+}
+
+function addStylesToDom (styles /* Array<StyleObject> */) {
+  for (var i = 0; i < styles.length; i++) {
+    var item = styles[i]
+    var domStyle = stylesInDom[item.id]
+    if (domStyle) {
+      domStyle.refs++
+      for (var j = 0; j < domStyle.parts.length; j++) {
+        domStyle.parts[j](item.parts[j])
+      }
+      for (; j < item.parts.length; j++) {
+        domStyle.parts.push(addStyle(item.parts[j]))
+      }
+      if (domStyle.parts.length > item.parts.length) {
+        domStyle.parts.length = item.parts.length
+      }
+    } else {
+      var parts = []
+      for (var j = 0; j < item.parts.length; j++) {
+        parts.push(addStyle(item.parts[j]))
+      }
+      stylesInDom[item.id] = { id: item.id, refs: 1, parts: parts }
+    }
+  }
+}
+
+function createStyleElement () {
+  var styleElement = document.createElement('style')
+  styleElement.type = 'text/css'
+  head.appendChild(styleElement)
+  return styleElement
+}
+
+function addStyle (obj /* StyleObjectPart */) {
+  var update, remove
+  var styleElement = document.querySelector('style[' + ssrIdKey + '~="' + obj.id + '"]')
+
+  if (styleElement) {
+    if (isProduction) {
+      // has SSR styles and in production mode.
+      // simply do nothing.
+      return noop
+    } else {
+      // has SSR styles but in dev mode.
+      // for some reason Chrome can't handle source map in server-rendered
+      // style tags - source maps in <style> only works if the style tag is
+      // created and inserted dynamically. So we remove the server rendered
+      // styles and inject new ones.
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  if (isOldIE) {
+    // use singleton mode for IE9.
+    var styleIndex = singletonCounter++
+    styleElement = singletonElement || (singletonElement = createStyleElement())
+    update = applyToSingletonTag.bind(null, styleElement, styleIndex, false)
+    remove = applyToSingletonTag.bind(null, styleElement, styleIndex, true)
+  } else {
+    // use multi-style-tag mode in all other cases
+    styleElement = createStyleElement()
+    update = applyToTag.bind(null, styleElement)
+    remove = function () {
+      styleElement.parentNode.removeChild(styleElement)
+    }
+  }
+
+  update(obj)
+
+  return function updateStyle (newObj /* StyleObjectPart */) {
+    if (newObj) {
+      if (newObj.css === obj.css &&
+          newObj.media === obj.media &&
+          newObj.sourceMap === obj.sourceMap) {
+        return
+      }
+      update(obj = newObj)
+    } else {
+      remove()
+    }
+  }
+}
+
+var replaceText = (function () {
+  var textStore = []
+
+  return function (index, replacement) {
+    textStore[index] = replacement
+    return textStore.filter(Boolean).join('\n')
+  }
+})()
+
+function applyToSingletonTag (styleElement, index, remove, obj) {
+  var css = remove ? '' : obj.css
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = replaceText(index, css)
+  } else {
+    var cssNode = document.createTextNode(css)
+    var childNodes = styleElement.childNodes
+    if (childNodes[index]) styleElement.removeChild(childNodes[index])
+    if (childNodes.length) {
+      styleElement.insertBefore(cssNode, childNodes[index])
+    } else {
+      styleElement.appendChild(cssNode)
+    }
+  }
+}
+
+function applyToTag (styleElement, obj) {
+  var css = obj.css
+  var media = obj.media
+  var sourceMap = obj.sourceMap
+
+  if (media) {
+    styleElement.setAttribute('media', media)
+  }
+  if (options.ssrId) {
+    styleElement.setAttribute(ssrIdKey, obj.id)
+  }
+
+  if (sourceMap) {
+    // https://developer.chrome.com/devtools/docs/javascript-debugging
+    // this makes source maps inside style tags work properly in Chrome
+    css += '\n/*# sourceURL=' + sourceMap.sources[0] + ' */'
+    // http://stackoverflow.com/a/26603875
+    css += '\n/*# sourceMappingURL=data:application/json;base64,' + btoa(unescape(encodeURIComponent(JSON.stringify(sourceMap)))) + ' */'
+  }
+
+  if (styleElement.styleSheet) {
+    styleElement.styleSheet.cssText = css
+  } else {
+    while (styleElement.firstChild) {
+      styleElement.removeChild(styleElement.firstChild)
+    }
+    styleElement.appendChild(document.createTextNode(css))
+  }
+}
+
+
+/***/ }),
+
+/***/ 51:
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (immutable) */ __webpack_exports__["a"] = listToStyles;
+/**
+ * Translates the list format produced by css-loader into something
+ * easier to manipulate.
+ */
+function listToStyles (parentId, list) {
+  var styles = []
+  var newStyles = {}
+  for (var i = 0; i < list.length; i++) {
+    var item = list[i]
+    var id = item[0]
+    var css = item[1]
+    var media = item[2]
+    var sourceMap = item[3]
+    var part = {
+      id: parentId + ':' + i,
+      css: css,
+      media: media,
+      sourceMap: sourceMap
+    }
+    if (!newStyles[id]) {
+      styles.push(newStyles[id] = { id: id, parts: [part] })
+    } else {
+      newStyles[id].parts.push(part)
+    }
+  }
+  return styles
+}
+
+
 /***/ })
-]);
+
+});

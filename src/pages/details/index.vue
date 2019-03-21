@@ -89,7 +89,7 @@ export default {
     position: absolute;
     bottom: 0;
     padding: 12px 24px;
-    border-top: 1px solid rgba($color: #000000, $alpha: 0.3);
+    border-top: 1px solid rgba($color: #000000, $alpha: 0.1);
     &_content {
       @include flex-center;
       justify-content: space-between;

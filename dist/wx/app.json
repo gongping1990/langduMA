@@ -5,6 +5,7 @@
     "pages/user/main",
     "pages/counter/main",
     "pages/details/main",
+    "pages/listen/main",
     "pages/read/main"
   ],
   "window": {

@@ -4,14 +4,13 @@
       <div class="introduce-image">
 
       </div>
-      <div class="introduce-title">朗读老师：<text class="introduce-weight">李林</text></div>
+      <div class="introduce-content">
+        <div class="introduce-title">朗读老师：<text class="introduce-weight">李林</text></div>
+        <text class="introduce-text">自2001年从事国家级朗读大赛评委以来有着自己独特的朗读经验和方式教授更多人学会朗读热爱朗读。</text>
+      </div>
     </div>
 
-    <read ref="read" v-if="show">
-      <div class="read-wrap" slot="footer-content">
-        <text class="read-wrap_text">请阅读课文，准备朗读</text>
-      </div>
-    </read>
+    <read ref="read" v-if="show"></read>
     <wux-popup position="bottom"
                :visible="showPopup">
       <div class="popup">
@@ -180,17 +179,16 @@ export default {
   }
 
   .introduce {
-    @include flex-column-center;
     box-sizing: border-box;
     margin: 16px auto;
     padding: 16px;
+    display: flex;
     width: 327px;
     height: 108px;
     background: #fff;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
     border-radius: 16px;
     &-image {
-      margin-bottom: 8px;
       width: 48px;
       height: 48px;
       margin-right: 16px;
@@ -202,6 +200,13 @@ export default {
     }
     &-weight {
       font-weight: 500;
+    }
+    &-text {
+      @include line-clamp(3);
+      width: 231px;
+      font-size: 12px;
+      line-height: 17px;
+      color: #9b9b9b;
     }
   }
 }

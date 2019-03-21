@@ -30,7 +30,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 1,
+			"current": 2,
 			"list": [
 				{
 					"id": -1,
@@ -42,7 +42,14 @@
 				{
 					"id": -1,
 					"name": "详情",
-					"pathName": "pages/details/main"
+					"pathName": "pages/details/main",
+					"query": ""
+				},
+				{
+					"id": 2,
+					"name": "阅读",
+					"pathName": "pages/read/main",
+					"query": ""
 				}
 			]
 		}

@@ -5,7 +5,6 @@
 </template>
 
 <script>
-import card from '@/components/card'
 
 export default {
   data () {
@@ -14,9 +13,6 @@ export default {
     }
   },
 
-  components: {
-    card
-  },
 
   methods: {
     bindViewTap () {

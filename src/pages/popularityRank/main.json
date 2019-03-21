@@ -1,6 +1,6 @@
 {
   "navigationBarTitleText": "人气排行榜",
   "usingComponents": {
-
+    "wux-popup": "/static/wux/popup/index"
   }
 }

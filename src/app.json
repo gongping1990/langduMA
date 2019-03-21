@@ -9,7 +9,8 @@
     "pages/read/main",
     "pages/popularityRank/main",
     "pages/share/main",
-    "pages/myWorks/main"
+    "pages/myWorks/main",
+    "pages/myCard/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

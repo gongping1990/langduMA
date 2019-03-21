@@ -4,8 +4,8 @@
       <span :class="{'-active': tabType == '1'}" class="-header-span" @click="changeTab(1)">本周排行</span>
       <span :class="{'-active': tabType == '2'}" @click="changeTab(2)">上周排行</span>
     </div>
-    <scroll-view  class="ld-popularityRank-content"
-      @scrolltolower="bindLoadItem"
+    <scroll-view class="ld-popularityRank-content"
+                 @scrolltolower="bindLoadItem"
                  scroll-y
                  scroll-with-animation>
       <div class="ld-popularityRank-content-wrap">

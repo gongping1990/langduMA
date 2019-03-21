@@ -1,53 +1,57 @@
 <template>
   <div class="ld-ranking">
-    <div class="ld-ranking-top">
-      <div class="-top-title">
-        <div class="-top-title-left">上周人气之星</div>
-        <div class="-top-title-right" @click="toJump">查看本周排行></div>
-      </div>
-
-      <div class="-top-content">
-        <div class="-one">
-          <div class="-one-img"></div>
-          <div class="-one-name">Okazaki Suzuko</div>
-          <div class="-one-num">233</div>
+    <scroll-view class="ld-ranking-wrap"
+                 @scrolltolower="bindLoadItem"
+                 scroll-y
+                 scroll-with-animation>
+      <div class="ld-ranking-top">
+        <div class="-top-title">
+          <div class="-top-title-left">上周人气之星</div>
+          <div class="-top-title-right" @click="toJump">查看本周排行></div>
         </div>
-        <div class="-two">
-          <div class="-two-img"></div>
-          <div class="-two-name">heaven小林哥</div>
-          <div class="-two-num">1233</div>
-        </div>
-        <div class="-one">
-          <div class="-one-img"></div>
-          <div class="-one-name">Yasaman F</div>
-          <div class="-one-num">33</div>
+        <div class="-top-content">
+          <div class="-one">
+            <div class="-one-img"></div>
+            <div class="-one-name">Okazaki Suzuko</div>
+            <div class="-one-num">233</div>
+          </div>
+          <div class="-two">
+            <div class="-two-img"></div>
+            <div class="-two-name">heaven小林哥</div>
+            <div class="-two-num">1233</div>
+          </div>
+          <div class="-one">
+            <div class="-one-img"></div>
+            <div class="-one-name">Yasaman F</div>
+            <div class="-one-num">33</div>
+          </div>
         </div>
       </div>
-    </div>
-    <div class="ld-ranking-down">
-      <div class="-down-title">
-        佳作推荐
-      </div>
-      <div class="-down-item" v-for="(item,index) of 3" :key="index">
-        <div class="-down-item-tip">人气之星</div>
-        <div class="-down-item-left">
-          <div class="-left-top">
-            <div class="-left-top-img"></div>
-            <div class="-left-top-text">
-              <div class="-user-name">heaven小林哥</div>
-              <div class="-book-name">《天地人》</div>
+      <div class="ld-ranking-down">
+        <div class="-down-title">
+          佳作推荐
+        </div>
+        <div class="-down-item" v-for="(item,index) of 6" :key="index">
+          <div class="-down-item-tip">人气之星</div>
+          <div class="-down-item-left">
+            <div class="-left-top">
+              <div class="-left-top-img"></div>
+              <div class="-left-top-text">
+                <div class="-user-name">heaven小林哥</div>
+                <div class="-book-name">《天地人》</div>
+              </div>
+            </div>
+            <div class="-left-down">
+              <div class="-left-down-text">123000</div>
+              <div class="-left-down-text">2933</div>
             </div>
           </div>
-          <div class="-left-down">
-            <div class="-left-down-text">123000</div>
-            <div class="-left-down-text">2933</div>
+          <div class="-down-item-right">
+            <div class="-right-img"></div>
           </div>
         </div>
-        <div class="-down-item-right">
-          <div class="-right-img"></div>
-        </div>
       </div>
-    </div>
+    </scroll-view>
   </div>
 </template>
 
@@ -55,16 +59,58 @@
 
   export default {
     data() {
-      return {};
+      return {
+        page: {
+          current: 1,
+          size: 20,
+          total: ""
+        },
+        isFetching: false,
+        dataList: []
+      };
     },
 
     components: {},
 
     methods: {
-      toJump () {
+      bindLoadItem() {
+        console.log(111);
+        if (this.page.current < Math.ceil(this.page.total / this.page.size)) {
+          this.page.current++;
+          // this.getList()
+        }
+      },
+      toJump() {
         wx.navigateTo({
-          url: '/pages/popularityRank/main'
-        })
+          url: "/pages/popularityRank/main"
+        });
+      },
+      getList() {
+        this.isFetching = true;
+        api.userAccount.getUserAccountIncomeList({
+          current: this.page.current,
+          size: this.page.size
+        }).then(({ data }) => {
+          let array = [];
+          let arrayStorage = [];
+
+          data.resultData.records.forEach(item => {
+            if (item.income) {
+              array.push(item);
+            }
+          });
+
+          if (this.page.current > 1) {
+            arrayStorage = arrayStorage.concat(array);
+          } else {
+            arrayStorage = array;
+          }
+
+          this.page.total = data.resultData.total;
+          this.isFetching = false;
+        }, () => {
+          this.isFetching = false;
+        });
       }
     },
 
@@ -76,6 +122,10 @@
 
 <style lang="scss" scoped>
   .ld-ranking {
+    &-wrap {
+      height: 100vh;
+    }
+
     &-top {
       padding: 16px 24px 0 24px;
       height: 280px;
@@ -192,14 +242,14 @@
           position: absolute;
           top: 0;
           right: 0;
-          width:60px;
-          height:18px;
-          background:rgba(155,155,155,1);
-          border-radius:0 26px 0 100px;
-          font-size:10px;
-          font-weight:400;
-          color:rgba(255,255,255,1);
-          line-height:14px;
+          width: 60px;
+          height: 18px;
+          background: rgba(155, 155, 155, 1);
+          border-radius: 0 26px 0 100px;
+          font-size: 10px;
+          font-weight: 400;
+          color: rgba(255, 255, 255, 1);
+          line-height: 14px;
           text-align: center;
         }
 
@@ -245,10 +295,10 @@
             align-items: center;
 
             &-text {
-              font-size:12px;
-              font-weight:400;
-              color:rgba(74,74,74,1);
-              line-height:17px;
+              font-size: 12px;
+              font-weight: 400;
+              color: rgba(74, 74, 74, 1);
+              line-height: 17px;
             }
           }
 
@@ -258,9 +308,9 @@
           padding-right: 24px;
           .-right-img {
             border-radius: 50%;
-            width:32px;
-            height:32px;
-            background:rgba(74,74,74,1);
+            width: 32px;
+            height: 32px;
+            background: rgba(74, 74, 74, 1);
           }
         }
       }

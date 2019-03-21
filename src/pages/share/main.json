@@ -1,0 +1,8 @@
+{
+  "navigationBarTitleText": "朗读作品",
+  "usingComponents": {
+    "wux-progress": "/static/wux/progress/index",
+    "wux-popup": "/static/wux/popup/index",
+    "wux-textarea": "/static/wux/textarea/index"
+  }
+}

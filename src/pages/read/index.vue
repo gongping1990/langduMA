@@ -8,7 +8,7 @@
     </div>
 
     <read ref="read" v-if="show">
-      <div  slot="footer-content">
+      <div >
         <div class="read-wrap">
           <text class="read-wrap_text">请阅读课文，准备朗读</text>
         </div>

@@ -1,8 +1,12 @@
 <template>
   <div class="ld-ranking">
+    <div class="-scroll" v-if="isShowHeader">
+      佳作推荐
+    </div>
     <scroll-view class="ld-ranking-wrap"
                  @scrolltolower="bindLoadItem"
                  scroll-y
+                 @scroll="scrollTopFn"
                  scroll-with-animation>
       <div class="ld-ranking-top">
         <div class="-top-title">
@@ -28,9 +32,7 @@
         </div>
       </div>
       <div class="ld-ranking-down">
-        <div class="-down-title">
-          佳作推荐
-        </div>
+        <div class="-down-title" v-if="!isShowHeader">佳作推荐</div>
         <div class="-down-item" v-for="(item,index) of 6" :key="index">
           <div class="-down-item-tip">人气之星</div>
           <div class="-down-item-left">
@@ -65,6 +67,7 @@
           size: 20,
           total: ""
         },
+        isShowHeader: false,
         isFetching: false,
         dataList: []
       };
@@ -73,6 +76,14 @@
     components: {},
 
     methods: {
+      scrollTopFn(e) {
+        if (e.mp.detail.scrollTop > 324) {
+          this.isShowHeader = true;
+        } else {
+          this.isShowHeader = false;
+        }
+        console.log(e.mp.detail.scrollTop)
+      },
       bindLoadItem() {
         console.log(111);
         if (this.page.current < Math.ceil(this.page.total / this.page.size)) {
@@ -115,15 +126,41 @@
     },
 
     created() {
-      // let app = getApp()
     }
   };
 </script>
 
 <style lang="scss" scoped>
   .ld-ranking {
+
     &-wrap {
       height: 100vh;
+    }
+
+    .-scroll {
+      position: fixed;
+      top: 0;
+      width: 100%;
+      height: 60px;
+      line-height: 60px;
+      padding-left: 24px;
+      background: rgba(255,255,255,1);
+      box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.03);
+      z-index: 999;
+      animation: -scroll .5s;
+      font-size:20px;
+      font-weight:500;
+      color:rgba(74,74,74,1);
+    }
+
+    @keyframes -scroll { /*设置内容由显示变为隐藏*/
+      0% {
+        opacity: 0;
+      }
+
+      100% {
+        opacity: 1;
+      }
     }
 
     &-top {

@@ -71,6 +71,10 @@
 
     components: {},
 
+    onLoad() {
+      console.log(222222)
+    },
+
     methods: {
       changeTab(num) {
         this.tabType = num;
@@ -112,8 +116,16 @@
     },
 
     created() {
-      // let app = getApp()
-    }
+      wx.getSystemInfo({
+        success: function(res) {
+          var ww = res.windowWidth;
+          var hh = res.windowHeight;
+          console.log(ww, hh, "009");
+        }
+      });
+    },
+
+
   };
 </script>
 

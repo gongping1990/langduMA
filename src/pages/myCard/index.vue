@@ -1,33 +1,29 @@
 <template>
   <div class="ld-my-card">
-    <div class="ld-my-card-header">
-      <div class="-header-text">
-        <span class="-header-text-num">4</span>张成就卡
-      </div>
-    </div>
-
-    <scroll-view class="ld-my-card-content"
+    <scroll-view class="ld-my-card-wrap"
                  @scrolltolower="bindLoadItem"
                  scroll-y
                  @scroll="scrollTopFn"
                  scroll-with-animation>
-      <div class="-content-wrap">
-        <div class="-content-item" v-for="(item, index) of 8" :key="index">
+      <div class="ld-my-card-header">
+        <div class="-header-text">
+          <span class="-header-text-num">4</span>张成就卡
+        </div>
+      </div>
+
+      <wux-grids class="ld-my-card-content" col="3" :bordered="false">
+        <wux-grid class="-content-item" v-for="(item, index) of 5" :key="index">
           <div class="-content-item-img">
             <div class="-content-item-img-header">12名</div>
             <div class="-content-item-img-footer">1991</div>
           </div>
           <div class="-content-item-text">
-            <div class="-text-name">《春天来了》</div>
+            <div class="-text-name">《春天来了来了来了来了》</div>
             <div class="-text-time">日期: 2019-03-20</div>
           </div>
-
-        </div>
-
-      </div>
-
+        </wux-grid>
+      </wux-grids>
     </scroll-view>
-
   </div>
 </template>
 
@@ -65,14 +61,22 @@
   };
 </script>
 
+<style>
+  .wux-grid__inner {
+    padding: 0 0 20px 0 !important;
+  }
+</style>
 <style lang="scss" scoped>
   .ld-my-card {
-    overflow: hidden;
     background: #ffffff;
     padding: 0 24px;
 
+    &-wrap {
+      height: 100vh;
+    }
+
     &-header {
-      margin: 16px 0;
+      padding: 16px 0;
 
       .-header-text {
         font-size: 12px;
@@ -85,25 +89,12 @@
           font-weight: bold;
         }
       }
-
     }
 
     &-content {
-      height: 100vh;
-
-      .-content-wrap {
-        display: flex;
-        justify-content: space-between;
-        flex-wrap: wrap
-      }
-
-      .-content-wrap > .-content-item {
-
-      }
 
       .-content-item {
         text-align: center;
-        width: 101px;
 
         &-img {
           position: relative;
@@ -141,24 +132,26 @@
         }
 
         &-text {
-          margin-bottom: 24px;
 
           .-text-name {
-            margin: 12px auto 4px ;
-            width:84px;
-            height:20px;
-            font-size:14px;
-            font-weight:500;
-            color:rgba(74,74,74,1);
-            line-height:20px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            margin: 12px auto 4px;
+            width: 84px;
+            height: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(74, 74, 74, 1);
+            line-height: 20px;
           }
 
           .-text-time {
-            height:14px;
-            font-size:10px;
-            font-weight:300;
-            color:rgba(74,74,74,1);
-            line-height:14px;
+            height: 14px;
+            font-size: 10px;
+            font-weight: 300;
+            color: rgba(74, 74, 74, 1);
+            line-height: 14px;
           }
         }
 

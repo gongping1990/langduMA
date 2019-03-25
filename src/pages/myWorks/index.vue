@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="ld-my-work-footer">
-        <wux-swipe-action autoClose useSlots v-for="(item, index) of dataList" :key="index">
+        <wux-swipe-action autoClose useSlots v-for="(item, index) of 5" :key="index">
           <div slot="right" @click="delItem" class="-footer-action">
             <wux-icon type="ios-add" size="32" />
           </div>
@@ -142,14 +142,14 @@
         position: relative;
         padding: 26px 16px 19px;
         margin: 21px 24px;
-        border-radius: 6px;
+        border-radius: 16px;
         background: rgba(255, 255, 255, 1);
         box-shadow: 0px 2px 10px 0px rgba(222, 232, 237, 1);
 
         .-item-img {
           position: absolute;
           top: -18px;
-          left: 0;
+          right: 0;
           width: 36px;
           height: 36px;
         }
@@ -157,13 +157,13 @@
         .-item-tip {
           position: absolute;
           top: 0;
-          right: 0;
-          width: 44px;
-          height: 18px;
-          background:linear-gradient(45deg,rgba(255,82,128,1) 0%,rgba(255,102,142,1) 100%);
-          border-radius:0px 20px 0px 100px;
+          left: 0;
           font-size: 10px;
           font-weight: 400;
+          width:56px;
+          height:18px;
+          background:linear-gradient(45deg,rgba(255,82,128,1) 0%,rgba(255,102,142,1) 100%);
+          border-radius:100px 0 100px 0;
           color: rgba(255, 255, 255, 1);
           line-height: 18px;
           text-align: center;

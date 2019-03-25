@@ -7,22 +7,26 @@
                  scroll-with-animation>
       <div class="ld-my-card-header">
         <div class="-header-text">
-          <span class="-header-text-num">4</span>张成就卡
+          <span class="-header-text-num">4</span> 张成就卡
         </div>
       </div>
 
-      <wux-grids class="ld-my-card-content" col="3" :bordered="false">
-        <wux-grid class="-content-item" v-for="(item, index) of 5" :key="index">
-          <div class="-content-item-img">
+      <div class="ld-my-card-content">
+        <div class="-content-item" v-for="(item, index) of 5" :key="index">
+          <div class="-content-item-img"
+               style="background: url('https://pub.file.k12.vip/2019/03/25/1110002707316191234.png') no-repeat;background-size: cover;">
             <div class="-content-item-img-header">12名</div>
-            <div class="-content-item-img-footer">1991</div>
+            <div class="-content-item-img-footer">
+              <img class="-image" src="https://pub.file.k12.vip/read/lesson/kczy-icon-good.png"/>
+              <div>1991</div>
+            </div>
           </div>
           <div class="-content-item-text">
             <div class="-text-name">《春天来了来了来了来了》</div>
             <div class="-text-time">日期: 2019-03-20</div>
           </div>
-        </wux-grid>
-      </wux-grids>
+        </div>
+      </div>
     </scroll-view>
   </div>
 </template>
@@ -79,28 +83,35 @@
       padding: 16px 0;
 
       .-header-text {
-        font-size: 12px;
+        font-size: 14px;
         font-weight: bold;
         color: rgba(74, 74, 74, 1);
         line-height: 26px;
 
         &-num {
-          font-size: 22px;
+          font-size: 28px;
           font-weight: bold;
+          color: #30C0FFFF;
         }
       }
     }
 
     &-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
 
       .-content-item {
-        text-align: center;
+        margin-bottom: 24px;
 
         &-img {
           position: relative;
-          height: 135px;
-          background: rgba(208, 208, 208, 1);
-          border-radius: 6px;
+          width:155px;
+          height:207px;
+          box-shadow:2px 2px 12px -2px rgba(201,214,219,1);
+          border-radius:6px;
+
 
           &-header {
             text-align: center;
@@ -118,7 +129,9 @@
             position: absolute;
             bottom: 0;
             right: 0;
-            align-items: flex-end;
+            display: flex;
+            justify-content: center;
+            align-items: center;
             text-align: center;
             font-size: 12px;
             font-weight: 400;
@@ -126,8 +139,14 @@
             line-height: 20px;
             width: 60px;
             height: 20px;
-            background: rgba(155, 155, 155, 1);
-            border-radius: 100px 0px 6px 0px;
+            background: rgba(0,0,0,0.16);
+            border-radius: 100px 0 20px 0;
+
+            .-image{
+              margin-right: 4px;
+              width:11px;
+              height:11px;
+            }
           }
         }
 
@@ -137,13 +156,12 @@
             overflow: hidden;
             text-overflow: ellipsis;
             white-space: nowrap;
-            margin: 12px auto 4px;
-            width: 84px;
-            height: 20px;
-            font-size: 14px;
+            margin: 16px 0 4px 0;
+            width: 144px;
+            font-size: 16px;
             font-weight: 500;
-            color: rgba(74, 74, 74, 1);
-            line-height: 20px;
+            color: rgba(29,27,27,1);
+            line-height: 22px;
           }
 
           .-text-time {
@@ -154,7 +172,6 @@
             line-height: 14px;
           }
         }
-
       }
     }
 

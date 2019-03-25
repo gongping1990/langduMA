@@ -56,7 +56,7 @@
     <wux-popup :visible="isOpenReport" @close="toReport">
       <div class="ld-share-popup">
         <div class="-popup-title">举报内容</div>
-        <textarea class="-popup-content" placeholder="请输入举报原因，不少于5个字~" auto-focus />
+        <textarea class="-popup-content" placeholder="请输入举报原因，不少于5个字~" auto-focus @blur="reportFn" :value="reportInfo"/>
         <div class="-popup-btn" @click="submitReport">确认举报</div>
       </div>
     </wux-popup>
@@ -75,18 +75,28 @@
         },
         isOpenReport: false,
         isFetching: false,
-        dataList: []
+        dataList: [],
+        reportInfo: ''
       };
     },
 
     components: {},
 
     methods: {
+      reportFn (e) {
+       this.reportInfo = e.mp.detail.value
+      },
       toReport() {
+        this.reportInfo = ''
         this.isOpenReport = !this.isOpenReport;
       },
       submitReport() {
 
+        wx.showToast({
+          title: this.reportInfo,
+          icon: 'none',
+          duration: 2000
+        })
       },
       toJump() {
         wx.navigateTo({

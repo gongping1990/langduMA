@@ -10,49 +10,54 @@
               status="normal"
               percent="50"
               strokeWidth="2"
-              activeColor="#ffc900"
+              activeColor="#30C0FF"
               backgroundColor="#f3f3f3"/>
           </div>
           <span class="-end">05:10</span>
         </div>
       </div>
       <div class="-header-right">
-        <div class="-header-right-img"></div>
+        <div class="-header-right-img">
+          <img class="-img" src="https://pub.file.k12.vip/read/lesson/kczy-button-play.png"/>
+        </div>
       </div>
     </div>
     <div class="ld-share-content">
       <div class="-content-title">
-        <div class="-content-title-img"></div>
+        <div class="-content-title-img">
+          <img class="-img" src="https://wx.qlogo.cn/mmhead/DQUJ1lic9u2tgaIBMEvzETXs9SnwSjpLmXyHFibWDd3Ws/132"/>
+        </div>
         <div class="-content-title-name">李林的宝宝</div>
         <div class="-content-title-text">
-          <div class="-text-one">还差<span class="-text-em">2</span>个赞就可以进前<span class="-text-em">100</span>名啦</div>
-          <div class="-text-two">请给我点个赞吧</div>
+          <div class="-text-one">还差<span class="-text-em">2</span>个赞</div>
+          <div class="-text-two">就可以进前100名啦，请给我点个赞吧</div>
         </div>
       </div>
       <div class="-content-body">
-        <div class="-body-img">
-          <div class="-body-img-center"></div>
+        <div class="-body-img"
+             style="background: url('https://pub.file.k12.vip/2019/03/25/1110002707316191234.png') no-repeat;background-size: cover;">
+          <div class="-body-img-center">
+            <img class="-img" src="https://pub.file.k12.vip/read/button-good.png"/>
+          </div>
+          <div class="-body-img-mask"></div>
         </div>
       </div>
       <div class="-content-footer">
-        <div class="-content-footer-text" @click="toReport">我要举报</div>
+        <div class="-content-footer-text" @click="toReport">
+          <div>我要举报</div>
+          <img class="-image" src="https://pub.file.k12.vip/read/icon-report.png"/>
+        </div>
       </div>
     </div>
     <div class="ld-share-footer">
       <div class="-footer-btn">名师朗读欣赏</div>
     </div>
 
-    <wux-popup :visible="isOpenReport">
+    <wux-popup :visible="isOpenReport" @close="toReport">
       <div class="ld-share-popup">
         <div class="-popup-title">举报内容</div>
-        <div class="-popup-content">
-          <wux-textarea
-            hasCount
-            placeholder="请输入举报原因，不少于5个字~"
-            placeholder-class="placeholder-class"
-            rows="4"/>
-        </div>
-        <div class="-popup-btn" @click="toReport">确认</div>
+        <textarea class="-popup-content" placeholder="请输入举报原因，不少于5个字~" auto-focus />
+        <div class="-popup-btn" @click="submitReport">确认举报</div>
       </div>
     </wux-popup>
   </div>
@@ -68,7 +73,7 @@
           size: 20,
           total: ""
         },
-        isOpenReport: true,
+        isOpenReport: false,
         isFetching: false,
         dataList: []
       };
@@ -79,6 +84,9 @@
     methods: {
       toReport() {
         this.isOpenReport = !this.isOpenReport;
+      },
+      submitReport() {
+
       },
       toJump() {
         wx.navigateTo({
@@ -166,10 +174,13 @@
       .-header-right {
 
         &-img {
-          border-radius: 50%;
-          width: 36px;
           height: 36px;
-          background: rgba(74, 74, 74, 1);
+          line-height: 36px;
+
+          .-img {
+            width: 36px;
+            height: 36px;
+          }
         }
       }
     }
@@ -180,15 +191,17 @@
       .-content-title {
         &-img {
           margin: 0 auto;
-          border-radius: 50%;
-          width: 48px;
-          height: 48px;
-          background: rgba(216, 216, 216, 1);
+
+          .-img {
+            border-radius: 50%;
+            width: 48px;
+            height: 48px;
+          }
         }
 
         &-name {
           margin-top: 4px;
-          margin-bottom: 12px;
+          margin-bottom: 8px;
           font-size: 15px;
           font-weight: 400;
           color: rgba(74, 74, 74, 1);
@@ -207,13 +220,15 @@
           }
 
           .-text-em {
-            font-size: 22px;
+            color: #FF668E;
+            font-size: 24px;
           }
         }
       }
 
       .-content-body {
-        margin-top: 24px;
+        position: relative;
+        margin-top: 32px;
 
         .-body-img {
           display: flex;
@@ -223,27 +238,46 @@
           width: 150px;
           height: 200px;
           background: rgba(74, 74, 74, 1);
-          box-shadow: 0px 6px 16px 0px rgba(0, 0, 0, 0.1);
+          box-shadow: 0px 6px 16px 0px rgba(48, 192, 255, 0.5);
           border-radius: 6px;
 
+          &-mask {
+            position: absolute;
+            width:150px;
+            height:200px;
+            background:rgba(48,192,255,0.5);
+            border-radius:6px;
+            filter:blur(2px);
+          }
           &-center {
-            border-radius: 50%;
-            width: 72px;
-            height: 72px;
-            background: rgba(255, 255, 255, 0.16);
+            z-index: 99;
+            .-img {
+              width: 72px;
+              height: 72px;
+            }
           }
         }
       }
 
       .-content-footer {
+        display: flex;
+        justify-content: flex-end;
         margin-top: 65px;
         padding: 0 24px;
-        text-align: right;
 
         &-text {
+          width: 70px;
+          display: flex;
+          align-items: center;
           font-size: 12px;
           font-weight: 400;
-          color: rgba(155, 155, 155, 1);
+          color: rgba(112, 115, 116, 1);
+
+          .-image {
+            width: 18px;
+            height: 16px;
+            margin-left: 4px;
+          }
         }
       }
     }
@@ -255,19 +289,18 @@
 
       .-footer-btn {
         height: 52px;
-        background: rgba(240, 240, 240, 1);
+        background: #ffffff;
         border-radius: 26px;
-        border: 1px solid rgba(155, 155, 155, 1);
+        border: 1px solid rgba(48, 192, 255, 0.24);
         font-size: 15px;
         font-weight: 500;
-        color: rgba(74, 74, 74, 1);
+        color: #30C0FF;
         line-height: 52px;
       }
     }
 
     &-popup {
       text-align: center;
-      margin: 0 24px;
       height: 294px;
       background: rgba(255, 255, 255, 1);
       border-radius: 16px;
@@ -282,21 +315,23 @@
       }
 
       .-popup-content {
+        margin: 0 auto;
+        width: 263px;
+        height: 94px;
+        background: rgba(0, 0, 0, 0.04);
+        border-radius: 6px;
+        border: 1px solid rgba(0, 0, 0, 0.16);
         font-size: 14px;
-        margin: 0 32px;
         padding: 10px;
         text-align: left;
-        background: rgba(240, 240, 240, 1);
-        border-radius: 6px;
-        border: 1px solid rgba(155, 155, 155, 1);
       }
 
       .-popup-btn {
+        background: linear-gradient(90deg, rgba(102, 255, 248, 1) 0%, rgba(48, 192, 255, 1) 100%);
+        border-radius: 26px;
         text-align: center;
         margin: 33px 32px 23px 32px;
         height: 40px;
-        background: rgba(74, 74, 74, 1);
-        border-radius: 26px;
         font-size: 15px;
         font-weight: 500;
         color: rgba(255, 255, 255, 1);

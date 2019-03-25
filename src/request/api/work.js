@@ -6,6 +6,9 @@ const work = {
   },
   getById(params) {
     return axios.get('/work/getById/' + params.id)
+  },
+  getSingleList(params) {
+    return axios.post('/work/single/works',params)
   }
 
 }

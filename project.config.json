@@ -1,17 +1,25 @@
 {
-	"description": "项目配置文件。",
+	"description": "项目配置文件",
+	"packOptions": {
+		"ignore": []
+	},
 	"setting": {
-		"urlCheck": false,
+		"urlCheck": true,
 		"es6": true,
 		"postcss": true,
 		"minified": true,
 		"newFeature": true,
 		"autoAudits": false
 	},
-	"miniprogramRoot": "dist/wx/",
 	"compileType": "miniprogram",
+	"libVersion": "2.6.2",
 	"appid": "wxf55391977aa1e37e",
 	"projectname": "read-huoke",
+	"miniprogramRoot": "dist/wx/",
+	"debugOptions": {
+		"hidedInDevtools": []
+	},
+	"scripts": {},
 	"condition": {
 		"search": {
 			"current": -1,
@@ -26,15 +34,10 @@
 			"list": []
 		},
 		"game": {
-			"currentL": -1,
 			"list": []
 		},
 		"miniprogram": {
-<<<<<<< HEAD
-			"current": 3,
-=======
-			"current": 7,
->>>>>>> cd8979c124b5aa309203eb75c55d5ae4658b5a06
+			"current": 5,
 			"list": [
 				{
 					"id": -1,
@@ -51,16 +54,44 @@
 					"scene": null
 				},
 				{
-					"id": 2,
+					"id": -1,
 					"name": "详情",
 					"pathName": "pages/details/main",
-					"query": "id=1110007948997107714"
+					"query": ""
 				},
 				{
-					"id": 3,
+					"id": 2,
 					"name": "阅读",
 					"pathName": "pages/read/main",
-					"query": "id=1110007948997107714"
+					"query": ""
+				},
+				{
+					"id": -1,
+					"name": "分享",
+					"pathName": "pages/share/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "我的作品",
+					"pathName": "pages/myWorks/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "排行榜",
+					"pathName": "pages/popularityRank/main",
+					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "我的成就卡",
+					"pathName": "pages/myCard/main",
+					"query": "",
+					"scene": null
 				}
 			]
 		}

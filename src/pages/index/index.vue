@@ -11,14 +11,14 @@
                :key="item">
           <swiper-item class="swiper-item">
             <image mode="widthFix"
-                   :src="item"
+                   :src="item.urffffl"
                    class="slide-image"
                    :class="swiperIndex == index ? 'active' : ''" />
           </swiper-item>
         </block>
       </swiper>
       <div class="news">
-        <div class="news-image"></div>
+        <image mode="widthFix" src="https://pub.file.k12.vip/read/home/icon-index-trumpet.png" class="news-image" />
         <swiper class="news-swiper"
                 current="0"
                 circular
@@ -27,7 +27,7 @@
           <block v-for="item in newsList"
                  :key="item">
             <swiper-item class="news-swiper-item">
-              <text class="news-text">{{item}}</text>
+              <text class="news-text">{{item.content}}</text>
             </swiper-item>
           </block>
         </swiper>
@@ -37,30 +37,36 @@
       <swiper class="class-list_swiper"
               previous-margin="280rpx"
               next-margin="280rpx"
+              circular
               :current="classIndex"
               @change="changeClassIndex">
-        <block v-for="(item, index) in 10"
+        <block v-for="(item, index) in classList"
                :key="item">
           <swiper-item class="class-list_swiper__item">
-            <div @tap="tapClassItem(index)"
+            <div @tap="tapClassItem(index,item)"
                  class="class-list_item"
+                 :style="'background-image:url(' + item.src + ')'"
                  :class="classIndex == index ? 'active' : ''">
-              <text class="class-name">四年级</text>
-              <text class="class-text">下册</text>
+              <text class="class-name">{{item.name}}</text>
+              <text class="class-text">{{item.semester == 1 ? '上册' : '下册'}}</text>
             </div>
           </swiper-item>
         </block>
       </swiper>
     </div>
     <div class="home-good_list">
-      <div class="home-good_item">
+      <div v-for="item in courseList" :key="item.id" class="home-good_item" @tap="goToDetails(item.id)">
         <div class="home-good_left">
-          <text class="home-good_title">《天地人》</text>
-          <text class="home-good_text">朗读老师：李林</text>
-          <div class="home-good_num">2368 位同学已会读</div>
+          <text class="home-good_title">{{item.name}}</text>
+          <text class="home-good_text">朗读老师：{{item.teacherName}}</text>
+          <div class="home-good_num">{{item.aloudReading}} 位同学已会读</div>
         </div>
         <div class="home-good_right">
-
+          <image
+            class="home-good_image"
+            :src="item.comAchievement"
+            mode="widthFix"
+            lazy-load="false" />
         </div>
       </div>
     </div>
@@ -68,31 +74,120 @@
 </template>
 
 <script>
+import api from '../../request/api'
+import store from '../../store'
 
 export default {
   data () {
     return {
       swiperIndex: 0,
       classIndex: 0,
-      newsList: ['跟着老师一起朗读了《天地人》，获得新成就', '跟着老师一起朗读了《天', '了《天地人》，获得新成就'],
-      bannerList: ['https://pub.file.k12.vip/2019/03/04/1102390948861579266.png', 'https://pub.file.k12.vip/2018/11/17/d1615b9fa20ee58a38b87a6ed02b96b.png', "https://pub.file.k12.vip/2019/03/04/1102391104851939329.png"]
+      newsList: [],
+      bannerList: [],
+      classList: [],
+      courseList: [],
+      page: {
+        current: 1,
+        grade: 1,
+        semester: 1,
+        size: 10
+      },
+      total: 0
+    }
+  },
+
+  onReachBottom() {
+    if(this.courseList.length < this.total) {
+      this.getCourseList()
     }
   },
 
 
   methods: {
+    // 获取banner列表
+    getBannerList() {
+      api.banner.listDefault().then(({data}) => {
+        this.bannerList = data.resultData
+      })
+    },
+    // 获取年级列表
+    getGradeList() {
+      api.con.gradeList().then(({data}) => {
+        let arr = []
+        data.resultData.forEach((e, i) => {
+          let copyObj = Object.assign({}, e)
+          copyObj.semester = 1
+          copyObj.src = '"https://pub.file.k12.vip/read/home/fm/Courses cover' + (i + 1) + '.png"'
+          arr.push(copyObj)
+          e.semester = 2
+          e.src = '"https://pub.file.k12.vip/read/home/fm/Courses cover' + (i + 1) + '.png"'
+          arr.push(e)
+        })
+        console.log(arr)
+        this.classList = arr
+      })
+    },
+    /**
+     * 获取课程列表
+     * @param [params] (Object)
+     * {
+     *  current: 页码，
+     *  grade: 年级,
+     *  semester: 学期，
+     *  size: 条数
+     * }
+     */
+    getCourseList() {
+      api.course.queryPage(this.page).then(({data}) => {
+        this.courseList = data.resultData.records
+        this.total = data.resultData.total
+      })
+    },
+    // 获取荣誉播报
+    getBroadcastList() {
+      api.work.getBroadcastList().then(({data}) => {
+        this.newsList = data.resultData
+      })
+    },
+    goToDetails(id) {
+      wx.navigateTo({ url: '/pages/details/main?id=' + id });
+    },
     swiperChange (e) {
       this.swiperIndex = e.mp.detail.current
     },
     changeClassIndex (e) {
-      this.classIndex = e.mp.detail.current
-    },
-    tapClassItem (index) {
+      let index = e.mp.detail.current
       this.classIndex = index
+      this.page = {
+        ...this.page,
+        grade: this.classList[index].id,
+        semester: this.classList[index].semester,
+        size: 10
+      }
+      this.getCourseList()
+    },
+    /**
+     * 点击年级事件
+     * @param [index]（index） 对应的index
+     * @param [item] ()
+     */
+    tapClassItem (index, item) {
+      this.classIndex = index
+      this.page = {
+        ...this.page,
+        grade: item.id,
+        semester: item.semester,
+        size: 10
+      }
+      this.getCourseList()
     }
   },
 
-  created () {
+  mounted () {
+    this.getBannerList()
+    this.getGradeList()
+    this.getCourseList()
+    this.getBroadcastList()
     // let app = getApp()
   }
 }
@@ -101,6 +196,10 @@ export default {
 <style lang="scss" scoped>
 .home {
   &-good {
+    &_image {
+      width: 63px;
+      height: 84px;
+    }
     &_list {
       box-shadow: 0px -4px 4px 0px rgba(0, 0, 0, 0.03);
     }
@@ -117,9 +216,9 @@ export default {
     &_right {
       width: 63px;
       height: 84px;
-      background: rgba(208, 208, 208, 1);
       box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.1);
       border-radius: 6px;
+      overflow: hidden;
     }
     &_title {
       font-size: 17px;
@@ -141,7 +240,7 @@ export default {
       height: 22px;
       font-size: 12px;
       line-height: 22px;
-      color: #9B9B9B;
+      color: #9b9b9b;
       background: rgba(247, 247, 247, 1);
       border-radius: 5px;
     }
@@ -150,7 +249,6 @@ export default {
     box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.03);
   }
   .class-list {
-    background-color: #fafafa;
     padding-top: 24px;
     &_swiper {
       height: 96px;
@@ -165,10 +263,12 @@ export default {
       padding: 10px 12px;
       width: 63px;
       height: 84px;
-      background: rgba(237, 237, 237, 1);
+      background-size: 100%;
+      background-repeat: no-repeat;
       box-shadow: 0px -3px 8px 0px rgba(0, 0, 0, 0.05);
       border-radius: 6px 6px 0px 0px;
-      color: #9b9b9b;
+      color: #fff;
+      font-weight: bold;
       transition: all 0.3s;
       .class-name,
       .class-text {
@@ -186,9 +286,8 @@ export default {
       &.active {
         width: 72px;
         height: 96px;
-        background-color: #fff;
         box-shadow: 0px -7px 16px 0px rgba(0, 0, 0, 0.1);
-        color: #4a4a4a;
+        color: #fff;
         .class-name {
           font-size: 18px;
         }
@@ -202,11 +301,8 @@ export default {
     @include flex-center;
     padding: 24px;
     &-image {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
+      width: 31px;
       margin-right: 12px;
-      background-color: #d8d8d8;
     }
     &-swiper {
       width: 100%;

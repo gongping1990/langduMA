@@ -1,33 +1,48 @@
 <template>
   <div class="read">
-    <div class="introduce">
-      <div class="introduce-image">
-
-      </div>
+    <div class="introduce"
+         :class="{'show': showIntroduce}">
+      <image class="introduce-image"
+             mode="widthFix"
+             :src="courseData.headImage" />
       <div class="introduce-content">
-        <div class="introduce-title">朗读老师：<text class="introduce-weight">李林</text></div>
-        <text class="introduce-text">自2001年从事国家级朗读大赛评委以来有着自己独特的朗读经验和方式教授更多人学会朗读热爱朗读。</text>
+        <div class="introduce-title">朗读老师：<text class="introduce-weight">{{courseData.teacherName}}</text></div>
+        <text class="introduce-text">{{courseData.teacherIntroduce}}</text>
       </div>
     </div>
 
-    <read ref="read" v-if="show"></read>
+    <read ref="read"
+          :title="courseData.name"
+          :subtitle="subtitle"
+          :lyricSrc="courseData.authorVrAudio"
+          :lyricText="courseData.introduction"
+          @clickList="changePopup"
+          @ended="changeRead"></read>
     <wux-popup position="bottom"
-               :visible="showPopup">
+               :visible="showPopup"
+               @close="changePopup">
       <div class="popup">
-        <div class="popup-title van-hairline--bottom">选择课文</div>
-        <div class="popup-list van-hairline--top-bottom">
-          <div class="popup-item van-hairline--bottom"
-               v-for="item in 10"
-               :key="item">
-            <div class="popup-item_icon"></div>
-            <text class="popup-item_text">1.春天来了</text>
+        <div class="popup-title">选择课文</div>
+        <scroll-view scroll-y
+                     scroll-with-animation
+                     class="popup-scroll">
+          <div class="popup-list ">
+            <div class="popup-item"
+                 :class="{'active': item.id == id}"
+                 v-for="(item,i) in courseList"
+                 @tap="clickItem(item.id)"
+                 :key="item">
+              <div class="popup-item_icon"></div>
+              <text class="popup-item_text">{{(i + 1) + '.' + item.name}}</text>
+            </div>
           </div>
-        </div>
+        </scroll-view>
         <div class="popup-close_btn"
              @tap="changePopup"></div>
       </div>
     </wux-popup>
-    <wux-popup :visible="showAchieve" @close="changeAchieve">
+    <wux-popup :visible="showAchieve"
+               @close="changeAchieve">
       <div class="achieve">
         <div class="achieve-image"></div>
         <text class="achieve-text">自由朗读课文就能解锁我哟~</text>
@@ -35,12 +50,16 @@
              @tap="changeAchieve">我知道了</div>
       </div>
     </wux-popup>
-    <wux-popup :visible="showRead" @close="changeRead">
+    <wux-popup :visible="showRead"
+               @close="changeRead">
       <div class="read-popup">
+        <div class="read-popup_close"
+             @tap="changeRead"></div>
         <div class="read-popup_icon"></div>
         <text class="read-popup_text">听完了范读，</text>
         <text class="read-popup_content">自己来朗读一遍吧！</text>
-        <div class="read-popup_btn">去朗读</div>
+        <div class="read-popup_btn"
+             @tap="clickRead">去朗读</div>
       </div>
     </wux-popup>
   </div>
@@ -48,14 +67,32 @@
 
 <script>
 import read from '../../components/read'
+import api from '../../request/api'
 
 export default {
   data () {
     return {
+      gradeArr: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '初中'],
+      courseData: {},
+      detailData: {},
       showAchieve: false,
       showRead: false,
       showPopup: false,
-      show: true
+      show: true,
+      showIntroduce: false,
+      courseList: [],
+      total: 0,
+      id: 0,
+      page: {
+        current: 1,
+        size: 10
+      }
+    }
+  },
+
+  computed: {
+    subtitle () {
+      return `${this.gradeArr[this.courseData.grade]}·${this.courseData.semester == 1 ? '上册' : '下册'}`
     }
   },
 
@@ -64,21 +101,63 @@ export default {
   },
 
   methods: {
+    getCourseDetail () {
+      api.course.getById({
+        id: this.$root.$mp.query.id
+      }).then(({ data }) => {
+        this.courseData = data.resultData
+        this.getCourseList()
+      })
+    },
+    /**
+     * 获取课程列表
+     * @param [params] (Object)
+     * {
+     *  current: 页码，
+     *  grade: 年级,
+     *  semester: 学期，
+     *  size: 条数
+     * }
+     */
+    getCourseList () {
+      api.course.queryPage({
+        size: this.page.size,
+        current: this.page.current,
+        grade: this.courseData.grade,
+        semester: this.courseData.semester
+      }).then(({ data }) => {
+        this.courseList = data.resultData.records
+        this.total = data.resultData.total
+      })
+    },
+    clickItem(id) {
+      wx.redirectTo({ url: '/pages/listen/main?id=' + id });
+    },
+    clickRead () {
+      wx.navigateTo({ url: '/pages/read/main?id=' + this.$root.$mp.query.id });
+    },
     changePopup () {
       this.showPopup = !this.showPopup
     },
     changeAchieve () {
       this.showAchieve = !this.showAchieve
     },
-    changeRead() {
+    changeRead () {
       this.showRead = !this.showRead
     }
   },
 
 
 
-  created () {
-
+  mounted () {
+    this.id = this.$root.$mp.query.id
+    this.getCourseDetail()
+    setTimeout(() => {
+      this.showIntroduce = true
+      setTimeout(() => {
+        this.showIntroduce = false
+      }, 6000);
+    }, 500);
     // this.initAudio()
     // let app = getApp()
   }
@@ -89,32 +168,40 @@ export default {
 .read {
   padding-top: 1px;
   height: 100vh;
-  background-color: #fafafa;
+  background-color: #01141d;
   .read-popup {
+    position: relative;
     @include flex-column-center;
     width: 327px;
     height: 246px;
     font-size: 16px;
     line-height: 32px;
-    color: #4a4a4a;
-    background: rgba(255, 255, 255, 1);
+    color: rgba($color: #fff, $alpha: 0.75);
+    background: #031a24;
     border-radius: 16px;
     &_icon {
-      margin-bottom: 12px;
+      @include bg('/read/mike.png');
       width: 56px;
-      height: 56px;
-      border: 2px solid rgba(74, 74, 74, 1);
+      height: 70px;
     }
     &_content {
       font-size: 20px;
+    }
+    &_close {
+      @include bg('/read/button-icon-close.png');
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 15px;
+      height: 15px;
     }
     &_btn {
       @include flex-center;
       margin-top: 32px;
       width: 263px;
       height: 40px;
-      color: #fff;
-      background: rgba(74, 74, 74, 1);
+      color: #30c0ff;
+      border: 1px solid rgba(255, 255, 255, 0.16);
       border-radius: 26px;
     }
   }
@@ -145,17 +232,18 @@ export default {
   .popup {
     padding-bottom: 1px;
     border-radius: 16px 16px 0px 0px;
-    background-color: #fff;
+    background: rgba(3, 26, 36, 1);
+    box-shadow: 0px 2px 10px 0px rgba(1, 21, 31, 1);
     &-title {
       @include flex-center;
       justify-content: flex-start;
       height: 60px;
       font-size: 20px;
+      color: rgba($color: #fff, $alpha: 0.75);
       padding-left: 24px;
     }
-    &-list {
+    &-srcoll {
       height: 344px;
-      overflow-y: auto;
     }
     &-item {
       @include flex-center;
@@ -163,18 +251,26 @@ export default {
       height: 68px;
       padding-left: 24px;
       font-size: 15px;
+      color: rgba($color: #fff, $alpha: 0.4);
       &_icon {
+        display: none;
+        @include bg('/read/msfd-icon-playing.png');
         width: 16px;
         height: 17px;
         margin-right: 12px;
-        background-color: #4a4a4a;
+      }
+      &.active {
+        color: #30C0FF;
+        .popup-item_icon {
+          display: block;
+        }
       }
     }
     &-close_btn {
+      @include bg('/read/msfd-icon-close.png');
       margin: 15px auto;
       width: 36px;
       height: 36px;
-      background: rgba(74, 74, 74, 1);
     }
   }
 
@@ -185,9 +281,14 @@ export default {
     display: flex;
     width: 327px;
     height: 108px;
-    background: #fff;
-    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+    background: #031a24;
+    box-shadow: 0px 2px 10px 0px rgba(1, 21, 31, 1);
     border-radius: 16px;
+    transform: translateX(120%);
+    transition: all 0.5s;
+    &.show {
+      transform: translateX(0);
+    }
     &-image {
       width: 48px;
       height: 48px;
@@ -196,7 +297,7 @@ export default {
     }
     &-title {
       font-size: 15px;
-      color: #4a4a4a;
+      color: rgba($color: #fff, $alpha: 0.75);
     }
     &-weight {
       font-weight: 500;
@@ -206,7 +307,7 @@ export default {
       width: 231px;
       font-size: 12px;
       line-height: 17px;
-      color: #9b9b9b;
+      color: rgba($color: #fff, $alpha: 0.4);
     }
   }
 }

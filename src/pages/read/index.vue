@@ -1,56 +1,86 @@
 <template>
   <div class="read">
-    <div class="introduce">
-      <div class="introduce-image">
-
+    <div class="mask"
+         v-if="showMask">
+      <div class="mask-content"
+           v-if="percent != 100">
+        <wux-circle :sAngle="270"
+                    :strokeWidth="2"
+                    :size="60"
+                    :animate="false"
+                    :percent="percent"
+                    backgroundColor="#01141D"
+                    color="#66FFF8">
+          <div class="circle-text">{{percent}}<text>%</text></div>
+        </wux-circle>
+        <text class="mask-text">资源正在加载···</text>
       </div>
-      <div class="introduce-title">朗读老师：<text class="introduce-weight">李林</text></div>
+      <div class="mask-content"
+           v-else>
+        <div class="down-time">{{downTime}}</div>
+        <text class="mask-text">请准备···</text>
+      </div>
+    </div>
+    <div class="introduce">
+      <image :src="userInfo.headimgurl"
+             mode="widthFix"
+             class="introduce-image" />
+      <div class="introduce-title">朗读者：<text class="introduce-weight">{{userInfo.nickname}}</text></div>
     </div>
 
-    <read ref="read" v-if="show">
-      <div  slot="footer-content">
-        <div class="read-wrap">
-          <text class="read-wrap_text">请阅读课文，准备朗读</text>
-        </div>
-      </div>
+    <read ref="read"
+          :isReady="true"
+          :title="courseData.name"
+          :subtitle="subtitle"
+          :lyricSrc="courseData.authorVrAudio"
+          :lyricText="courseData.introduction"
+          :showControl="false"
+          :disabled="disabled"
+          @ended="bindEnded"
+          @progress="changeProgress"
+          @duration="changeDuration"
+          v-if="show">
     </read>
-    <wux-popup position="bottom"
-               :visible="showPopup">
-      <div class="popup">
-        <div class="popup-title van-hairline--bottom">选择课文</div>
-        <div class="popup-list van-hairline--top-bottom">
-          <div class="popup-item van-hairline--bottom"
-               v-for="item in 10"
-               :key="item">
-            <div class="popup-item_icon"></div>
-            <text class="popup-item_text">1.春天来了</text>
-          </div>
+    <div class="control"
+         v-if="!isStart">
+      <text class="control-text">请阅读课文，准备朗读</text>
+      <div class="control-btn"
+           @tap="clickStart">
+      </div>
+    </div>
+    <div class="recorder-control control"
+         :class="{'bg': !isEnd}"
+         v-else>
+      <div class="control-wrap">
+        <div class="progress">
+          <div class="progress-bar"
+               :style="{'width': progress + '%'}"></div>
         </div>
-        <div class="popup-close_btn"
-             @tap="changePopup"></div>
+        <div class="reset-btn"
+             v-if="isEnd">重录</div>
+        <div class="play-btn"
+             v-if="!isEnd"
+             @tap="clickRecorderStart"></div>
+        <div class="play-btn"
+             v-else
+             @tap="clickRecorderPlay"></div>
+        <div class="save-btn"
+             v-if="isEnd">保存</div>
       </div>
-    </wux-popup>
-    <wux-popup :visible="showAchieve" @close="changeAchieve">
-      <div class="achieve">
-        <div class="achieve-image"></div>
-        <text class="achieve-text">自由朗读课文就能解锁我哟~</text>
-        <div class="achieve-btn"
-             @tap="changeAchieve">我知道了</div>
+      <div class="control-bg">
+        <img class="control-bg_image"
+             mode="widthFix"
+             src="/static/images/a.gif" />
       </div>
-    </wux-popup>
-    <wux-popup :visible="showRead" @close="changeRead">
-      <div class="read-popup">
-        <div class="read-popup_icon"></div>
-        <text class="read-popup_text">听完了范读，</text>
-        <text class="read-popup_content">自己来朗读一遍吧！</text>
-        <div class="read-popup_btn">去朗读</div>
-      </div>
-    </wux-popup>
+    </div>
+
   </div>
 </template>
 
 <script>
 import read from '../../components/read'
+import store from '../../store'
+import api from '../../request/api'
 
 export default {
   data () {
@@ -58,7 +88,26 @@ export default {
       showAchieve: false,
       showRead: false,
       showPopup: false,
-      show: true
+      show: true,
+      disabled: false,
+      showMask: true,
+      percent: 0,
+      downTime: 3,
+      timer: null,
+      isStart: false,
+      paused: false,
+      progress: 0,
+      recorder: null,
+      isPlay: null,
+      isEnd: false,
+      duration: 0,
+      courseData: {}
+    }
+  },
+
+  computed: {
+    userInfo () {
+      return store.state.userInfo
     }
   },
 
@@ -67,21 +116,128 @@ export default {
   },
 
   methods: {
+    initRecorder () {
+
+      this.recorder.onStart(() => {
+        this.isPlay = true
+        this.$refs.read.play()
+        console.log('start')
+      })
+      this.recorder.onResume(() => {
+        this.isPlay = true
+        this.$refs.read.play()
+        console.log('resume')
+      })
+      this.recorder.onPause(() => {
+        this.isPlay = false
+        this.$refs.read.pause()
+        console.log('pause')
+      })
+      this.recorder.onStop((e) => {
+        console.log(e)
+        this.isPlay = false
+        this.isEnd = true
+        this.recorderSrc = e.tempFilePath
+        this.audio.src = e.tempFilePath
+        this.audio.play()
+      })
+    },
+    bindEnded () {
+      this.recorder.stop()
+    },
+    changeDuration (duration) {
+      this.duration = duration
+      this.disabled = true
+      console.log(this.recorder)
+      this.recorder.start({
+        format: 'mp3',
+        sampleRate: 16000,
+        encodeBitRate: 96000,
+        duration: 6000000
+      })
+      wx.setKeepScreenOn({
+        keepScreenOn: true
+      })
+    },
+    clickRecorderPlay () {
+      if (this.audio.paused) {
+        this.audio.play()
+      } else {
+        this.audio.pause()
+      }
+    },
+    clickRecorderStart () {
+      let { recorder } = this
+      console.log()
+      if (this.isPlay != null) {
+        if (this.isPlay) {
+          this.recorder.pause()
+        } else {
+          this.recorder.resume()
+        }
+      } else {
+        this.$refs.read.play()
+      }
+
+
+    },
+    changeProgress (progress) {
+      console.log(progress)
+      this.progress = progress
+    },
     changePopup () {
       this.showPopup = !this.showPopup
     },
     changeAchieve () {
       this.showAchieve = !this.showAchieve
     },
-    changeRead() {
+    changeRead () {
       this.showRead = !this.showRead
-    }
+    },
+    clickStart () {
+      this.showMask = true
+      this.timer = setInterval(() => {
+        let random = Math.floor(10 * Math.random())
+        if (this.percent != 100) {
+          console.log(this.percent, Math.floor(10 * Math.random()))
+          this.percent = this.percent + random <= 100 ? this.percent + random : 100
+        } else {
+          clearInterval(this.timer)
+          this.donwTimeStart()
+        }
+
+      }, 200);
+    },
+    donwTimeStart () {
+      this.timer = setInterval(() => {
+        console.log(2)
+        this.downTime -= 1
+        if (!this.downTime) {
+          clearInterval(this.timer)
+          this.downTime = 3
+          this.percent = 0
+          this.isStart = true
+          this.showMask = false
+        }
+      }, 1000);
+    },
+    getCourseDetail () {
+      api.course.getById({
+        id: this.$root.$mp.query.id
+      }).then(({ data }) => {
+        this.courseData = data.resultData
+        this.getCourseList()
+      })
+    },
   },
 
 
 
-  created () {
-
+  mounted () {
+    this.recorder = wx.getRecorderManager()
+    this.audio = wx.createInnerAudioContext()
+    this.initRecorder()
+    this.getCourseDetail()
     // this.initAudio()
     // let app = getApp()
   }
@@ -92,7 +248,135 @@ export default {
 .read {
   padding-top: 1px;
   height: 100vh;
-  background-color: #fafafa;
+  background-color: #01141d;
+  .progress {
+    position: absolute;
+    left: 24px;
+    right: 24px;
+    top: 0;
+    width: 327px;
+    height: 1px;
+    background-color: #979797;
+    &-bar {
+      position: absolute;
+      left: 0;
+      top: 50%;
+      height: 3px;
+      border-radius: 2px;
+      background-color: #4a4a4a;
+      transform: translateY(-50%);
+    }
+  }
+  .mask {
+    @include flex-column-center;
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 100;
+    background-color: #01141d;
+    &-content {
+      @include flex-column-center;
+    }
+    &-text {
+      margin-top: 8px;
+      font-size: 12px;
+      color: #fff;
+    }
+    .down-time {
+      @include flex-center;
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      font-weight: 600;
+      font-size: 22px;
+      color: rgba(255, 255, 255, 1);
+      line-height: 30px;
+      background: linear-gradient(
+        360deg,
+        rgba(102, 255, 248, 1) 0%,
+        rgba(48, 192, 255, 1) 100%
+      );
+    }
+    .circle-text {
+      font-size:22px;
+      font-weight: 600;
+      color: rgba(255, 255, 255, 1);
+      line-height: 30px;
+      background: linear-gradient(
+        90deg,
+        rgba(102, 255, 248, 1) 0%,
+        rgba(48, 192, 255, 1) 100%
+      );
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text {
+        font-size: 12px;
+      }
+    }
+  }
+  .control {
+    @include flex-column-center;
+    box-sizing: border-box;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    font-size: 14px;
+    color: #9b9b9b;
+    &-wrap {
+      @include flex-center;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      z-index: 10;
+    }
+    &-bg {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background: url('/static/images/a.gif') no-repeat;
+      background-size: 100%;
+      &_image {
+        width: 100%;
+      }
+    }
+    &.recorder-control {
+      flex-direction: row;
+      padding: 24px;
+    }
+    .play-btn {
+      margin: 0 36px;
+      width: 72px;
+      height: 72px;
+      background: rgba(74, 74, 74, 1);
+    }
+    .reset-btn,
+    .save-btn {
+      @include flex-center;
+      width: 92px;
+      height: 52px;
+      background: linear-gradient(
+        90deg,
+        rgba(151, 240, 94, 1) 0%,
+        rgba(56, 226, 146, 1) 100%
+      );
+      box-shadow: 0px 3px 8px -3px rgba(183, 242, 175, 0.4);
+      border-radius: 26px;
+    }
+    &-btn {
+      @include bg('/read/zyld-button-go.png');
+      margin-top: 12px;
+      margin-bottom: 40px;
+      width: 260px;
+      height: 52px;
+    }
+  }
   .read-popup {
     @include flex-column-center;
     width: 327px;
@@ -188,14 +472,14 @@ export default {
     padding: 16px;
     width: 327px;
     height: 108px;
-    background: #fff;
-    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+    background: rgba(3, 26, 36, 1);
+    box-shadow: 0px 2px 10px 0px rgba(1, 21, 31, 1);
     border-radius: 16px;
     &-image {
       margin-bottom: 8px;
       width: 48px;
       height: 48px;
-      margin-right: 16px;
+      border-radius: 50%;
       background-color: #d8d8d8;
     }
     &-title {

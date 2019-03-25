@@ -1,8 +1,8 @@
 <template>
   <div class="read-component">
     <div class="lyric">
-      <text class="lyric-title">《天地人》</text>
-      <text class="lyric-subtitle">人教版·一年级·下册</text>
+      <text class="lyric-title">《{{title}}》</text>
+      <text class="lyric-subtitle">{{subtitle}}</text>
       <div class="lyric-scroll"
            @touchend="touchend"
            @touchstart="touchstart">
@@ -26,12 +26,12 @@
                          catchtouchmove="catchtouchmove"
                          v-if="disabled">
               <text class="lyric-text"
-                    :class="lyricIndex == index ? 'active' : ''">{{item[1]}}</text>
+                    :class="{'active': lyricIndex == index, 'isReady': isReady}">{{item[1]}}</text>
             </swiper-item>
             <swiper-item class="lyric-swiper_item"
                          v-else>
               <text class="lyric-text"
-                    :class="lyricIndex == index ? 'active' : ''">{{item[1]}}</text>
+                    :class="{'active': lyricIndex == index, 'isReady': isReady}">{{item[1]}}</text>
             </swiper-item>
           </block>
         </swiper>
@@ -50,17 +50,20 @@
         </div>
         <div class="control-list"
              v-if="showList"
-             @tap="changePopup"></div>
+             @tap="clickList"></div>
       </div>
       <div class="control-content">
         <div class="control-btn"
+             v-if="!paused"
              @tap="clickPrev">上一句</div>
         <div class="play-btn"
+             :class="{'pause': paused}"
              @tap="clickPlay"></div>
         <div class="control-btn"
+             v-if="!paused"
              @tap="clickNext">下一句</div>
       </div>
-      <slot name="footer-content"></slot>
+      <slot></slot>
     </div>
   </div>
 </template>
@@ -71,6 +74,18 @@ export default {
     lyricText: {
       type: String,
       default: `[00:00.00]时钟不要走\n[00:04.22]让我脆弱一分钟\n[00:07.44]要多久才能习惯被放手\n[00:15.80]马克杯空了 暖暖的温热\n[00:22.66]却还在我手中停留\n[00:27.96]\n[00:29.79]勇气不要走\n[00:32.20]给我理由再冲动\n[00:35.69]去相信爱情 就算还在痛\n[00:43.96]如果我不说不会有人懂\n[00:50.72]失去你我有多寂寞\n[00:55.61]还是愿意\n[00:57.58]付出一切仅仅为了一个好梦\n[01:03.98]梦里有人真心爱我 陪我快乐也陪我沉默\n[01:11.26]没有无缘无故的痛承受越多越成熟\n[01:18.63]能让你拥抱更好的我\n[01:25.03] 谁也不要走\n[01:28.27]应该是一种奢求\n[01:31.90]可是我只想 握紧你的手\n[01:39.78]我宁愿等候 也不愿错过\n[01:46.63]你对我微笑的时候\n[01:56.78]\n[02:18.91]还是愿意\n[02:21.32]用尽全力仅仅为了一个以后\n[02:27.87]哪怕生命并不温柔哪怕被幸福一再反驳\n[02:34.87]也要相信伤痕累累 其实只是在琢磨\n[02:42.07]能让你为之一亮 的我`
+    },
+    lyricSrc: {
+      type: String,
+      default: ''
+    },
+    title: {
+      type: String,
+      default: ''
+    },
+    subtitle: {
+      type: String,
+      default: ''
     },
     showControl: {
       type: Boolean,
@@ -90,9 +105,13 @@ export default {
     },
     disabled: {
       type: Boolean,
-      default: true
+      default: false
     },
     autoplay: {
+      type: Boolean,
+      default: false
+    },
+    isReady: {
       type: Boolean,
       default: false
     }
@@ -107,10 +126,27 @@ export default {
       progress: 0,
       proIndex: 0,
       tapSwiper: false,
-      timer: null
+      timer: null,
+      paused: true
     }
   },
+
+  watch: {
+    lyricSrc(n,o) {
+      if(n) {
+        console.log(n)
+        this.audio.src = n
+      }
+    }
+  },
+
   methods: {
+    play () {
+      this.audio.play()
+    },
+    pause () {
+      this.audio.pause()
+    },
     catchtouchmove () {
       return true
     },
@@ -124,15 +160,15 @@ export default {
       this.$emit('paused', this.audio.paused)
     },
     clickNext () {
-      this.lyricIndex += 1
-      console.log(this.lyricArr[this.lyricIndex][0])
-      this.audio.seek(this.lyricArr[this.lyricIndex][0])
+      if(this.lyricIndex == this.lyricArr.length - 1) {
+        return
+      }
+      this.audio.seek(this.lyricArr[this.lyricIndex + 1][0])
       this.$emit('next')
     },
     clickPrev () {
-      this.lyricIndex -= 1
       console.log(this.lyricArr[this.lyricIndex][0])
-      this.audio.seek(this.lyricArr[this.lyricIndex][0])
+      this.audio.seek(this.lyricArr[this.lyricIndex - 1][0])
       this.$emit('prev')
     },
     touchend () {
@@ -147,8 +183,10 @@ export default {
       this.tapSwiper = true
     },
     changeLyric (e) {
-      this.lyricIndex = e.mp.detail.current
-      this.$emit('changeLyric')
+      this.$emit('changeLyric', e)
+    },
+    clickList() {
+      this.$emit('clickList')
     },
     parseLyric (text) {
       let result = [];
@@ -193,9 +231,9 @@ export default {
     },
     initAudio () {
       console.log(111)
-      this.audio.src = 'http://h5player.bytedance.com/video/music/audio.mp3'
+      this.audio.src = this.lyricSrc
       this.audio.autoplay = this.autoplay
-
+      console.log(this.audio.src)
       if (this.autoplay) {
         setTimeout(() => {
           this.audio.play()
@@ -203,43 +241,50 @@ export default {
       }
 
       this.audio.onPlay(() => {
+        this.paused = false
+        console.log('play')
         this.$emit('play')
       })
 
+      this.audio.onPause(() => {
+        this.paused = true
+        this.$emit('pause')
+      })
+
       this.audio.onEnded(() => {
+        console.log('end')
+        this.progress = 100
+        this.$emit('progress', 100)
         this.$emit('ended')
       })
 
       this.audio.onTimeUpdate(() => {
+        console.log('update')
         this.$emit('timeUpdate')
         if (this.endTime == '00:00') {
           this.endTime = this.timeToFormat(this.audio.duration)
+          this.$emit('duration', this.audio.duration)
         }
         this.startTime = this.timeToFormat(this.audio.currentTime)
         this.progress = Math.floor((this.audio.currentTime / this.audio.duration) * 100)
-        console.log(this.tapSwiper)
-        if ((this.proIndex != this.lyricIndex) && !this.tapSwiper) {
-          this.lyricIndex = this.proIndex
-        }
+        this.$emit('progress', this.progress)
+        console.log()
         if ((this.lyricIndex != this.lyricArr.length - 1) && !this.tapSwiper) {
-          var j = 0;
-          for (var j = this.lyricIndex; j < this.lyricArr.length; j++) {
-            // 当前时间与前一行，后一行时间作比较， j:代表当前行数
-            if (this.lyricIndex == this.lyricArr.length - 2) {
-              //最后一行只能与前一行时间比较
-              if (parseFloat(this.audio.currentTime) > parseFloat(this.lyricArr[this.lyricArr.length - 1][0])) {
-                this.lyricIndex = this.lyricArr.length - 1
-                this.proIndex = this.lyricArr.length - 1
-                return;
-              }
-            } else {
-              if (parseFloat(this.audio.currentTime) > parseFloat(this.lyricArr[j][0]) && parseFloat(this.audio.currentTime) < parseFloat(this.lyricArr[j + 1][0])) {
-                this.lyricIndex = j
-                this.proIndex = j
+
+          this.lyricArr.forEach((e, i) => {
+            let {lyricIndex} = this
+            let currentTime = this.audio.currentTime
+            if (lyricIndex == this.lyricArr.length - 2 && currentTime > this.lyricArr[this.lyricArr.length - 1][0]) {
+              this.lyricIndex = this.lyricArr.length - 1
+              return;
+            } else if(lyricIndex != this.lyricArr.length - 1) {
+              if (currentTime >= e[0] && currentTime < this.lyricArr[i + 1][0]) {
+                this.lyricIndex = i
                 return;
               }
             }
-          }
+
+          })
         }
       })
 
@@ -263,9 +308,10 @@ export default {
       return result;
     }
   },
-  created () {
+  mounted () {
     this.lyricArr = this.sliceNull(this.parseLyric(this.lyricText))
     this.audio = this.globalData.audio
+    console.log(this.lyricArr)
     this.initAudio()
   },
   destroyed () {
@@ -288,7 +334,7 @@ export default {
   left: 16px;
   right: 16px;
   font-size: 10px;
-  color: #4a4a4a;
+  color: rgba($color: #fff, $alpha: 0.75);
   transform: translateY(-50%);
   &-text {
     width: 60px;
@@ -296,7 +342,7 @@ export default {
   &_line {
     margin-left: 13px;
     width: 280px;
-    border-top: 1px #4a4a4a dashed;
+    border-top: 1px rgba($color: #fff, $alpha: 0.4) dashed;
   }
 }
 .mask-top {
@@ -307,8 +353,8 @@ export default {
   height: 21px;
   background: linear-gradient(
     360deg,
-    rgba(250, 250, 250, 0) 0%,
-    rgba(250, 250, 250, 1) 100%
+    rgba(1, 20, 29, 0) 0%,
+    rgba(1, 20, 29, 1) 100%
   );
   z-index: 9;
 }
@@ -320,17 +366,20 @@ export default {
   height: 21px;
   background: linear-gradient(
     180deg,
-    rgba(250, 250, 250, 0) 0%,
-    rgba(250, 250, 250, 1) 100%
+    rgba(1, 20, 29, 0) 0%,
+    rgba(1, 20, 29, 1) 100%
   );
   z-index: 9;
 }
 .play-btn {
+  @include bg('/read/msfd-button-pause.png');
   margin: 0 40px;
   width: 48px;
   height: 48px;
-  background: rgba(74, 74, 74, 1);
   border-radius: 50%;
+  &.pause {
+    @include bg('/read/msfd-button-play.png');
+  }
 }
 .control {
   position: absolute;
@@ -343,19 +392,18 @@ export default {
     width: 72px;
     height: 36px;
     font-size: 12px;
-    color: #4a4a4a;
-    background: rgba(240, 240, 240, 1);
+    color: rgba($color: #fff, $alpha: 0.75);
     border-radius: 18px;
-    border: 1px solid rgba(155, 155, 155, 1);
+    border:1px solid rgba(255,255,255,0.16);
   }
   &-content {
     @include flex-center;
   }
   &-list {
+    @include bg('/read/msfd-button-list.png');
     margin-left: 24px;
     width: 24px;
     height: 18px;
-    background-color: #4a4a4a;
   }
   &-header {
     @include flex-center;
@@ -369,24 +417,24 @@ export default {
     .start-time,
     .end-time {
       font-size: 12px;
-      color: #4a4a4a;
+      color: rgba($color: #fff, $alpha: 0.4);
     }
     .end-time {
-      color: #9b9b9b;
+      color: rgba($color: #fff, $alpha: 0.75);
     }
     .progress {
       flex: 1;
       position: relative;
       margin: 0 8px;
-      height: 1px;
+      height: 2px;
       background-color: #979797;
       border-radius: 20px;
       &-bar {
         position: absolute;
         left: 0;
         top: 50%;
-        height: 3px;
-        background-color: #4a4a4a;
+        height: 4px;
+        background-color: #30C0FF;
         border-radius: 20px;
         transform: translateY(-50%);
       }
@@ -398,12 +446,13 @@ export default {
   margin-top: 32px;
   &-title {
     font-size: 24px;
+    color: rgba($color: #fff, $alpha: 0.75);
     margin-bottom: 8px;
   }
   &-subtitle {
     margin-bottom: 32px;
     font-size: 12px;
-    color: #4a4a4a;
+    color: rgba($color: #fff, $alpha: 0.4);
   }
   &-scroll,
   &-swiper {
@@ -417,12 +466,20 @@ export default {
   &-text {
     padding: 0 10px;
     font-size: 15px;
-    color: #9b9b9b;
-    background-color: #fafafa;
+    color: rgba($color: #fff, $alpha: 0.4);
+    background-color: #01141D;
+
     &.active {
-      font-size: 17px;
+      font-size: 20px;
       font-weight: 500;
-      color: #4a4a4a;
+      color: #30C0FF;
+    }
+    &.isReady {
+      font-size: 17px !important;
+      color: #fff;
+    }
+    &.active.isReady {
+      color: #38E292;
     }
   }
 }

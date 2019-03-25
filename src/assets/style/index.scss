@@ -7,6 +7,13 @@ $G_Line: #efefef;
 $G_Gray: #b3b5b8;
 $G_Block: #2b2828;
 $G_yellow: #fad362;
+
+@mixin  bg($path) {
+  background-image: url('https://pub.file.k12.vip' + $path);
+  background-repeat: no-repeat;
+  background-size: 100%;
+}
+
 // 文字超出后用省略号显示
 @mixin text-overflow($width: 100px) {
   width: $width;

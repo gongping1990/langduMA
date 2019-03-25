@@ -1,5 +1,7 @@
 {
   "navigationBarTitleText": "课程主页",
+  "navigationBarBackgroundColor": "#01141D",
+  "navigationBarTextStyle": "white",
   "usingComponents": {
     "wux-popup": "/static/wux/popup/index"
   }

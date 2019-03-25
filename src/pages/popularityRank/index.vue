@@ -46,10 +46,46 @@
               <div class="-zan">29</div>
             </div>
           </div>
-          <div class="-item-right">集赞冲榜 ></div>
+          <div class="-item-right" @click="openPopup">集赞冲榜 ></div>
         </div>
       </div>
     </div>
+
+    <wux-popup :visible="!isOpenPopup" position="bottom" @close="openPopup">
+      <div class="ld-popularityRank-popup-content" :class="{'-more': isOpenMore}">
+        <div class="-popup-title">叫大家来给你的作品点赞吧</div>
+        <div class="-popup-item" v-if="!isOpenMore">
+          <div class="-item-tip">赞最多</div>
+          <div class="-item-left">
+            <div class="-item-title">《天气人》</div>
+            <div class="-item-title-two">日期: 2019-03-22</div>
+            <div class="-item-num">2933</div>
+          </div>
+          <div class="-item-center"></div>
+        </div>
+        <scroll-view class="-popup-item-wrap"
+                     v-if="isOpenMore"
+                     @scrolltolower="bindLoadItem"
+                     scroll-y
+                     @scroll="scrollTopFn"
+                     scroll-with-animation>
+          <div class="-popup-item" v-for="(item, index) of 4" :key="index">
+            <div class="-item-tip" v-if="index==0">赞最多</div>
+            <div class="-item-left">
+              <div class="-item-title">《天气人》</div>
+              <div class="-item-title-two">日期: 2019-03-22</div>
+              <div class="-item-num">2933</div>
+            </div>
+            <div class="-item-center"></div>
+          </div>
+        </scroll-view>
+        <div class="-popup-more" @click="openMore" v-if="!isOpenMore">选择其他作品 ></div>
+      </div>
+
+
+
+      <button open-type="share" class="ld-popularityRank-popup-btn">分享到班级群</button>
+    </wux-popup>
   </div>
 </template>
 
@@ -64,6 +100,8 @@
           total: ""
         },
         isFetching: false,
+        isOpenPopup: false,
+        isOpenMore: false,
         dataList: [],
         tabType: "1"
       };
@@ -76,6 +114,12 @@
     },
 
     methods: {
+      openMore () {
+        this.isOpenMore = !this.isOpenMore
+      },
+      openPopup () {
+        this.isOpenPopup = !this.isOpenPopup
+      },
       changeTab(num) {
         this.tabType = num;
       },
@@ -227,6 +271,113 @@
         padding: 0 24px;
         height: 100%;
       }
+    }
+
+    .-more {
+      height: 440px!important;
+
+      .-popup-item {
+        margin: 16px!important;
+      }
+    }
+
+    &-popup-content {
+      margin: 0 24px;
+      width:327px;
+      height:250px;
+      background:rgba(255,255,255,1);
+      border-radius:16px;
+
+      .-popup-title {
+        font-size:20px;
+        font-weight:500;
+        color:rgba(74,74,74,1);
+        padding: 32px 0 24px 0;
+      }
+
+      .-popup-item-wrap {
+        height: 360px;
+      }
+
+      .-popup-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        position: relative;
+        padding: 16px 24px;
+        margin: 0 16px;
+        border-radius: 6px;
+        border: 1px solid rgba(236, 236, 236, 1);
+
+        .-item-tip {
+          position: absolute;
+          top: 0;
+          right: 0;
+          width:44px;
+          height:18px;
+          background:rgba(155,155,155,1);
+          border-radius:0px 6px 0px 100px;
+          font-size:10px;
+          font-weight:400;
+          color:rgba(255,255,255,1);
+          line-height:18px;
+          text-align: center;
+        }
+
+        .-item-left {
+          text-align: left;
+          width: 60%;
+
+          .-item-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: rgba(74, 74, 74, 1);
+            line-height: 22px;
+          }
+
+          .-item-title-two {
+            margin-top: 4px;
+            font-size: 12px;
+            font-weight: 300;
+            color: rgba(236, 236, 236, 1);
+            line-height: 14px;
+          }
+
+          .-item-num {
+            margin-top: 12px;
+            font-size: 12px;
+            font-weight: 400;
+            color: rgba(74, 74, 74, 1);
+            line-height: 17px;
+          }
+        }
+
+        .-item-center {
+          border-radius: 50%;
+          width: 32px;
+          height: 32px;
+          background: rgba(74, 74, 74, 1);
+        }
+      }
+
+      .-popup-more {
+        margin-top: 24px;
+        font-size:12px;
+        font-weight:400;
+        color:rgba(0,0,0,1);
+      }
+    }
+
+    &-popup-btn {
+      margin: 12px 24px 34px;
+      width:327px;
+      height:52px;
+      background:rgba(255,255,255,1);
+      border-radius:16px;
+      font-size:15px;
+      font-weight:500;
+      color:rgba(74,74,74,1);
+      line-height:52px;
     }
 
     .item-wrap {

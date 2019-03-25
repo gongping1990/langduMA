@@ -113,4 +113,10 @@ export default {
 .van-hairline--surround::after {
   border-width: 1px;
 }
+
+::-webkit-scrollbar {
+  width: 0;
+  height: 0;
+  color: transparent;
+}
 </style>

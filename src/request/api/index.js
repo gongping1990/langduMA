@@ -1,12 +1,12 @@
 
 import user from "./user";
 import banner from "./banner";
-import con from './con'
+import grade from './grade'
 import course from './course'
 import work from './work'
 
 export default {
-  con,
+  grade,
   banner,
   user,
   course,

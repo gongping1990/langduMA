@@ -112,7 +112,7 @@ export default {
     },
     // 获取年级列表
     getGradeList() {
-      api.con.gradeList().then(({data}) => {
+      api.grade.gradeList().then(({data}) => {
         let arr = []
         data.resultData.forEach((e, i) => {
           let copyObj = Object.assign({}, e)

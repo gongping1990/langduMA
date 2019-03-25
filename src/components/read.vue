@@ -263,7 +263,10 @@ export default {
         this.$emit('timeUpdate')
         if (this.endTime == '00:00') {
           this.endTime = this.timeToFormat(this.audio.duration)
-          this.$emit('duration', this.audio.duration)
+          this.$emit('duration', {
+            duration: this.audio.duration,
+            formatDuration: this.timeToFormat(this.audio.duration)
+          })
         }
         this.startTime = this.timeToFormat(this.audio.currentTime)
         this.progress = Math.floor((this.audio.currentTime / this.audio.duration) * 100)

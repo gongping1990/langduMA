@@ -58,19 +58,16 @@
         </div>
         <div class="reset-btn"
              v-if="isEnd">重录</div>
-        <div class="play-btn"
+        <div class="play-btn ly"
              v-if="!isEnd"
-             @tap="clickRecorderStart"></div>
+             @tap="clickRecorderStart">
+          <text class="play-btn_text">{{duration}}</text>
+        </div>
         <div class="play-btn"
              v-else
              @tap="clickRecorderPlay"></div>
         <div class="save-btn"
              v-if="isEnd">保存</div>
-      </div>
-      <div class="control-bg">
-        <img class="control-bg_image"
-             mode="widthFix"
-             src="/static/images/a.gif" />
       </div>
     </div>
 
@@ -90,17 +87,17 @@ export default {
       showPopup: false,
       show: true,
       disabled: false,
-      showMask: true,
+      showMask: false,
       percent: 0,
       downTime: 3,
       timer: null,
-      isStart: false,
+      isStart: true,
       paused: false,
       progress: 0,
       recorder: null,
       isPlay: null,
       isEnd: false,
-      duration: 0,
+      duration: '00:00',
       courseData: {}
     }
   },
@@ -108,6 +105,15 @@ export default {
   computed: {
     userInfo () {
       return store.state.userInfo
+    }
+  },
+
+  watch: {
+    userInfo(n, o) {
+      if(n.id && !o.id) {
+        console.log(this.$root.$mp.query)
+        this.getCourseDetail()
+      }
     }
   },
 
@@ -145,8 +151,8 @@ export default {
     bindEnded () {
       this.recorder.stop()
     },
-    changeDuration (duration) {
-      this.duration = duration
+    changeDuration (params) {
+      this.duration = params.formatDuration
       this.disabled = true
       console.log(this.recorder)
       this.recorder.start({
@@ -237,7 +243,9 @@ export default {
     this.recorder = wx.getRecorderManager()
     this.audio = wx.createInnerAudioContext()
     this.initRecorder()
-    this.getCourseDetail()
+    if(this.userInfo.id) {
+      this.getCourseDetail()
+    }
     // this.initAudio()
     // let app = getApp()
   }
@@ -347,14 +355,26 @@ export default {
       }
     }
     &.recorder-control {
+      box-sizing: border-box;
       flex-direction: row;
       padding: 24px;
+      height: 136px;
     }
     .play-btn {
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
       margin: 0 36px;
       width: 72px;
       height: 72px;
-      background: rgba(74, 74, 74, 1);
+      background-color: #01151F;
+      &.ly {
+        @include bg('/read/zyld-button-start.png');
+      }
+      &_text {
+        font-size: 13px;
+        margin-bottom: 15px;
+      }
     }
     .reset-btn,
     .save-btn {

@@ -12,7 +12,7 @@
         </div>
       </div>
       <div class="ld-my-work-footer">
-        <wux-swipe-action autoClose useSlots v-for="(item, index) of 5" :key="index">
+        <wux-swipe-action autoClose useSlots v-for="(item, index) of dataList" :key="index">
           <div slot="right" @click="delItem" class="-footer-action">
             <img class="-right-img" src="https://pub.file.k12.vip/read/my/zp-icon-delete.png"/>
           </div>

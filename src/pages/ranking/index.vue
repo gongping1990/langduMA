@@ -1,7 +1,7 @@
 <template>
   <div class="ld-ranking">
     <div class="-scroll" v-if="isShowHeader">
-      佳作推荐
+      <div class="-scroll-bg">佳作推荐</div>
     </div>
     <scroll-view class="ld-ranking-wrap"
                  @scrolltolower="bindLoadItem"
@@ -15,19 +15,43 @@
         </div>
         <div class="-top-content">
           <div class="-one">
-            <div class="-one-img"></div>
-            <div class="-one-name">Okazaki Suzuko</div>
-            <div class="-one-num">233</div>
+            <div class="-one-img">
+              <img class="-one-img-header"
+                   src="https://wx.qlogo.cn/mmhead/DQUJ1lic9u2tgaIBMEvzETXs9SnwSjpLmXyHFibWDd3Ws/132">
+            </div>
+            <div class="-one-name">
+              良辰美景小林哥aaa
+            </div>
+            <div class="-one-num">
+              <img class="-one-num-img" src="https://pub.file.k12.vip/read/wind/icon-good2.png"/>
+              <span>233</span>
+            </div>
+            <img class="-one-image" src="https://pub.file.k12.vip/read/wind/2.png"/>
           </div>
           <div class="-two">
-            <div class="-two-img"></div>
+            <div class="-two-img">
+              <img class="-two-img-crown" src="https://pub.file.k12.vip/read/rank/icon-head champion.png"/>
+              <img class="-two-img-header"
+                   src="https://wx.qlogo.cn/mmhead/DQUJ1lic9u2tgaIBMEvzETXs9SnwSjpLmXyHFibWDd3Ws/132">
+            </div>
             <div class="-two-name">heaven小林哥</div>
-            <div class="-two-num">1233</div>
+            <div class="-two-num">
+              <img class="-two-num-img" src="https://pub.file.k12.vip/read/wind/icon-good1.png"/>
+              <span>1233</span>
+            </div>
+            <img class="-two-image" src="https://pub.file.k12.vip/read/wind/1.png"/>
           </div>
           <div class="-one">
-            <div class="-one-img"></div>
+            <div class="-one-img">
+              <img class="-one-img-header"
+                   src="https://wx.qlogo.cn/mmhead/DQUJ1lic9u2tgaIBMEvzETXs9SnwSjpLmXyHFibWDd3Ws/132"/>
+            </div>
             <div class="-one-name">Yasaman F</div>
-            <div class="-one-num">33</div>
+            <div class="-one-num -three-num">
+              <img class="-one-num-img" src="https://pub.file.k12.vip/read/wind/icon-good3.png"/>
+              <span>33</span>
+            </div>
+            <img class="-one-image -three-image" src="https://pub.file.k12.vip/read/wind/3.png"/>
           </div>
         </div>
       </div>
@@ -151,6 +175,13 @@
       font-size: 20px;
       font-weight: 500;
       color: rgba(74, 74, 74, 1);
+
+      &-bg {
+        height: 46px;
+        line-height: 46px;
+        background: url("https://pub.file.k12.vip/read/rank/icon-tittle.png") 0% no-repeat;
+        background-size: contain;
+      }
     }
 
     @keyframes -scroll { /*设置内容由显示变为隐藏*/
@@ -164,9 +195,10 @@
     }
 
     &-top {
-      padding: 16px 24px 0 24px;
-      height: 280px;
-      background: rgba(74, 74, 74, 1);
+      background: url("https://pub.file.k12.vip/read/wind/backgroud.png");
+      background-size: cover;
+      padding: 0 24px 0 24px;
+      height: 351px;
 
       .-top-title {
         display: flex;
@@ -175,9 +207,13 @@
         color: rgba(255, 255, 255, 1);
 
         &-left {
+          background: url("https://pub.file.k12.vip/read/rank/icon-tittle.png") 10% no-repeat;
+          background-size: contain;
+          color: rgba(29, 27, 27, 1);
           font-size: 20px;
           font-weight: 500;
-
+          height: 46px;
+          line-height: 46px;
         }
 
         &-right {
@@ -191,26 +227,30 @@
         display: flex;
         justify-content: space-around;
         align-items: flex-end;
-        margin-top: 86px;
+        margin-top: 62px;
         text-align: center;
 
         .-one {
-          width: 33%;
+          width: 25%;
 
           &-img {
             margin: 0 auto;
-            border-radius: 50%;
-            width: 48px;
-            height: 48px;
-            background: rgba(216, 216, 216, 1);
-            border: 2px solid rgba(0, 0, 0, 1);
+
+            &-header {
+              border-radius: 50%;
+              width: 48px;
+              height: 48px;
+            }
           }
 
           &-name {
+            width: 90px;
+            text-overflow: ellipsis;
+            overflow: hidden;
+            white-space: nowrap;
             height: 18px;
             font-size: 13px;
             font-weight: 500;
-            color: rgba(255, 255, 255, 1);
             line-height: 18px;
             margin: 8px 0 4px 0;
           }
@@ -219,27 +259,59 @@
             height: 17px;
             font-size: 12px;
             font-weight: 400;
-            color: rgba(255, 255, 255, 1);
+            color: #FEA1BAFF;
             line-height: 17px;
+            margin-bottom: 8px;
+
+            &-img {
+              margin-right: 4px;
+              width: 15px;
+              height: 15px;
+            }
+          }
+
+          .-three-num {
+            color: #86ECBCFF;
+          }
+
+          &-image {
+            width: 86px;
+            height: 69px;
+          }
+
+          .-three-image {
+            height: 49px;
           }
         }
         .-two {
-          width: 33%;
+          width: 50%;
 
           &-img {
+            position: relative;
             margin: 0 auto;
-            border-radius: 50%;
             width: 80px;
             height: 80px;
-            background: rgba(216, 216, 216, 1);
-            border: 2px solid rgba(0, 0, 0, 1);
+
+            &-crown {
+              position: absolute;
+              top: -29px;
+              left: 19px;
+              width: 53px;
+              height: 33px;
+            }
+
+            &-header {
+              border: 3px solid rgba(226, 198, 92, 1);
+              border-radius: 50%;
+              width: 80px;
+              height: 80px;
+            }
           }
 
           &-name {
             height: 18px;
             font-size: 16px;
             font-weight: 500;
-            color: rgba(255, 255, 255, 1);
             line-height: 22px;
             margin: 8px 0 4px 0;
           }
@@ -248,8 +320,20 @@
             height: 17px;
             font-size: 14px;
             font-weight: 400;
-            color: rgba(255, 255, 255, 1);
+            color: #E2C65CFF;
             line-height: 20px;
+
+            &-img {
+              margin-right: 4px;
+              width: 15px;
+              height: 15px;
+            }
+          }
+
+          &-image {
+            margin-top: 12px;
+            width: 128px;
+            height: 107px;
           }
         }
       }
@@ -259,11 +343,14 @@
       padding: 0 24px;
 
       .-down-title {
+        background: url("https://pub.file.k12.vip/read/rank/icon-tittle.png") 0% no-repeat;
+        background-size: contain;
         margin-top: 32px;
         font-size: 20px;
         font-weight: 500;
         color: rgba(74, 74, 74, 1);
-        line-height: 28px;
+        line-height: 46px;
+        height: 46px;
       }
 
       .-down-item {

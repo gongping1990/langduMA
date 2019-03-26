@@ -34,7 +34,7 @@
       <div class="ld-ranking-down">
         <div class="-down-title" v-if="!isShowHeader">佳作推荐</div>
         <div class="-down-item" v-for="(item,index) of 6" :key="index">
-          <div class="-down-item-tip">人气之星</div>
+          <div class="-down-item-tip" :class="{'-rq':index == '0','-tj':index==1}">{{index== 1 ? "教师推荐": "人气之星"}}</div>
           <div class="-down-item-left">
             <div class="-left-top">
               <div class="-left-top-img"></div>
@@ -49,7 +49,7 @@
             </div>
           </div>
           <div class="-down-item-right">
-            <div class="-right-img"></div>
+            <img class="-right-img" src="https://pub.file.k12.vip/read/lesson/kczy-button-play.png"/>
           </div>
         </div>
       </div>
@@ -82,7 +82,7 @@
         } else {
           this.isShowHeader = false;
         }
-        console.log(e.mp.detail.scrollTop)
+        console.log(e.mp.detail.scrollTop);
       },
       bindLoadItem() {
         console.log(111);
@@ -93,7 +93,7 @@
       },
       toJump() {
         wx.navigateTo({
-          url: "/pages/popularityRank/main"
+          url: `/pages/popularityRank/main?type=1`
         });
       },
       getList() {
@@ -144,13 +144,13 @@
       height: 60px;
       line-height: 60px;
       padding-left: 24px;
-      background: rgba(255,255,255,1);
+      background: rgba(255, 255, 255, 1);
       box-shadow: 0 4px 4px 0 rgba(0, 0, 0, 0.03);
       z-index: 999;
       animation: -scroll .5s;
-      font-size:20px;
-      font-weight:500;
-      color:rgba(74,74,74,1);
+      font-size: 20px;
+      font-weight: 500;
+      color: rgba(74, 74, 74, 1);
     }
 
     @keyframes -scroll { /*设置内容由显示变为隐藏*/
@@ -181,6 +181,7 @@
         }
 
         &-right {
+          color: #30C0FF;
           font-size: 12px;
           font-weight: 400;
         }
@@ -272,26 +273,35 @@
         align-items: center;
         margin: 16px 0;
         height: 102px;
-        border-radius: 6px;
-        border: 1px solid rgba(236, 236, 236, 1);
+        border-radius: 16px;
+        box-shadow: 0px 2px 10px 0px rgba(222, 232, 237, 1);
 
         &-tip {
           position: absolute;
           top: 0;
-          right: 0;
-          width: 60px;
+          left: 0;
+          width: 64px;
           height: 18px;
           background: rgba(155, 155, 155, 1);
-          border-radius: 0 26px 0 100px;
+          border-radius: 100px 0 100px 0;
           font-size: 10px;
           font-weight: 400;
           color: rgba(255, 255, 255, 1);
-          line-height: 14px;
+          line-height: 18px;
           text-align: center;
         }
 
+        .-rq {
+          background: linear-gradient(90deg, rgba(253, 244, 197, 1) 0%, rgba(233, 223, 169, 1) 100%);
+          color: #DCB876;
+        }
+        .-tj {
+          background: linear-gradient(90deg, rgba(197, 255, 199, 1) 0%, rgba(161, 240, 203, 1) 100%);
+          color: #79D0A7;
+        }
+
         &-left {
-          padding: 18px 0 15px 24px;
+          padding: 28px 0 15px 24px;
 
           .-left-top {
             display: flex;
@@ -347,7 +357,6 @@
             border-radius: 50%;
             width: 32px;
             height: 32px;
-            background: rgba(74, 74, 74, 1);
           }
         }
       }

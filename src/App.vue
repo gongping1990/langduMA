@@ -11,8 +11,19 @@ export default {
         success: res => {
           api.user.loginWithWxMa({
             code: res.code
-          }).then(({data}) => {
+          }).then(({ data }) => {
             store.commit('updateUserInfo', data.resultData)
+            if (data.resultData.id) {
+              wx.getSetting({
+                success (res) {
+                  console.log(res)
+                  if (!res.authSetting['scope.userInfo']) {
+                    wx.redirectTo({ url: '/pages/authorize/main' });
+                  }
+                }
+              })
+            }
+
           })
         }
       });
@@ -118,5 +129,8 @@ export default {
   width: 0;
   height: 0;
   color: transparent;
+}
+button::after {
+  border: none;
 }
 </style>

@@ -59,7 +59,7 @@
         <div class="home-good_left">
           <text class="home-good_title">{{item.name}}</text>
           <text class="home-good_text">朗读老师：{{item.teacherName}}</text>
-          <div class="home-good_num">{{item.aloudReading}} 位同学已会读</div>
+          <div class="home-good_num">{{item.alreadyread}} 位同学已会读</div>
         </div>
         <div class="home-good_right">
           <image
@@ -93,6 +93,20 @@ export default {
         size: 10
       },
       total: 0
+    }
+  },
+
+  computed: {
+    userInfo() {
+      return store.state.userInfo
+    }
+  },
+
+  watch: {
+    userInfo(n, o) {
+      if(n.id && !o.id) {
+        this.getCourseList()
+      }
     }
   },
 
@@ -186,8 +200,10 @@ export default {
   mounted () {
     this.getBannerList()
     this.getGradeList()
-    this.getCourseList()
     this.getBroadcastList()
+    if(this.userInfo.id) {
+      this.getCourseList()
+    }
     // let app = getApp()
   }
 }

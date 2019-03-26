@@ -68,6 +68,7 @@
 <script>
 import read from '../../components/read'
 import api from '../../request/api'
+import store from '../../store'
 
 export default {
   data () {
@@ -93,6 +94,17 @@ export default {
   computed: {
     subtitle () {
       return `${this.gradeArr[this.courseData.grade]}·${this.courseData.semester == 1 ? '上册' : '下册'}`
+    },
+    userInfo() {
+      return store.state.userInfo
+    }
+  },
+
+  watch: {
+    userInfo(n, o) {
+      if(n.id && !o.id && this.$root.$mp.query) {
+        this.getCourseDetail()
+      }
     }
   },
 
@@ -131,6 +143,8 @@ export default {
       })
     },
     clickItem(id) {
+      this.showPopup = false
+      this.globalData.audio.stop()
       wx.redirectTo({ url: '/pages/listen/main?id=' + id });
     },
     clickRead () {
@@ -151,7 +165,9 @@ export default {
 
   mounted () {
     this.id = this.$root.$mp.query.id
-    this.getCourseDetail()
+    if(this.userInfo.id) {
+      this.getCourseDetail()
+    }
     setTimeout(() => {
       this.showIntroduce = true
       setTimeout(() => {
@@ -160,6 +176,10 @@ export default {
     }, 500);
     // this.initAudio()
     // let app = getApp()
+  },
+
+  onHide() {
+    this.globalData.audio.stop()
   }
 }
 </script>

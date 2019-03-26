@@ -1,24 +1,39 @@
 <template>
   <div class="counter-warp">
-    <button>授权登录</button>
+    <button
+      open-type="getUserInfo"
+      @getuserinfo="getUserInfo"
+      lang="zh_CN"
+      >
+      授权登录
+    </button>
   </div>
 </template>
 
 <script>
 // Use Vuex
+import store from '../../store'
+import api from '../../request/api'
 
 export default {
   computed: {
-    count () {
-      return store.state.count
+    userInfo () {
+      return store.state.userInfo
     }
   },
   methods: {
-    increment () {
-      store.commit('increment')
-    },
-    decrement () {
-      store.commit('decrement')
+    getUserInfo(res) {
+      let {encryptedData, iv, rawData, signature} = res.mp.detail
+      console.log(res)
+      api.user.updateUserWxMa({
+        encryptedData,
+        iv,
+        rawData,
+        signature
+      }).then(({data}) => {
+        store.commit('updateUserInfo', data.resultData)
+        wx.redirectTo({ url: '/pages/index/main' });
+      })
     }
   }
 }

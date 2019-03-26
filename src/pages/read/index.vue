@@ -21,7 +21,8 @@
         <text class="mask-text">请准备···</text>
       </div>
     </div>
-    <div class="introduce">
+    <div class="introduce"
+         @tap="bindEnded">
       <image :src="userInfo.headimgurl"
              mode="widthFix"
              class="introduce-image" />
@@ -29,7 +30,8 @@
     </div>
 
     <read ref="read"
-          :isReady="true"
+          className="readPage"
+          :isReady="!isStart"
           :title="courseData.name"
           :subtitle="subtitle"
           :lyricSrc="courseData.authorVrAudio"
@@ -38,7 +40,7 @@
           :disabled="disabled"
           @ended="bindEnded"
           @progress="changeProgress"
-          @duration="changeDuration"
+          @timeUpdate="changeTimeUpdate"
           v-if="show">
     </read>
     <div class="control"
@@ -57,20 +59,35 @@
                :style="{'width': progress + '%'}"></div>
         </div>
         <div class="reset-btn"
-             v-if="isEnd">重录</div>
+             v-if="isPlay || isEnd"
+             @tap="clickReset">重录</div>
         <div class="play-btn ly"
              v-if="!isEnd"
              @tap="clickRecorderStart">
-          <text class="play-btn_text">{{duration}}</text>
+          <text class="play-btn_text">{{currentTime}}</text>
         </div>
-        <div class="play-btn"
+        <div class="play-btn bf"
              v-else
              @tap="clickRecorderPlay"></div>
         <div class="save-btn"
-             v-if="isEnd">保存</div>
+             v-if="isEnd"
+             @tap="clickSave">保存</div>
       </div>
     </div>
 
+    <wux-popup :visible="showReset"
+               @close="changeReset">
+      <div class="reset-popup">
+        <text class="reset-popup_text">确认重录 </text>
+        <text class="reset-popup_content">确认后，当前录制的内容将不会保存</text>
+        <div class="reset-popup_btn">
+          <div class="reset-popup_cancel"
+               @tap="changeReset">取消</div>
+          <div class="reset-popup_confim"
+               @tap="clickResetConfim">确认</div>
+        </div>
+      </div>
+    </wux-popup>
   </div>
 </template>
 
@@ -97,8 +114,9 @@ export default {
       recorder: null,
       isPlay: null,
       isEnd: false,
-      duration: '00:00',
-      courseData: {}
+      currentTime: '00:00',
+      courseData: {},
+      showReset: false
     }
   },
 
@@ -109,9 +127,8 @@ export default {
   },
 
   watch: {
-    userInfo(n, o) {
-      if(n.id && !o.id) {
-        console.log(this.$root.$mp.query)
+    userInfo (n, o) {
+      if (n.id && !o.id && this.$root.$mp.query) {
         this.getCourseDetail()
       }
     }
@@ -140,32 +157,61 @@ export default {
         console.log('pause')
       })
       this.recorder.onStop((e) => {
-        console.log(e)
         this.isPlay = false
         this.isEnd = true
         this.recorderSrc = e.tempFilePath
         this.audio.src = e.tempFilePath
-        this.audio.play()
       })
     },
-    bindEnded () {
+    clickResetConfim () {
+      this.recorder.stop()
+      setTimeout(() => {
+        this.$refs.read.stop()
+        this.currentTime = '00:00'
+        this.isPlay = null
+        this.isEnd = false
+        this.changeReset()
+      }, 500);
+    },
+    clickStop () {
       this.recorder.stop()
     },
-    changeDuration (params) {
-      this.duration = params.formatDuration
-      this.disabled = true
-      console.log(this.recorder)
-      this.recorder.start({
-        format: 'mp3',
-        sampleRate: 16000,
-        encodeBitRate: 96000,
-        duration: 6000000
-      })
-      wx.setKeepScreenOn({
-        keepScreenOn: true
-      })
+    clickReset () {
+      this.showReset = true
+      this.recorder.pause()
+    },
+    clickSave () {
+      console.log(this.recorderSrc)
+      wx.uploadFile({
+        url: 'https://huoke.test.k12.vip/declaim/common/uploadPublicFile', //开发者服务器 url
+        filePath: this.recorderSrc, //要上传文件资源的路径
+        name: 'file', //文件对应的 key , 开发者在服务器端通过这个 key 可以获取到文件二进制内容
+        header: {
+          'content-type': 'multipart/form-data'
+        },
+        success: res => {
+
+          console.log(res)
+        },
+        fail: () => {
+          console.log(fail)
+        },
+      });
+    },
+    changeReset () {
+      console.log('cancel')
+      this.showReset = !this.showReset
+      this.clickRecorderStart()
+    },
+    bindEnded () {
+      this.$refs.read.stop()
+      this.recorder.stop()
+    },
+    changeTimeUpdate (params) {
+      this.currentTime = params.formatCurrentTime
     },
     clickRecorderPlay () {
+      console.log(this.audio.paused)
       if (this.audio.paused) {
         this.audio.play()
       } else {
@@ -174,7 +220,6 @@ export default {
     },
     clickRecorderStart () {
       let { recorder } = this
-      console.log()
       if (this.isPlay != null) {
         if (this.isPlay) {
           this.recorder.pause()
@@ -183,6 +228,17 @@ export default {
         }
       } else {
         this.$refs.read.play()
+        this.disabled = true
+        console.log(this.recorder)
+        this.recorder.start({
+          format: 'mp3',
+          sampleRate: 16000,
+          encodeBitRate: 96000,
+          duration: 6000000
+        })
+        wx.setKeepScreenOn({
+          keepScreenOn: true
+        })
       }
 
 
@@ -201,18 +257,32 @@ export default {
       this.showRead = !this.showRead
     },
     clickStart () {
-      this.showMask = true
-      this.timer = setInterval(() => {
-        let random = Math.floor(10 * Math.random())
-        if (this.percent != 100) {
-          console.log(this.percent, Math.floor(10 * Math.random()))
-          this.percent = this.percent + random <= 100 ? this.percent + random : 100
-        } else {
-          clearInterval(this.timer)
-          this.donwTimeStart()
-        }
+      wx.getSetting({
+        success (res) {
+          if (!res.authSetting['scope.record']) {
+            wx.authorize({
+              scope: 'scope.record',
+              success () {
+                console.log('授权成功')
+              }
+            })
+          } else {
+            this.showMask = true
+            this.timer = setInterval(() => {
+              let random = Math.floor(10 * Math.random())
+              if (this.percent != 100) {
+                console.log(this.percent, Math.floor(10 * Math.random()))
+                this.percent = this.percent + random <= 100 ? this.percent + random : 100
+              } else {
+                clearInterval(this.timer)
+                this.donwTimeStart()
+              }
 
-      }, 200);
+            }, 200);
+          }
+        }
+      })
+
     },
     donwTimeStart () {
       this.timer = setInterval(() => {
@@ -243,11 +313,28 @@ export default {
     this.recorder = wx.getRecorderManager()
     this.audio = wx.createInnerAudioContext()
     this.initRecorder()
-    if(this.userInfo.id) {
+    wx.getSetting({
+      success (res) {
+        if (!res.authSetting['scope.record']) {
+          wx.authorize({
+            scope: 'scope.record',
+            success () {
+              console.log('授权成功')
+            }
+          })
+        }
+      }
+    })
+    if (this.userInfo.id) {
       this.getCourseDetail()
     }
     // this.initAudio()
     // let app = getApp()
+  },
+
+  onHide () {
+    this.audio.destroy()
+    this.recorder.stop()
   }
 }
 </script>
@@ -257,6 +344,42 @@ export default {
   padding-top: 1px;
   height: 100vh;
   background-color: #01141d;
+  .reset-popup {
+    @include flex-column-center;
+    width: 327px;
+    height: 178px;
+    background: rgba(3, 26, 36, 1);
+    box-shadow: 0px 2px 10px 0px rgba(1, 21, 31, 1);
+    border-radius: 16px;
+    &_text {
+      font-size: 20px;
+      color: rgba($color: #fff, $alpha: 0.75);
+    }
+    &_content {
+      font-size: 16px;
+      color: rgba($color: #fff, $alpha: 0.75);
+    }
+    &_btn {
+      @include flex-center;
+      margin-top: 32px;
+      width: 236px;
+    }
+    &_cancel,
+    &_confim {
+      @include flex-center;
+      box-sizing: border-box;
+      width: 100px;
+      height: 40px;
+      font-size: 15px;
+      font-weight: 500;
+      border-radius: 26px;
+      border: 1px solid rgba(255, 255, 255, 0.16);
+    }
+    &_confim {
+      margin-left: 31px;
+      color: #30c0ff;
+    }
+  }
   .progress {
     position: absolute;
     left: 24px;
@@ -308,7 +431,7 @@ export default {
       );
     }
     .circle-text {
-      font-size:22px;
+      font-size: 22px;
       font-weight: 600;
       color: rgba(255, 255, 255, 1);
       line-height: 30px;
@@ -367,9 +490,17 @@ export default {
       margin: 0 36px;
       width: 72px;
       height: 72px;
-      background-color: #01151F;
+      background-color: #01151f;
       &.ly {
+        position: absolute;
+        margin: 0;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%, -50%);
         @include bg('/read/zyld-button-start.png');
+      }
+      &.bf {
+        @include bg('/read/');
       }
       &_text {
         font-size: 13px;
@@ -378,16 +509,21 @@ export default {
     }
     .reset-btn,
     .save-btn {
+      position: absolute;
+      top: 50%;
       @include flex-center;
       width: 92px;
       height: 52px;
-      background: linear-gradient(
-        90deg,
-        rgba(151, 240, 94, 1) 0%,
-        rgba(56, 226, 146, 1) 100%
-      );
-      box-shadow: 0px 3px 8px -3px rgba(183, 242, 175, 0.4);
+      color: rgba($color: #fff, $alpha: 0.75);
+      border: 1px solid rgba(255, 255, 255, 0.16);
       border-radius: 26px;
+      transform: translateY(-50%);
+    }
+    .save-btn {
+      right: 24px;
+    }
+    .reset-btn {
+      left: 24px;
     }
     &-btn {
       @include bg('/read/zyld-button-go.png');

@@ -6,7 +6,8 @@ const user = {
   },
   updateUserWxMa(params) {
     return axios.post('/user/updateUserWxMa', params)
-  }
+  },
+
 
 }
 

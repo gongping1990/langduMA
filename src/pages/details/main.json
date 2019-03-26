@@ -1,5 +1,7 @@
 {
   "navigationBarTitleText": "课程主页",
   "usingComponents": {
+    "wux-popup": "/static/wux/popup/index",
+    "wux-badge": "/static/wux/badge/index"
   }
 }

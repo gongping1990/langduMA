@@ -3,6 +3,7 @@
   "navigationBarBackgroundColor": "#01141D",
   "navigationBarTextStyle": "white",
   "usingComponents": {
-    "wux-circle": "/static/wux/circle/index"
+    "wux-circle": "/static/wux/circle/index",
+    "wux-popup": "/static/wux/popup/index"
   }
 }

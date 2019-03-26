@@ -30,11 +30,7 @@
 			"list": []
 		},
 		"miniprogram": {
-<<<<<<< HEAD
 			"current": 3,
-=======
-			"current": 7,
->>>>>>> cd8979c124b5aa309203eb75c55d5ae4658b5a06
 			"list": [
 				{
 					"id": -1,
@@ -59,7 +55,7 @@
 				{
 					"id": 3,
 					"name": "阅读",
-					"pathName": "pages/read/main",
+					"pathName": "pages/listen/main",
 					"query": "id=1110007948997107714"
 				}
 			]

@@ -4,24 +4,35 @@
       <image class="introduce-image"
              :src="detailData.headImage"
              mode="widthFix"
-             lazy-load="false">
-      </image>
+             lazy-load="false" />
       <div class="introduce-content">
         <div class="introduce-title">朗读老师：<text class="introduce-weight">{{detailData.teacherName}}</text></div>
         <text class="introduce-text">{{detailData.teacherIntroduce}}</text>
       </div>
     </div>
     <div class="details-content">
-      <div class="details-cover">
+      <div class="details-cover"
+           @tap="changePopup">
+        <div class="details-cover_mask">
+          <div class="details-cover_bg"></div>
+          <image src="https://pub.file.k12.vip/read/lesson/kczy-button-lock.png"
+                 mode="widthFix" />
+        </div>
         <image class="details-cover-image"
                :src="detailData.comAchievement"
                mode="scaleToFill"
                lazy-load="false" />
-        <div class="details-cover_popover">
+        <div class="details-cover_popover"
+             v-if="!detailData.unlocktype">
           <text>快来解锁我吧</text>
           <i class="details-cover_arrow"></i>
         </div>
-        <div class="details-cover_tag">未解锁</div>
+        <div class="details-cover_tag"
+             v-if="detailData.unlocktype">
+          <image src="https://pub.file.k12.vip/read/lesson/kczy-icon-good.png"
+                 mode="widthFix" />
+          <text>{{detailData.courselikes}}</text>
+        </div>
       </div>
       <text class="details-title">{{detailData.name}}</text>
       <div class="details-info">
@@ -40,14 +51,22 @@
                src="https://pub.file.k12.vip/read/lesson/kczy-button-read.png" />
         <text class="action-text">自由朗读</text>
       </div>
-      <div class="play-btn"
+      <button v-if="!userInfo.phone"
+              class="play-btn"
+              open-type="getPhoneNumber"
+              @getphonenumber="getPhoneNumber">
+      </button>
+      <div v-if="userInfo.phone"
+           class="play-btn"
            @tap="navigateTo('listen')"></div>
-      <div class="wdzp-btn">
-        <image class="action-image"
-               mode="widthFix"
-               src="https://pub.file.k12.vip/read/lesson/kczy-button-works.png" />
-        <text class="action-text">我的作品</text>
-      </div>
+      <wux-badge :count="detailData.uploadworks">
+        <div class="wdzp-btn">
+          <image class="action-image"
+                 mode="widthFix"
+                 src="https://pub.file.k12.vip/read/lesson/kczy-button-works.png" />
+          <text class="action-text">我的作品</text>
+        </div>
+      </wux-badge>
     </div>
     <div class="details-footer">
       <div class="details-footer_content">
@@ -62,21 +81,47 @@
       </div>
       <text class="link-btn">查看人气排行 ></text>
     </div>
+
+    <wux-popup closable
+               :visible="showPopup">
+      <div class="popup">
+        <image class="popup-image"
+               :src="detailData.comAchievement"
+               mode="widthFix" />
+        <text class="popup-text">自由朗读课文就能解锁我哟~</text>
+        <div class="popup-btn"
+             @tap="changePopup">我知道了</div>
+      </div>
+    </wux-popup>
   </div>
 </template>
 
 <script>
 import api from '../../request/api'
+import store from '../../store'
 
 export default {
   data () {
     return {
-      detailData: {}
+      detailData: {},
+      showPopup: false
+    }
+  },
+
+  computed: {
+    userInfo () {
+      return store.state.userInfo
     }
   },
 
 
   methods: {
+    getPhoneNumber (res) {
+      console.log(res)
+    },
+    changePopup () {
+      this.showPopup = !this.showPopup
+    },
     navigateTo (path) {
       wx.navigateTo({ url: `/pages/${path}/main?id=${this.detailData.id}` });
     },
@@ -102,6 +147,36 @@ export default {
   .wdzp-btn {
     @include flex-column-center;
   }
+  .popup {
+    @include flex-column-center;
+    &-image {
+      margin-bottom: 12px;
+      width: 180px;
+      height: 240px;
+      border-radius: 6px;
+    }
+    &-text {
+      font-size: 14px;
+      font-weight: 400;
+      color: rgba(255, 255, 255, 0.75);
+      line-height: 20px;
+    }
+    &-btn {
+      @include flex-center;
+      margin-top: 24px;
+      width: 263px;
+      height: 40px;
+      font-size: 15px;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 1);
+      background: linear-gradient(
+        90deg,
+        rgba(102, 255, 248, 1) 0%,
+        rgba(48, 192, 255, 1) 100%
+      );
+      border-radius: 26px;
+    }
+  }
   &-message {
     color: #1d1b1b;
     font-size: 17px;
@@ -115,6 +190,7 @@ export default {
     position: absolute;
     bottom: 0;
     padding: 12px 24px;
+
     border-top: 1px solid rgba($color: #000000, $alpha: 0.1);
     &_content {
       @include flex-center;
@@ -152,6 +228,8 @@ export default {
       width: 80px;
       height: 90px;
       margin: 0 50px;
+      border: none;
+      background-color: transparent;
     }
   }
   &-title {
@@ -188,7 +266,33 @@ export default {
     height: 160px;
     background: rgba(208, 208, 208, 1);
     box-shadow: 0px 6px 16px 0px rgba(0, 0, 0, 0.1);
+    &_bg {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
+      background: rgba(48, 192, 255, 0.5);
+      border-radius: 6px;
+      filter: blur(2px);
+    }
+    &_mask {
+      @include flex-center;
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 0;
+      bottom: 0;
 
+      image {
+        position: absolute;
+        left: 50%;
+        top: 50%;
+        width: 60px;
+        height: 60px;
+        transform: translate(-50%, -50%);
+      }
+    }
     &-image {
       width: 120px;
       height: 160px;
@@ -218,6 +322,11 @@ export default {
       color: #fff;
       background: rgba(155, 155, 155, 1);
       border-radius: 100px 0px 6px 0px;
+      image {
+        width: 11px;
+        height: 11px;
+        margin-right: 3px;
+      }
     }
     &_arrow {
       position: absolute;

@@ -1,5 +1,5 @@
 <template>
-  <div class="read-component">
+  <div class="read-component" :class="className">
     <div class="lyric">
       <text class="lyric-title">《{{title}}》</text>
       <text class="lyric-subtitle">{{subtitle}}</text>
@@ -114,6 +114,10 @@ export default {
     isReady: {
       type: Boolean,
       default: false
+    },
+    className: {
+      type: String,
+      default: ''
     }
   },
   data () {
@@ -146,6 +150,9 @@ export default {
     },
     pause () {
       this.audio.pause()
+    },
+    stop() {
+      this.audio.stop()
     },
     catchtouchmove () {
       return true
@@ -251,6 +258,14 @@ export default {
         this.$emit('pause')
       })
 
+      this.audio.onStop(() => {
+        console.log('stop')
+        this.paused = true
+        this.progress = 0
+        this.startTime = '00:00'
+        this.lyricIndex = 0
+      })
+
       this.audio.onEnded(() => {
         console.log('end')
         this.progress = 100
@@ -260,12 +275,14 @@ export default {
 
       this.audio.onTimeUpdate(() => {
         console.log('update')
-        this.$emit('timeUpdate')
+        this.$emit('timeUpdate',{
+          currentTime: this.audio.currentTime,
+          formatCurrentTime: this.timeToFormat(this.audio.currentTime)
+        })
         if (this.endTime == '00:00') {
           this.endTime = this.timeToFormat(this.audio.duration)
           this.$emit('duration', {
-            duration: this.audio.duration,
-            formatDuration: this.timeToFormat(this.audio.duration)
+            duration: this.audio.duration
           })
         }
         this.startTime = this.timeToFormat(this.audio.currentTime)
@@ -481,9 +498,13 @@ export default {
       font-size: 17px !important;
       color: #fff;
     }
-    &.active.isReady {
-      color: #38E292;
-    }
+
+  }
+}
+
+.readPage {
+  .lyric-text.active {
+    color: #38E292!important;
   }
 }
 </style>

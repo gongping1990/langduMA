@@ -14,22 +14,22 @@
       <div class="ld-my-work-footer">
         <wux-swipe-action autoClose useSlots v-for="(item, index) of 5" :key="index">
           <div slot="right" @click="delItem" class="-footer-action">
-            <wux-icon type="ios-add" size="32" />
+            <img class="-right-img" src="https://pub.file.k12.vip/read/my/zp-icon-delete.png"/>
           </div>
           <div class="-footer-item">
             <div class="-item-tip" v-if="index==0">赞最多</div>
-            <img class="-item-img" src="https://pub.file.k12.vip/read/lesson/kczy-button-play.png"/>
+            <img class="-item-img" src="https://pub.file.k12.vip/read/my/zp-button-share.png"/>
             <div class="-item-left">
               <div class="-item-title">
-                <span>《天气人》</span>
-                <img class="-img" src="https://pub.file.k12.vip/read/lesson/kczy-button-play.png"/>
+                <span>《{{item.coursename}}》</span>
+                <img class="-img" src="https://pub.file.k12.vip/read/my/msfd-button-play.png"/>
               </div>
             </div>
             <div class="-item-down">
-              <div class="-item-time">日期: 2019-03-22</div>
+              <div class="-item-time">日期: {{item.gmtCreate}}</div>
               <div class="-item-num">
                 <img class="-img" src="https://pub.file.k12.vip/read/icon-good.png"/>
-                <span>2933</span>
+                <span>{{item.likes || 0}}</span>
               </div>
             </div>
           </div>
@@ -136,6 +136,11 @@
         width: 40px;
         height: 40px;
         top: 40%;
+
+        .-right-img {
+          width:20px;
+          height:25px;
+        }
       }
 
       .-footer-item {

@@ -68,8 +68,14 @@
               </div>
             </div>
             <div class="-left-down">
-              <div class="-left-down-text">123000</div>
-              <div class="-left-down-text">2933</div>
+              <div class="-left-down-text">
+                <img class="-left-down-text-img" src="https://pub.file.k12.vip/read/wind/icon-playing.png"/>
+                123000
+              </div>
+              <div class="-left-down-text">
+                <img class="-left-down-text-img-two" src="https://pub.file.k12.vip/read/rank/icon-good2.png"/>
+                2933
+              </div>
             </div>
           </div>
           <div class="-down-item-right">
@@ -429,10 +435,21 @@
             align-items: center;
 
             &-text {
+              margin-left: 4px;
               font-size: 12px;
               font-weight: 400;
               color: rgba(74, 74, 74, 1);
               line-height: 17px;
+
+              &-img {
+                width:14px;
+                height:11px;
+              }
+
+              &-img-two {
+                width:11px;
+                height:11px;
+              }
             }
           }
 

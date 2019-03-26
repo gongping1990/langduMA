@@ -93,7 +93,7 @@
       },
       toJump() {
         wx.navigateTo({
-          url: "/pages/popularityRank/main"
+          url: `/pages/popularityRank/main?type=1`
         });
       },
       getList() {

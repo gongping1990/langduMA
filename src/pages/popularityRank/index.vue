@@ -1,8 +1,8 @@
 <template>
   <div class="ld-popularityRank">
     <div class="ld-popularityRank-header">
-      <span :class="{'-active': tabType == '1'}" class="-header-span" @click="changeTab(1)">本周排行</span>
-      <span :class="{'-active': tabType == '2'}" @click="changeTab(2)">上周排行</span>
+      <span :class="{'-active': tabType == '1'}" class="-header-span" @click="changeTab(1)">{{queryInfo.type == 1 ? '本周排行' : queryInfo.name}}</span>
+      <span :class="{'-active': tabType == '2'}" @click="changeTab(2)" v-if="queryInfo.type == 1">上周排行</span>
     </div>
     <scroll-view class="ld-popularityRank-content"
                  @scrolltolower="bindLoadItem"
@@ -121,6 +121,7 @@
         isOpenPopup: false,
         isOpenMore: false,
         dataList: [],
+        queryInfo: '',
         tabType: "1"
       };
     },
@@ -128,7 +129,8 @@
     components: {},
 
     onLoad() {
-      console.log(222222);
+      this.queryInfo = this.$root.$mp.query
+      console.log(this.$root.$mp.query,'090');
     },
 
     methods: {

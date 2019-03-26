@@ -63,8 +63,8 @@
         <div class="wdzp-btn">
           <image class="action-image"
                  mode="widthFix"
-                 src="https://pub.file.k12.vip/read/lesson/kczy-button-works.png" />
-          <text class="action-text">我的作品</text>
+                 src="https://pub.file.k12.vip/read/lesson/kczy-button-works.png" @click="myWork"/>
+          <text class="action-text" @click="myWork">我的作品</text>
         </div>
       </wux-badge>
     </div>
@@ -79,7 +79,7 @@
           ··· heaven小林哥… 等已解锁
         </div>
       </div>
-      <text class="link-btn">查看人气排行 ></text>
+      <text class="link-btn" @click="toJump">查看人气排行 ></text>
     </div>
 
     <wux-popup closable
@@ -116,6 +116,16 @@ export default {
 
 
   methods: {
+    myWork () {
+      wx.navigateTo({
+        url: `/pages/myWorks/main?id=${this.detailData.id}&name=${this.detailData.name}`
+      });
+    },
+    toJump () {
+      wx.navigateTo({
+        url: `/pages/popularityRank/main?type=2&name=${this.detailData.name}`
+      });
+    },
     getPhoneNumber (res) {
       console.log(res)
     },

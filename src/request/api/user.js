@@ -7,6 +7,10 @@ const user = {
   updateUserWxMa(params) {
     return axios.post('/user/updateUserWxMa', params)
   },
+  // 本周、上周排行榜
+  getUserLikeRank(params) {
+    return axios.get('/user/userLikeRank', params)
+  },
 
 
 }

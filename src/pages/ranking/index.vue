@@ -115,10 +115,9 @@
         console.log(e.mp.detail.scrollTop);
       },
       bindLoadItem() {
-        console.log(111);
         if (this.page.current < Math.ceil(this.page.total / this.page.size)) {
           this.page.current++;
-          // this.getList()
+          this.getList()
         }
       },
       toJump() {
@@ -132,22 +131,12 @@
           current: this.page.current,
           size: this.page.size
         }).then(({ data }) => {
-          let array = [];
-          let arrayStorage = [];
-
-          data.resultData.records.forEach(item => {
-            if (item.income) {
-              array.push(item);
-            }
-          });
-
           if (this.page.current > 1) {
-            arrayStorage = arrayStorage.concat(array);
+            this.dataList = this.dataList.concat(data.resultData.records)
           } else {
-            arrayStorage = array;
+            this.dataList = data.resultData.records;
           }
-
-          this.page.total = data.resultData.total;
+          this.page.total = data.resultData.total
           this.isFetching = false;
         }, () => {
           this.isFetching = false;

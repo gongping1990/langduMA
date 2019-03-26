@@ -1,7 +1,9 @@
 <template>
   <div class="ld-popularityRank">
     <div class="ld-popularityRank-header">
-      <span :class="{'-active': tabType == '1'}" class="-header-span" @click="changeTab(1)">{{queryInfo.type == 1 ? '本周排行' : queryInfo.name}}</span>
+      <span :class="{'-active': tabType == '1'}" class="-header-span" @click="changeTab(1)">
+        {{queryInfo.type == 1 ? "本周排行" : queryInfo.name}}
+      </span>
       <span :class="{'-active': tabType == '2'}" @click="changeTab(2)" v-if="queryInfo.type == 1">上周排行</span>
     </div>
     <scroll-view class="ld-popularityRank-content"
@@ -65,22 +67,30 @@
               </div>
             </div>
           </div>
-          <div class="-item-right -footer-right" @click="openPopup">集赞冲榜</div>
-          <img class="-footer-img" src="https://pub.file.k12.vip/read/rank/zp-button-share.png"/>
+          <div class="-item-right -footer-right">集赞冲榜</div>
+          <img @click="openPopup" class="-footer-img" src="https://pub.file.k12.vip/read/rank/zp-button-share.png"/>
         </div>
       </div>
     </div>
+
     <wux-popup :visible="isOpenPopup" position="bottom" @close="openPopup">
       <div class="ld-popularityRank-popup-content" :class="{'-more': isOpenMore}">
         <div class="-popup-title">叫大家来给你的作品点赞吧</div>
         <div class="-popup-item" v-if="!isOpenMore">
           <div class="-item-tip">赞最多</div>
           <div class="-item-left">
-            <div class="-item-title">《天气人》</div>
-            <div class="-item-title-two">日期: 2019-03-22</div>
-            <div class="-item-num">2933</div>
+            <div class="-item-title">
+              <span>《天地人》</span>
+              <img class="-img" src="https://pub.file.k12.vip/read/my/msfd-button-play.png"/>
+            </div>
           </div>
-          <div class="-item-center"></div>
+          <div class="-item-down">
+            <div class="-item-time">日期: 2019-23-12</div>
+            <div class="-item-num">
+              <img class="-img" src="https://pub.file.k12.vip/read/icon-good.png"/>
+              <span>{{11111111110}}</span>
+            </div>
+          </div>
         </div>
         <scroll-view class="-popup-item-wrap"
                      v-if="isOpenMore"
@@ -88,19 +98,26 @@
                      scroll-y
                      @scroll="scrollTopFn"
                      scroll-with-animation>
-          <div class="-popup-item" v-for="(item, index) of 4" :key="index">
+          <div class="-popup-item -popup-item-more" v-for="(item, index) of 4" :key="index"
+               :class="{'-active': index==0}">
             <div class="-item-tip" v-if="index==0">赞最多</div>
             <div class="-item-left">
-              <div class="-item-title">《天气人》</div>
-              <div class="-item-title-two">日期: 2019-03-22</div>
-              <div class="-item-num">2933</div>
+              <div class="-item-title">
+                <span>《{{item.coursename}}》</span>
+                <img class="-img" src="https://pub.file.k12.vip/read/my/msfd-button-play.png"/>
+              </div>
             </div>
-            <div class="-item-center"></div>
+            <div class="-item-down">
+              <div class="-item-time">日期: {{item.gmtCreate}}</div>
+              <div class="-item-num">
+                <img class="-img" src="https://pub.file.k12.vip/read/icon-good.png"/>
+                <span>{{item.likes || 0}}</span>
+              </div>
+            </div>
           </div>
         </scroll-view>
         <div class="-popup-more" @click="openMore" v-if="!isOpenMore">选择其他作品 ></div>
       </div>
-
 
       <button open-type="share" class="ld-popularityRank-popup-btn">分享到班级群</button>
     </wux-popup>
@@ -108,6 +125,7 @@
 </template>
 
 <script>
+  import api from "../../request/api";
 
   export default {
     data() {
@@ -121,7 +139,7 @@
         isOpenPopup: false,
         isOpenMore: false,
         dataList: [],
-        queryInfo: '',
+        queryInfo: "",
         tabType: "1"
       };
     },
@@ -129,8 +147,15 @@
     components: {},
 
     onLoad() {
-      this.queryInfo = this.$root.$mp.query
-      console.log(this.$root.$mp.query,'090');
+      this.queryInfo = this.$root.$mp.query;
+    },
+
+    mounted() {
+      if (this.queryInfo.type == 1) {
+        this.getWeekList();
+      } else {
+        this.getItemList()
+      }
     },
 
     methods: {
@@ -139,43 +164,61 @@
       },
       openPopup() {
         this.isOpenPopup = !this.isOpenPopup;
+        this.queryInfo.type == 1 && this.openMore();
       },
       changeTab(num) {
         this.tabType = num;
-      },
-      bindLoadItem() {
-        console.log(111);
-        if (this.page.current < Math.ceil(this.page.total / this.page.size)) {
-          this.page.current++;
-          // this.getList()
+        if (this.queryInfo.type == 1) {
+          this.getWeekList();
+        } else {
+          this.getItemList()
         }
       },
-      getList() {
-        this.isFetching = true;
-        api.userAccount.getUserAccountIncomeList({
-          current: this.page.current,
-          size: this.page.size
-        }).then(({ data }) => {
-          let array = [];
-          let arrayStorage = [];
+      bindLoadItem() {
 
-          data.resultData.records.forEach(item => {
-            if (item.income) {
-              array.push(item);
-            }
-          });
-
-          if (this.page.current > 1) {
-            arrayStorage = arrayStorage.concat(array);
+        if (this.page.current < Math.ceil(this.page.total / this.page.size)) {
+          this.page.current++;
+          if (this.queryInfo.type == 1) {
+            this.getWeekList();
           } else {
-            arrayStorage = array;
+            this.getItemList()
           }
-
+        }
+      },
+      getWeekList() {
+        this.isFetching = true;
+        api.user.getUserLikeRank({
+          nowWeek: this.tabType == 1
+        }).then(({ data }) => {
+          if (this.page.current > 1) {
+            this.dataList = this.dataList.concat(data.resultData.records);
+          } else {
+            this.dataList = data.resultData.records;
+          }
           this.page.total = data.resultData.total;
           this.isFetching = false;
         }, () => {
           this.isFetching = false;
         });
+      },
+
+      getItemList() {
+        api.work.getItemRankinglist({
+          courseid: "",
+          current: this.page.current,
+          size: this.page.size
+        }).then(({ data }) => {
+          if (this.page.current > 1) {
+            this.dataList = this.dataList.concat(data.resultData.records);
+          } else {
+            this.dataList = data.resultData.records;
+          }
+          this.page.total = data.resultData.total;
+          this.isFetching = false;
+        }, () => {
+          this.isFetching = false;
+        });
+        ;
       }
     },
 
@@ -188,8 +231,6 @@
         }
       });
     }
-
-
   };
 </script>
 
@@ -214,7 +255,7 @@
       font-weight: 400;
       color: #707374;
       line-height: 22px;
-      background: url("https://pub.file.k12.vip/read/rank/icon-tittle.png") 10% no-repeat ;
+      background: url("https://pub.file.k12.vip/read/rank/icon-tittle.png") 10% no-repeat;
       background-size: contain;
 
       .-header-span {
@@ -242,22 +283,22 @@
             position: absolute;
             top: 36px;
             left: 48px;
-            width:48px;
-            height:48px;
+            width: 48px;
+            height: 48px;
 
             &-crown {
               position: absolute;
               top: -18px;
               left: 12px;
-              width:32px;
-              height:20px;
+              width: 32px;
+              height: 20px;
             }
 
             &-header {
-              border:3px solid rgba(226, 198, 92, 1);
+              border: 3px solid rgba(226, 198, 92, 1);
               border-radius: 50%;
-              width:48px;
-              height:48px;
+              width: 48px;
+              height: 48px;
             }
           }
 
@@ -387,71 +428,88 @@
       }
 
       .-popup-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
         position: relative;
-        padding: 16px 24px;
+        padding: 26px 16px 18px;
         margin: 0 16px;
-        border-radius: 6px;
-        border: 1px solid rgba(236, 236, 236, 1);
+        background: rgba(255, 255, 255, 1);
+        box-shadow: 0px 2px 10px 0px rgba(222, 232, 237, 1);
+        border-radius: 16px;
 
         .-item-tip {
           position: absolute;
           top: 0;
-          right: 0;
-          width: 44px;
-          height: 18px;
-          background: rgba(155, 155, 155, 1);
-          border-radius: 0px 6px 0px 100px;
+          left: 0;
           font-size: 10px;
           font-weight: 400;
+          width: 56px;
+          height: 18px;
+          background: linear-gradient(45deg, rgba(255, 82, 128, 1) 0%, rgba(255, 102, 142, 1) 100%);
+          border-radius: 86px 0 100px 0;
           color: rgba(255, 255, 255, 1);
           line-height: 18px;
           text-align: center;
+          padding-left: 4px;
         }
 
         .-item-left {
-          text-align: left;
-          width: 60%;
 
           .-item-title {
+            display: flex;
+            align-items: center;
             font-size: 16px;
             font-weight: 500;
-            color: rgba(74, 74, 74, 1);
-            line-height: 22px;
-          }
+            color: #1D1B1B;
 
-          .-item-title-two {
-            margin-top: 4px;
-            font-size: 12px;
+            .-img {
+              display: inline-block;
+              margin-left: 4px;
+              color: #30C0FF;
+              width: 16px;
+              height: 16px;
+            }
+          }
+        }
+
+        .-item-down {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          margin-top: 12px;
+
+          .-item-time {
+            font-size: 10px;
             font-weight: 300;
-            color: rgba(236, 236, 236, 1);
-            line-height: 14px;
+            color: #707374FF;
           }
 
           .-item-num {
-            margin-top: 12px;
-            font-size: 12px;
+            font-size: 14px;
             font-weight: 400;
-            color: rgba(74, 74, 74, 1);
-            line-height: 17px;
-          }
-        }
+            color: #FF668E;
 
-        .-item-center {
-          border-radius: 50%;
-          width: 32px;
-          height: 32px;
-          background: rgba(74, 74, 74, 1);
+            .-img {
+              margin-right: 8px;
+              width: 15px;
+              height: 15px;
+            }
+          }
         }
       }
 
+      .-active {
+        background: rgba(245, 245, 245, 1);
+      }
+
+      .-popup-item-more {
+        box-shadow: none;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+      }
+
       .-popup-more {
-        margin-top: 24px;
-        font-size: 12px;
+        margin-top: 32px;
+        font-size: 13px;
         font-weight: 400;
-        color: rgba(0, 0, 0, 1);
+        color: #707374FF;
       }
     }
 
@@ -459,12 +517,12 @@
       margin: 12px 24px 34px;
       width: 327px;
       height: 52px;
-      background: rgba(255, 255, 255, 1);
-      border-radius: 16px;
       font-size: 15px;
       font-weight: 500;
-      color: rgba(74, 74, 74, 1);
+      color: #ffffff;
       line-height: 52px;
+      background: linear-gradient(90deg, rgba(102, 255, 248, 1) 0%, rgba(48, 192, 255, 1) 100%);
+      border-radius: 26px;
     }
 
     .item-wrap {
@@ -476,8 +534,8 @@
       margin: 16px 0;
 
       .-item-img {
-        width:17px!important;
-        height:21px!important;
+        width: 17px !important;
+        height: 21px !important;
       }
 
       .-item-left {

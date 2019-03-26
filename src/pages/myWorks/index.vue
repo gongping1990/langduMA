@@ -6,9 +6,9 @@
                  @scroll="scrollTopFn"
                  scroll-with-animation>
       <div class="ld-my-work-header">
-        <div class="-header-down">《天地人》作品集</div>
+        <div class="-header-down">《{{queryInfo.name}}》 作品集</div>
         <div class="-header-top">
-          <img class="-img" src="https://wx.qlogo.cn/mmhead/DQUJ1lic9u2tgaIBMEvzETXs9SnwSjpLmXyHFibWDd3Ws/132"/>
+          <img class="-img" :src="userInfo.headimgurl"/>
         </div>
       </div>
       <div class="ld-my-work-footer">
@@ -34,7 +34,6 @@
             </div>
           </div>
         </wux-swipe-action>
-
       </div>
     </scroll-view>
 
@@ -42,7 +41,9 @@
 </template>
 
 <script>
-  import api from '../../request/api'
+  import api from "../../request/api";
+  import store from "../../store";
+
   export default {
 
     data() {
@@ -53,38 +54,58 @@
           total: ""
         },
         isFetching: false,
-        dataList: []
+        dataList: [],
+        queryInfo: ""
       };
     },
 
     components: {},
 
-    mounted () {
-      this.getList()
+    computed: {
+      userInfo() {
+        return store.state.userInfo;
+      }
+    },
+
+    mounted() {
+      this.queryInfo = this.$root.$mp.query;
+      this.getList();
     },
 
     methods: {
-      delItem (e) {
-        console.log(e,'001')
+      delItem(e) {
+        api.work.delItemWork({
+          id: ""
+        }).then(res => {
+          if (res.data.code == '200') {
+            wx.showToast({
+              title: '删除成功',
+              icon: 'none',
+              duration: 2000
+            })
+          }
+        });
+        console.log(e, "001");
       },
       bindLoadItem() {
         if (this.page.current < Math.ceil(this.page.total / this.page.size)) {
           this.page.current++;
-          this.getList()
+          this.getList();
         }
       },
       getList() {
         this.isFetching = true;
         api.work.getSingleList({
           current: this.page.current,
-          size: this.page.size
+          size: this.page.size,
+          id: this.queryInfo.id
         }).then(({ data }) => {
           if (this.page.current > 1) {
-            this.dataList = this.dataList.concat(data.resultData.records)
+            this.dataList = this.dataList.concat(data.resultData.records);
           } else {
             this.dataList = data.resultData.records;
           }
-          this.page.total = data.resultData.total
+          this.page.total = data.resultData.total;
           this.isFetching = false;
         }, () => {
           this.isFetching = false;
@@ -138,8 +159,8 @@
         top: 40%;
 
         .-right-img {
-          width:20px;
-          height:25px;
+          width: 20px;
+          height: 25px;
         }
       }
 
@@ -165,10 +186,10 @@
           left: 0;
           font-size: 10px;
           font-weight: 400;
-          width:56px;
-          height:18px;
-          background:linear-gradient(45deg,rgba(255,82,128,1) 0%,rgba(255,102,142,1) 100%);
-          border-radius:100px 0 100px 0;
+          width: 56px;
+          height: 18px;
+          background: linear-gradient(45deg, rgba(255, 82, 128, 1) 0%, rgba(255, 102, 142, 1) 100%);
+          border-radius: 100px 0 100px 0;
           color: rgba(255, 255, 255, 1);
           line-height: 18px;
           text-align: center;

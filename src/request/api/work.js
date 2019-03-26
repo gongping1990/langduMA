@@ -9,6 +9,12 @@ const work = {
   },
   getSingleList(params) {
     return axios.post('/work/single/works',params)
+  },
+  delItemWork(params) {
+    return axios.post('/work/removeById',params)
+  },
+  getItemRankinglist(params) {
+    return axios.post('/work/single/rankinglist',params)
   }
 
 }

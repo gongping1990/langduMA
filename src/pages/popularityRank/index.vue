@@ -14,35 +14,35 @@
         <div class="-content-item-one">
           <div class="-img">
             <img class="-img-crown" src="https://pub.file.k12.vip/read/rank/icon-head champion.png"/>
-            <img class="-img-header" src="https://wx.qlogo.cn/mmhead/DQUJ1lic9u2tgaIBMEvzETXs9SnwSjpLmXyHFibWDd3Ws/132">
+            <img class="-img-header" :src="dataItem.headimgurl">
           </div>
           <div class="-item-one-wrap">
             <div class="-item-one-wrap-text">
               <img class="-left" src="https://pub.file.k12.vip/read/rank/icon-1st.png"/>
               <div>
-                <div class="-name">VikentiyChaykovsky</div>
+                <div class="-name">{{dataItem.nickname}}</div>
                 <div class="-zan">
                   <img class="-zan-img" src="https://pub.file.k12.vip/read/rank/icon-good1.png"/>
-                  <span>29</span>
+                  <span>{{dataItem.likes}}</span>
                 </div>
               </div>
             </div>
             <img class="-item-one-wrap-img" src="https://pub.file.k12.vip/read/rank/kczy-icon-sel1.png"/>
           </div>
         </div>
-        <div class="item-wrap -content-wrap" v-for="(item,index) of 20" :key="index"
+        <div class="item-wrap -content-wrap" v-for="(item,index) of dataList" :key="index"
              :class="{'-two':index==0,'-three':index==1}">
           <img v-if="index==0" class="-item-img" src="https://pub.file.k12.vip/read/rank/icon-2ed.png"/>
           <img v-else-if="index==1" class="-item-img" src="https://pub.file.k12.vip/read/rank/icon-3rd.png"/>
           <div class="-item-left" v-else>{{index+2}}</div>
           <div class="-item-center">
             <img class="-item-center-img"
-                 src="https://wx.qlogo.cn/mmhead/DQUJ1lic9u2tgaIBMEvzETXs9SnwSjpLmXyHFibWDd3Ws/132"/>
+                 :src="item.headimgurl"/>
             <div class="-item-center-text">
-              <div class="-name">VikentiyChaykovsky</div>
+              <div class="-name">{{item.nickname}}</div>
               <div class="-zan">
                 <img class="-zan-img" src="https://pub.file.k12.vip/read/rank/icon-good2.png"/>
-                <span>29</span>
+                <span>{{item.likes}}</span>
               </div>
             </div>
           </div>
@@ -56,11 +56,11 @@
       <div class="-footer-wrap">
         <div class="item-wrap -footer-item">
           <div class="-item-left -footer-num">200</div>
-          <div class="-item-center">
+          <div class="-item-center -footer-center">
             <img class="-item-center-img"
                  src="https://wx.qlogo.cn/mmhead/DQUJ1lic9u2tgaIBMEvzETXs9SnwSjpLmXyHFibWDd3Ws/132"/>
             <div class="-item-center-text">
-              <div class="-name">VikentiyChaykovsky</div>
+              <div class="-name">阿萨大师</div>
               <div class="-zan">
                 <img class="-zan-img" src="https://pub.file.k12.vip/read/rank/icon-good2.png"/>
                 <span>29</span>
@@ -139,6 +139,7 @@
         isOpenPopup: false,
         isOpenMore: false,
         dataList: [],
+        dataItem: '',
         queryInfo: "",
         tabType: "1"
       };
@@ -204,7 +205,7 @@
 
       getItemList() {
         api.work.getItemRankinglist({
-          courseid: "",
+          courseid: this.queryInfo.id,
           current: this.page.current,
           size: this.page.size
         }).then(({ data }) => {
@@ -214,6 +215,10 @@
             this.dataList = data.resultData.records;
           }
           this.page.total = data.resultData.total;
+          if (this.dataList.length) {
+            this.dataItem = this.dataList[0]
+            this.dataList.splice(0,1)
+          }
           this.isFetching = false;
         }, () => {
           this.isFetching = false;
@@ -327,7 +332,7 @@
               .-left {
                 margin-right: 30px;
                 width: 17px;
-                height: 21px;
+                height: 19px;
               }
 
               .-name {
@@ -388,7 +393,12 @@
         }
 
         .-footer-num {
+          margin-right: 20px;
           color: #30C0FFFF !important;
+        }
+
+        .-footer-center{
+          width: 70%!important;
         }
 
         .-footer-img {
@@ -535,7 +545,7 @@
 
       .-item-img {
         width: 17px !important;
-        height: 21px !important;
+        height: 19px !important;
       }
 
       .-item-left {
@@ -546,8 +556,9 @@
       }
 
       .-item-center {
+        width: 75%;
         display: flex;
-        justify-content: space-between;
+        text-align: left;
         align-items: center;
 
         &-img {

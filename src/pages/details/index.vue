@@ -123,7 +123,7 @@ export default {
     },
     toJump () {
       wx.navigateTo({
-        url: `/pages/popularityRank/main?type=2&name=${this.detailData.name}`
+        url: `/pages/popularityRank/main?type=2&id=${this.detailData.id}&name=${this.detailData.name}`
       });
     },
     getPhoneNumber (res) {

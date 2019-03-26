@@ -7,23 +7,27 @@
                  scroll-with-animation>
       <div class="ld-my-card-header">
         <div class="-header-text">
-          <span class="-header-text-num">4</span> 张成就卡
+          <span class="-header-text-num">{{page.total}}</span> 张成就卡
         </div>
       </div>
 
       <div class="ld-my-card-content">
-        <div class="-content-item" v-for="(item, index) of 5" :key="index">
+        <div class="-content-item" v-for="(item, index) of dataList" :key="index">
           <div class="-content-item-img"
                style="background: url('https://pub.file.k12.vip/2019/03/25/1110002707316191234.png') no-repeat;background-size: cover;">
-            <div class="-content-item-img-header">12名</div>
+            <div class="-content-item-img-header">
+              <div class="-header-bg">
+                <span>{{item.rank}} 名</span>
+              </div>
+            </div>
             <div class="-content-item-img-footer">
               <img class="-image" src="https://pub.file.k12.vip/read/lesson/kczy-icon-good.png"/>
-              <div>1991</div>
+              <div>{{item.likes}}</div>
             </div>
           </div>
           <div class="-content-item-text">
-            <div class="-text-name">《春天来了来了来了来了》</div>
-            <div class="-text-time">日期: 2019-03-20</div>
+            <div class="-text-name">《{{item.coursename}}》</div>
+            <div class="-text-time">日期: {{item.gmtCreate}}</div>
           </div>
         </div>
       </div>
@@ -32,6 +36,7 @@
 </template>
 
 <script>
+  import api from "../../request/api";
 
   export default {
 
@@ -40,27 +45,60 @@
         page: {
           current: 1,
           size: 20,
-          total: ""
+          total: 0
         },
         isFetching: false,
+        totalItem: "",
         dataList: []
       };
     },
 
     components: {},
 
-    methods: {
-      bindLoadItem() {
-        console.log(111);
-        if (this.page.current < Math.ceil(this.page.total / this.page.size)) {
-          this.page.current++;
-          // this.getList()
-        }
-      }
+    mounted() {
+      this.getList()
     },
 
-    created() {
+    methods: {
+      bindLoadItem() {
+        if (this.page.current < Math.ceil(this.page.total / this.page.size)) {
+          this.page.current++;
+          this.getList();
+        }
+      },
+      getList() {
+        this.isFetching = true;
+        api.work.getMyCardList({
+          current: this.page.current,
+          size: this.page.size
+        }).then(({ data }) => {
+          if (this.page.current > 1) {
+            this.dataList = this.dataList.concat(data.resultData.records);
+          } else {
+            this.dataList = data.resultData.records;
+          }
+          this.page.total = data.resultData.total;
+          // this.dataList = [
+          //   {
+          //     coursename: "这是 一个测试",
+          //     likes: "1212",
+          //     rank: '11236',
+          //     gmtCreate: "2013-21-12"
+          //   }
+          // ];
+          this.dataList.forEach(item => {
+            if (item.rank >= 1000 && item.rank <= 9999) {
+              item.rank = `${(item.rank / 1000).toFixed(1)}k`;
+            } else if (item.rank > 9999) {
+              item.rank = `${(item.rank / 10000).toFixed(1)}w`;
+            }
+          });
 
+          this.isFetching = false;
+        }, () => {
+          this.isFetching = false;
+        });
+      }
     }
   };
 </script>
@@ -73,14 +111,15 @@
 <style lang="scss" scoped>
   .ld-my-card {
     background: #ffffff;
-    padding: 0 24px;
 
     &-wrap {
       height: 100vh;
     }
 
     &-header {
-      padding: 16px 0;
+      background: rgba(255, 255, 255, 1);
+      box-shadow: 0px 0px 1px 0px rgba(0, 0, 0, 0.12);
+      padding: 16px 24px;
 
       .-header-text {
         font-size: 14px;
@@ -101,28 +140,41 @@
       justify-content: space-between;
       align-items: center;
       flex-wrap: wrap;
+      padding: 24px 24px;
 
       .-content-item {
         margin-bottom: 24px;
 
         &-img {
           position: relative;
-          width:155px;
-          height:207px;
-          box-shadow:2px 2px 12px -2px rgba(201,214,219,1);
-          border-radius:6px;
-
+          width: 155px;
+          height: 207px;
+          box-shadow: 2px 2px 12px -2px rgba(201, 214, 219, 1);
+          border-radius: 6px;
 
           &-header {
+            display: flex;
+            justify-content: center;
             text-align: center;
             font-size: 10px;
             font-weight: 400;
             color: rgba(255, 255, 255, 1);
             line-height: 24px;
-            width: 101px;
             height: 24px;
-            background: rgba(155, 155, 155, 1);
-            border-radius: 6px 6px 0px 0px;
+
+            .-header-bg {
+              background: url("https://pub.file.k12.vip/read/cjk-icon-label.png") no-repeat;
+              background-size: 100%;
+              height: 24px;
+              width: 72px;
+
+              span {
+                margin-left: 20px;
+                font-size: 12px;
+                font-weight: 500;
+                color: rgba(253, 244, 197, 1);
+              }
+            }
           }
 
           &-footer {
@@ -139,13 +191,13 @@
             line-height: 20px;
             width: 60px;
             height: 20px;
-            background: rgba(0,0,0,0.16);
+            background: rgba(0, 0, 0, 0.16);
             border-radius: 100px 0 20px 0;
 
-            .-image{
+            .-image {
               margin-right: 4px;
-              width:11px;
-              height:11px;
+              width: 11px;
+              height: 11px;
             }
           }
         }
@@ -159,8 +211,8 @@
             margin: 16px 0 4px 0;
             width: 144px;
             font-size: 16px;
-            font-weight: 500;
-            color: rgba(29,27,27,1);
+            font-weight: bold;
+            color: rgba(29, 27, 27, 1);
             line-height: 22px;
           }
 
@@ -168,7 +220,7 @@
             height: 14px;
             font-size: 10px;
             font-weight: 300;
-            color: rgba(74, 74, 74, 1);
+            color: rgba(112, 115, 116, 1);
             line-height: 14px;
           }
         }

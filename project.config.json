@@ -83,7 +83,7 @@
 					"id": 6,
 					"name": "排行榜",
 					"pathName": "pages/popularityRank/main",
-					"query": "type=1",
+					"query": "type=2&id=1108188928168517633&name=测试课程02",
 					"scene": null
 				},
 				{

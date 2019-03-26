@@ -15,8 +15,10 @@ const work = {
   },
   getItemRankinglist(params) {
     return axios.post('/work/single/rankinglist',params)
+  },
+  getMyCardList(params) {
+    return axios.get('/work/listByAchievementCard',params)
   }
-
 }
 
 export  default work

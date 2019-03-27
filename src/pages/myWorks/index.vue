@@ -13,10 +13,10 @@
       </div>
       <div class="ld-my-work-footer">
         <wux-swipe-action autoClose useSlots v-for="(item, index) of dataList" :key="index">
-          <div slot="right" @click="delItem" class="-footer-action">
+          <div slot="right" @click="openDel" class="-footer-action">
             <img class="-right-img" src="https://pub.file.k12.vip/read/my/zp-icon-delete.png"/>
           </div>
-          <div class="-footer-item">
+          <div class="-footer-item" @click="lookOtherRead(item.id)">
             <div class="-item-tip" v-if="index==0">赞最多</div>
             <img class="-item-img" src="https://pub.file.k12.vip/read/my/zp-button-share.png"/>
             <div class="-item-left">
@@ -37,6 +37,16 @@
       </div>
     </scroll-view>
 
+    <wux-popup :visible="isShowDel" @close="openDel">
+      <div class="ld-my-work-del">
+        <div class="-del-title">提示</div>
+        <div class="-del-content">确认删除该作品吗？</div>
+        <div class="-del-footer">
+          <div class="-btn" @click="openDel()">取消</div>
+          <div class="-btn -two" @click="delItem()">确认</div>
+        </div>
+      </div>
+    </wux-popup>
   </div>
 </template>
 
@@ -54,8 +64,10 @@
           total: ""
         },
         isFetching: false,
+        isShowDel: false,
         dataList: [],
-        queryInfo: ""
+        queryInfo: "",
+        dataItem: ""
       };
     },
 
@@ -73,19 +85,28 @@
     },
 
     methods: {
+      lookOtherRead(id) {
+        wx.navigateTo({
+          url: `/pages/listenWork/main?id=${id}`
+        });
+      },
+      openDel(e) {
+        console.log(e, "e");
+        this.dataItem = e;
+        this.isShowDel = !this.isShowDel;
+      },
       delItem(e) {
         api.work.delItemWork({
-          id: ""
+          id: e
         }).then(res => {
-          if (res.data.code == '200') {
+          if (res.data.code == "200") {
             wx.showToast({
-              title: '删除成功',
-              icon: 'none',
+              title: "删除成功",
+              icon: "none",
               duration: 2000
-            })
+            });
           }
         });
-        console.log(e, "001");
       },
       bindLoadItem() {
         if (this.page.current < Math.ceil(this.page.total / this.page.size)) {
@@ -241,6 +262,47 @@
               height: 15px;
             }
           }
+        }
+      }
+    }
+
+    &-del {
+      padding: 32px 36px 24px;
+      background: rgba(3, 26, 36, 1);
+      box-shadow: 0px 2px 10px 0px rgba(1, 21, 31, 1);
+      border-radius: 16px;
+
+      .-del-title {
+        font-size: 20px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.75);
+        line-height: 28px;
+      }
+
+      .-del-content {
+        line-height: 28px;
+        font-size: 16px;
+      }
+
+      .-del-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 32px;
+
+        .-btn {
+          width: 100px;
+          height: 40px;
+          border-radius: 26px;
+          border: 1px solid rgba(255, 255, 255, 0.16);
+          font-size: 15px;
+          font-weight: 500;
+          color: rgba(255, 255, 255, 0.4);
+          line-height: 40px;
+        }
+
+        .-two {
+          color: #30C0FFFF;
         }
       }
     }

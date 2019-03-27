@@ -58,7 +58,7 @@
       </div>
     </div>
     <div class="ld-share-footer">
-      <div class="-footer-btn">名师朗读欣赏</div>
+      <div class="-footer-btn" @click="toListen">名师朗读欣赏</div>
     </div>
 
     <wux-popup :visible="isOpenReport" @close="toReport">
@@ -107,6 +107,11 @@
     },
 
     methods: {
+      toListen () {
+        wx.navigateTo({
+          url: `/pages/listen/main?id=${this.shareInfo.courseId}&share=1`
+        });
+      },
       init() {
         this.innerAudioContext = wx.createInnerAudioContext();
         this.innerAudioContext.src = this.shareInfo.voiceUrl;

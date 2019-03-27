@@ -3,6 +3,7 @@
   "navigationBarBackgroundColor": "#01141D",
   "navigationBarTextStyle": "white",
   "usingComponents": {
-    "wux-popup": "/static/wux/popup/index"
+    "wux-popup": "/static/wux/popup/index",
+    "wux-icon": "/static/wux/icon/index"
   }
 }

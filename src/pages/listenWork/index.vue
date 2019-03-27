@@ -1,55 +1,26 @@
 <template>
   <div class="read">
-    <!-- <div class="introduce"
+    <div class="introduce"
          v-if="!hideIntroduce"
          :class="{'show': showIntroduce}">
       <image class="introduce-image"
              mode="widthFix"
-             :src="detailData.headimage" />
-      <div class="introduce-title">朗读老师：<text class="introduce-weight">{{courseData.teacherName}}</text></div>
-      <text class="introduce-text">{{courseData.teacherIntroduce}}</text>
+             :src="detailData.headimgurl" />
+      <div class="introduce-title">朗读者：<text class="introduce-weight">{{detailData.nickname}}</text></div>
+      <div class="zan-num">
+        <div class="zan-icon"></div>
+        {{detailData.likes}}
+      </div>
     </div>
     <read ref="read"
-          :share="share"
-          :title="courseData.name"
-          :subtitle="subtitle"
-          :lyricSrc="courseData.authorVrAudio"
-          :lyricText="courseData.introduction"
+          :showList="false"
+          :title="detailData.coursename"
+          :subtitle="detailData.grade + '·' + detailData.semester"
+          :lyricSrc="detailData.voiceUrl"
+          :lyricText="detailData.coursecontent"
           @clickRead="clickRead"
           @clickList="changePopup"
           @ended="bindEnded"></read>
-    <wux-popup position="bottom"
-               :visible="showPopup"
-               @close="changePopup">
-      <div class="popup">
-        <div class="popup-title">选择课文</div>
-        <scroll-view scroll-y
-                     scroll-with-animation
-                     class="popup-scroll">
-          <div class="popup-list ">
-            <div class="popup-item"
-                 :class="{'active': item.id == id}"
-                 v-for="(item,i) in courseList"
-                 @tap="clickItem(item.id)"
-                 :key="item">
-              <div class="popup-item_icon"></div>
-              <text class="popup-item_text">{{(i + 1) + '.' + item.name}}</text>
-            </div>
-          </div>
-        </scroll-view>
-        <div class="popup-close_btn"
-             @tap="changePopup"></div>
-      </div>
-    </wux-popup>
-    <wux-popup :visible="showAchieve"
-               @close="changeAchieve">
-      <div class="achieve">
-        <div class="achieve-image"></div>
-        <text class="achieve-text">自由朗读课文就能解锁我哟~</text>
-        <div class="achieve-btn"
-             @tap="changeAchieve">我知道了</div>
-      </div>
-    </wux-popup>
     <wux-popup :visible="showRead"
                @close="changeRead">
       <div class="read-popup">
@@ -61,7 +32,7 @@
         <div class="read-popup_btn"
              @tap="clickRead">去朗读</div>
       </div>
-    </wux-popup> -->
+    </wux-popup>
   </div>
 </template>
 
@@ -85,7 +56,7 @@ export default {
 
   computed: {
     // subtitle () {
-    //   return `${this.gradeArr[this.courseData.grade]}·${this.courseData.semester == 1 ? '上册' : '下册'}`
+    //   return `${this.gradeArr[this.detailData.grade]}·${this.detailData.semester == 1 ? '上册' : '下册'}`
     // },
     userInfo () {
       return store.state.userInfo
@@ -94,7 +65,7 @@ export default {
 
   watch: {
     userInfo (n, o) {
-      if (n.id && !o.id && this.$root.$mp.query) {
+      if (n.id && !o.id && this.workId) {
         this.getWorkDetail()
       }
     },
@@ -135,7 +106,7 @@ export default {
     },
     finishFangdu () {
       api.work.finishFangdu({
-        courseId: this.courseData.id
+        courseId: this.detailData.id
       })
     }
   },
@@ -284,7 +255,6 @@ export default {
     margin: 16px auto;
     padding: 16px;
     width: 327px;
-    height: 108px;
     background: rgba(3, 26, 36, 1);
     box-shadow: 0px 2px 10px 0px rgba(1, 21, 31, 1);
     border-radius: 16px;
@@ -301,6 +271,16 @@ export default {
     }
     &-weight {
       font-weight: 500;
+    }
+    .zan-num {
+      @include flex-center;
+      color: #FF668E;
+    }
+    .zan-icon {
+      @include bg('/read/icon-good.png');
+      margin-right: 8px;
+      width: 16px;
+      height: 16px;
     }
   }
 }

@@ -9,7 +9,7 @@
       <div class="ld-user-footer">
         <div class="-footer-title">作品集</div>
 
-        <div class="-footer-item -other-item" v-for="(item, index) of dataList" :key="index">
+        <div class="-footer-item -other-item" v-for="(item, index) of dataList" :key="index" @click="lookOtherRead(item.id)">
           <div class="-other-left">
             <div class="-other-title">《{{item.coursename|| "这是一本测试"}}》</div>
             <div class="-other-time">{{grade || '一年级'}} · {{semester || '上学期'}} | 日期: {{item.gmtCreate || "2019-04-21"}}</div>
@@ -73,6 +73,11 @@
     components: {},
 
     methods: {
+      lookOtherRead (id) {
+        wx.navigateTo({
+          url: `/pages/listenWork/main?id=${id}`
+        });
+      },
       bindLoadItem() {
         console.log('aaaa')
         if (this.page.current < Math.ceil(this.page.total / this.page.size)) {

@@ -9,11 +9,11 @@
       <div class="ld-user-footer">
         <div class="-footer-title">作品集</div>
 
-        <wux-swipe-action autoClose useSlots v-for="(item, index) of dataList" :key="index">
-          <div slot="right" @click="delItem" class="-footer-action">
+        <wux-swipe-action autoClose useSlots v-for="(item, index) of 2" :key="index" >
+          <div slot="right" @click="openDel" class="-footer-action">
             <img class="-right-img" src="https://pub.file.k12.vip/read/my/zp-icon-delete.png"/>
           </div>
-          <div class="-footer-item">
+          <div class="-footer-item" @click="lookOtherRead(item.id)">
             <img class="-item-img" src="https://pub.file.k12.vip/read/my/zp-button-share.png"/>
             <div class="-item-left">
               <div class="-item-title">
@@ -55,6 +55,16 @@
       </div>
     </scroll-view>
 
+    <wux-popup :visible="isShowDel" @close="openDel">
+      <div class="ld-user-del">
+        <div class="-del-title">提示</div>
+        <div class="-del-content">确认删除该作品吗？</div>
+        <div class="-del-footer">
+          <div class="-btn" @click="openDel()">取消</div>
+          <div class="-btn -two" @click="delItem()">确认</div>
+        </div>
+      </div>
+    </wux-popup>
   </div>
 </template>
 
@@ -71,8 +81,10 @@
           total: ""
         },
         isFetching: false,
+        isShowDel: false,
         dataList: [],
-        userInfo: ""
+        userInfo: "",
+        dataItem: ""
       };
     },
 
@@ -84,7 +96,28 @@
     components: {},
 
     methods: {
-      delItem() {
+      openDel(e) {
+        console.log(e, "e");
+        this.dataItem = e;
+        this.isShowDel = !this.isShowDel;
+      },
+      delItem(e) {
+        api.work.delItemWork({
+          id: e
+        }).then(res => {
+          if (res.data.code == "200") {
+            wx.showToast({
+              title: "删除成功",
+              icon: "none",
+              duration: 2000
+            });
+          }
+        });
+      },
+      lookOtherRead (id) {
+        wx.navigateTo({
+          url: `/pages/listenWork/main?id=${id}`
+        });
       },
       bindLoadItem() {
         console.log("aaaa");
@@ -350,6 +383,47 @@
           width: 44px;
           color: #707374FF;
           font-size: 12px;
+        }
+      }
+    }
+
+    &-del {
+      padding: 32px 36px 24px;
+      background: rgba(3, 26, 36, 1);
+      box-shadow: 0px 2px 10px 0px rgba(1, 21, 31, 1);
+      border-radius: 16px;
+
+      .-del-title {
+        font-size: 20px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 0.75);
+        line-height: 28px;
+      }
+
+      .-del-content {
+        line-height: 28px;
+        font-size: 16px;
+      }
+
+      .-del-footer {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 32px;
+
+        .-btn {
+          width: 100px;
+          height: 40px;
+          border-radius: 26px;
+          border: 1px solid rgba(255, 255, 255, 0.16);
+          font-size: 15px;
+          font-weight: 500;
+          color: rgba(255, 255, 255, 0.4);
+          line-height: 40px;
+        }
+
+        .-two {
+          color: #30C0FFFF;
         }
       }
     }

@@ -60,13 +60,13 @@
       </div>
       <div class="ld-ranking-down">
         <div class="-down-title" v-if="!isShowHeader">佳作推荐</div>
-        <div class="-down-item" v-for="(item,index) of dataList" :key="index">
+        <div class="-down-item" v-for="(item,index) of dataList" :key="index" @click="lookOtherRead(item.workId)" >
           <div class="-down-item-tip" v-if="item.recommend!=0" :class="{'-rq':item.recommend == '2','-tj':item.recommend=='1'}">
             {{tagList[item.recommend-1]}}
           </div>
           <div class="-down-item-left">
             <div class="-left-top">
-              <img class="-left-top-img" @click="lookOtherWorks(item.userId)" :src="item.headimgurl"/>
+              <img class="-left-top-img" :src="item.headimgurl"/>
               <div class="-left-top-text">
                 <div class="-user-name">{{item.nickname}}</div>
                 <div class="-book-name">《{{item.course}}》</div>
@@ -121,6 +121,11 @@
     },
 
     methods: {
+      lookOtherRead (id) {
+        wx.navigateTo({
+          url: `/pages/listenWork/main?id=${id}`
+        });
+      },
       lookOtherWorks(id) {
         wx.navigateTo({
           url: `/pages/otherUser/main?userId=${id}`

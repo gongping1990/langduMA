@@ -11,10 +11,10 @@
                  scroll-y
                  scroll-with-animation>
       <div class="ld-popularityRank-content-wrap">
-        <div class="-content-item-one">
+        <div class="-content-item-one"  @click="lookOtherWorks(dataItem.userId)">
           <div class="-img">
             <img class="-img-crown" src="https://pub.file.k12.vip/read/rank/icon-head champion.png"/>
-            <img class="-img-header" @click="lookOtherWorks(dataItem.userId)" :src="dataItem.headimgurl">
+            <img class="-img-header" :src="dataItem.headimgurl">
           </div>
           <div class="-item-one-wrap">
             <div class="-item-one-wrap-text">
@@ -31,12 +31,12 @@
           </div>
         </div>
         <div class="item-wrap -content-wrap" v-for="(item,index) of dataList" :key="index"
-             :class="{'-two':index==0,'-three':index==1}">
+             :class="{'-two':index==0,'-three':index==1}" @click="lookOtherWorks(item.userId)">
           <img v-if="index==0" class="-item-img" src="https://pub.file.k12.vip/read/rank/icon-2ed.png"/>
           <img v-else-if="index==1" class="-item-img" src="https://pub.file.k12.vip/read/rank/icon-3rd.png"/>
           <div class="-item-left" v-else>{{index+2}}</div>
           <div class="-item-center">
-            <img @click="lookOtherWorks(item.userId)" class="-item-center-img"
+            <img class="-item-center-img"
                  :src="item.headimgurl"/>
             <div class="-item-center-text">
               <div class="-name">{{item.nickname}}</div>

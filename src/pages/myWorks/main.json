@@ -2,6 +2,7 @@
   "navigationBarTitleText": "我的作品",
   "usingComponents": {
     "wux-swipe-action": "/static/wux/swipe-action/index",
+    "wux-popup": "/static/wux/popup/index",
     "wux-icon": "/static/wux/icon/index"
   }
 }

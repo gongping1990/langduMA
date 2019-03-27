@@ -52,7 +52,7 @@
         </div>
       </div>
     </scroll-view>
-    <div class="ld-popularityRank-footer">
+    <div class="ld-popularityRank-footer" v-if="isShowMyWork">
       <div class="-footer-wrap">
         <div class="item-wrap -footer-item">
           <div class="-item-left -footer-num">{{myInfo.rank}}</div>
@@ -143,12 +143,13 @@
         isFetching: false,
         isOpenPopup: false,
         isOpenMore: false,
+        isShowMyWork: true,
         dataList: [],
         dataShareList: [],
         dataItem: "",
         queryInfo: "",
         tabType: "1",
-        myInfo: ""
+        myInfo: {}
       };
     },
 
@@ -162,6 +163,7 @@
       //type: 1为周次，2为单课排行
       if (this.queryInfo.type == 1) {
         this.getWeekList();
+        this.getMyWeekInfo();
       } else {
         this.getMyRankInfo();
         this.getItemList();
@@ -192,6 +194,7 @@
         this.tabType = num;
         if (this.queryInfo.type == 1) {
           this.getWeekList();
+          this.getMyWeekInfo();
         } else {
           this.getItemList();
         }
@@ -220,12 +223,15 @@
             this.dataList = data.resultData.records;
           }
           this.page.total = data.resultData.total;
+          if (this.dataList.length) {
+            this.dataItem = this.dataList[0];
+            this.dataList.splice(0, 1);
+          }
           this.isFetching = false;
         }, () => {
           this.isFetching = false;
         });
       },
-
       getItemList() {
         api.work.getItemRankinglist({
           courseid: this.queryInfo.id,
@@ -269,26 +275,25 @@
           courseId: this.queryInfo.id
         })
           .then(({ data }) => {
-            this.myInfo = data.resultData;
-            this.myInfo = {
-              count: '693',
-              headimgurl: 'https://wx.qlogo.cn/mmhead/DQUJ1lic9u2tgaIBMEvzETXs9SnwSjpLmXyHFibWDd3Ws/132',
-              nickname: '我是浪成美好',
-              rank: '21',
-              workId: 'sssssss'
+            if (data.resultData != null) {
+              this.myInfo = data.resultData
+            } else {
+              this.isShowMyWork = false
+            }
+          });
+      },
+      getMyWeekInfo() {
+        api.user.weekLikeRankForMe({
+          nowWeek: this.tabType == 1
+        })
+          .then(({ data }) => {
+            if (data.resultData != null) {
+              this.myInfo = data.resultData
+            } else {
+              this.isShowMyWork = false
             }
           });
       }
-    },
-
-    created() {
-      wx.getSystemInfo({
-        success: function(res) {
-          var ww = res.windowWidth;
-          var hh = res.windowHeight;
-          console.log(ww, hh, "009");
-        }
-      });
     }
   };
 </script>

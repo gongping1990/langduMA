@@ -33,6 +33,9 @@ const work = {
   },
   myShareWorksList(params) {
     return axios.get('/work/listByShareWorks',params)
+  },
+  shareDetail(params) {
+    return axios.get('/work/getShareWorkDetails',params)
   }
 }
 

@@ -61,8 +61,8 @@
       <div class="ld-ranking-down">
         <div class="-down-title" v-if="!isShowHeader">佳作推荐</div>
         <div class="-down-item" v-for="(item,index) of dataList" :key="index">
-          <div class="-down-item-tip" v-if="item.workId!=0" :class="{'-rq':item.workId == '2','-tj':item.workId=='1'}">
-            {{tagList[item.workId-1]}}
+          <div class="-down-item-tip" v-if="item.recommend!=0" :class="{'-rq':item.recommend == '2','-tj':item.recommend=='1'}">
+            {{tagList[item.recommend-1]}}
           </div>
           <div class="-down-item-left">
             <div class="-left-top">

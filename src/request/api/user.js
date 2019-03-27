@@ -19,9 +19,21 @@ const user = {
   getRecommendRank(params) {
     return axios.get('/user/listRecommendWorkPage', params)
   },
-  // 自己排行
+  // 自己排行 单课
   userLikeRankForMe(params) {
     return axios.get('/user/userLikeRankForMe', params)
+  },
+  // 自己排行 周次
+  weekLikeRankForMe(params) {
+    return axios.get('/user/weekLikeRankForMe', params)
+  },
+  // 举报
+  reportContent(params) {
+    return axios.post('/user/report', params)
+  },
+  // 点赞
+  likeContent(params) {
+    return axios.post('/user/like', params)
   },
 
 

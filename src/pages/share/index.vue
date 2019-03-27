@@ -2,44 +2,52 @@
   <div class="ld-share">
     <div class="ld-share-header">
       <div class="-header-left">
-        <div class="-header-left-name">《吃水不忘挖井人》</div>
+        <div class="-header-left-name">《{{shareInfo.courseName}}》</div>
         <div class="-header-left-time">
-          <span class="-start">00:00</span>
+          <span class="-start">{{currentTime}}</span>
           <div class="-progress">
             <wux-progress
               status="normal"
-              percent="50"
+              :percent="percentInfo"
               strokeWidth="2"
               activeColor="#30C0FF"
               backgroundColor="#f3f3f3"/>
           </div>
-          <span class="-end">05:10</span>
+          <span class="-end">{{duration}}</span>
         </div>
       </div>
       <div class="-header-right">
         <div class="-header-right-img">
-          <img class="-img" src="https://pub.file.k12.vip/read/lesson/kczy-button-play.png"/>
+          <img class="-img" @click="audioPlay" src="https://pub.file.k12.vip/read/lesson/kczy-button-play.png"/>
         </div>
       </div>
     </div>
     <div class="ld-share-content">
       <div class="-content-title">
         <div class="-content-title-img">
-          <img class="-img" src="https://wx.qlogo.cn/mmhead/DQUJ1lic9u2tgaIBMEvzETXs9SnwSjpLmXyHFibWDd3Ws/132"/>
+          <img class="-img" :src="shareInfo.headimgurl"/>
         </div>
-        <div class="-content-title-name">李林的宝宝</div>
+        <div class="-content-title-name">{{shareInfo.nickName}}</div>
         <div class="-content-title-text">
-          <div class="-text-one">还差<span class="-text-em">2</span>个赞</div>
-          <div class="-text-two">就可以进前100名啦，请给我点个赞吧</div>
+          <div class="-text-one" v-if="!shareInfo.liked">还差<span
+            class="-text-em"> {{shareInfo.shortOfLikeCount}} </span>个赞
+          </div>
+          <div class="-text-one" v-if="shareInfo.liked">感谢你的点赞</div>
+          <div class="-text-two" v-if="!shareInfo.liked">就可以进前{{shareInfo.shortOfLike}}名啦，请给我点个赞吧</div>
+          <div class="-text-two" v-if="shareInfo.liked">这是我朗读获得的成就卡片</div>
         </div>
       </div>
       <div class="-content-body">
         <div class="-body-img"
              style="background: url('https://pub.file.k12.vip/2019/03/25/1110002707316191234.png') no-repeat;background-size: cover;">
-          <div class="-body-img-center">
-            <img class="-img" src="https://pub.file.k12.vip/read/button-good.png"/>
+          <div class="-body-img-center" v-if="!shareInfo.liked">
+            <img @click="likeFn" class="-img" src="https://pub.file.k12.vip/read/button-good.png"/>
           </div>
-          <div class="-body-img-mask"></div>
+          <div class="-body-img-mask" v-if="!shareInfo.liked"></div>
+          <div class="-body-img-like" v-if="shareInfo.liked">
+            <img class="-img" src="https://pub.file.k12.vip/read/course/kczy-icon-good.png"/>
+            {{shareInfo.likedCount}}
+          </div>
         </div>
       </div>
       <div class="-content-footer">
@@ -64,6 +72,7 @@
 </template>
 
 <script>
+  import api from "../../request/api";
 
   export default {
     data() {
@@ -75,64 +84,132 @@
         },
         isOpenReport: false,
         isFetching: false,
-        dataList: [],
-        reportInfo: ''
+        isPlay: false,
+        shareInfo: "",
+        reportInfo: "",
+        duration: "00:00",
+        durationFatter: "",
+        currentTime: "00:00",
+        currentTimeFatter: "",
+        innerAudioContext: ''
       };
     },
 
-    components: {},
+    computed: {
+      percentInfo() {
+        return parseInt((parseInt(this.currentTimeFatter)/parseInt(this.durationFatter))*100);
+      }
+    },
+
+    mounted() {
+      this.getShareDetail();
+      this.init();
+    },
 
     methods: {
-      reportFn (e) {
-       this.reportInfo = e.mp.detail.value
+      init() {
+        this.innerAudioContext = wx.createInnerAudioContext();
+        this.innerAudioContext.src = this.shareInfo.voiceUrl;
+        this.innerAudioContext.onPlay(() => {
+          this.isPlay = true;
+        });
+        this.innerAudioContext.onPause(() => {
+          this.isPlay = false;
+        });
+        this.innerAudioContext.onTimeUpdate(() => {
+          if (this.duration == "00:00") {
+            this.duration =  this.timeToFormat(this.innerAudioContext.duration);
+            this.durationFatter =  this.innerAudioContext.duration;
+          }
+          this.currentTime = this.timeToFormat(this.innerAudioContext.currentTime);
+          this.currentTimeFatter = this.innerAudioContext.currentTime;
+        });
+      },
+      audioPlay() {
+        if (this.innerAudioContext.paused) {
+          this.innerAudioContext.play();
+        } else {
+          this.innerAudioContext.pause();
+        }
+      },
+      timeToFormat(times) {
+        var result = "00:00";
+        var hour, minute, second;
+        if (times > 0) {
+
+          minute = Math.floor(times / 60);
+          if (minute < 10) {
+            minute = "0" + minute;
+          }
+
+          second = Math.floor((times - 60 * minute) % 60);
+          if (second < 10) {
+            second = "0" + second;
+          }
+          result = minute + ":" + second;
+        }
+        return result;
+      },
+      likeFn() {
+        api.user.likeContent({
+          id: "1108305547498700805"
+        }).then(({ data }) => {
+          this.getShareDetail();
+          wx.showToast({
+            title: "点赞成功",
+            icon: "none",
+            duration: 2000
+          });
+        });
+      },
+      reportFn(e) {
+        this.reportInfo = e.mp.detail.value;
       },
       toReport() {
-        this.reportInfo = ''
+        this.reportInfo = "";
         this.isOpenReport = !this.isOpenReport;
       },
       submitReport() {
+        if (!this.reportInfo) {
+          return wx.showToast({
+            title: "请输入举报原因，至少5个字哦~~",
+            icon: "none",
+            duration: 2000
+          });
+        }
 
-        wx.showToast({
-          title: this.reportInfo,
-          icon: 'none',
-          duration: 2000
-        })
+        api.user.reportContent({
+          id: "1108305547498700805",
+          reportReason: this.reportInfo
+        }).then(({ data }) => {
+          this.toReport();
+          wx.showToast({
+            title: "举报成功",
+            icon: "none",
+            duration: 2000
+          });
+        });
+
       },
       toJump() {
         wx.navigateTo({
           url: "/pages/popularityRank/main"
         });
       },
-      getList() {
+      getShareDetail() {
         this.isFetching = true;
-        api.userAccount.getUserAccountIncomeList({
-          current: this.page.current,
-          size: this.page.size
+        api.work.shareDetail({
+          id: "1108305547498700805"
         }).then(({ data }) => {
-          let array = [];
-          let arrayStorage = [];
-
-          data.resultData.records.forEach(item => {
-            if (item.income) {
-              array.push(item);
-            }
-          });
-
-          if (this.page.current > 1) {
-            arrayStorage = arrayStorage.concat(array);
-          } else {
-            arrayStorage = array;
-          }
-
-          this.page.total = data.resultData.total;
+          this.shareInfo = data.resultData;
           this.isFetching = false;
         }, () => {
           this.isFetching = false;
         });
+      },
+      onHide () {
+        this.innerAudioContext.destroy()
       }
-    },
-
-    created() {
     }
   };
 </script>
@@ -241,6 +318,7 @@
         margin-top: 32px;
 
         .-body-img {
+          position: relative;
           display: flex;
           justify-content: center;
           align-items: center;
@@ -253,12 +331,33 @@
 
           &-mask {
             position: absolute;
-            width:150px;
-            height:200px;
-            background:rgba(48,192,255,0.5);
-            border-radius:6px;
-            filter:blur(2px);
+            width: 150px;
+            height: 200px;
+            background: rgba(48, 192, 255, 0.5);
+            border-radius: 6px;
+            filter: blur(2px);
           }
+
+          &-like {
+            position: absolute;
+            right: 0;
+            bottom: 0;
+            width: 68px;
+            height: 24px;
+            background: rgba(0, 0, 0, 0.16);
+            border-radius: 100px 0px 6px 0px;
+            font-size: 12px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 1);
+            line-height: 24px;
+
+            .-img {
+              margin-right: 4px;
+              width: 11px;
+              height: 11px;
+            }
+          }
+
           &-center {
             z-index: 99;
             .-img {

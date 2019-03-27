@@ -98,7 +98,7 @@
         api.work.getSingleList({
           current: this.page.current,
           size: this.page.size,
-          id: this.queryInfo.id
+          courseid: this.queryInfo.id
         }).then(({ data }) => {
           if (this.page.current > 1) {
             this.dataList = this.dataList.concat(data.resultData.records);

@@ -13,7 +13,7 @@
     <div class="details-content">
       <div class="details-cover"
            @tap="changePopup">
-        <div class="details-cover_mask">
+        <div class="details-cover_mask" v-if="!detailData.unlocktype">
           <div class="details-cover_bg"></div>
           <image src="https://pub.file.k12.vip/read/lesson/kczy-button-lock.png"
                  mode="widthFix" />
@@ -172,6 +172,7 @@ export default {
   .wdzp-btn {
     @include flex-column-center;
   }
+
   .popup {
     @include flex-column-center;
     &-image {

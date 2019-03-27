@@ -39,7 +39,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 8,
+			"current": 2,
 			"list": [
 				{
 					"id": -1,
@@ -56,16 +56,17 @@
 					"scene": null
 				},
 				{
-					"id": -1,
+					"id": 2,
 					"name": "详情",
 					"pathName": "pages/details/main",
-					"query": ""
+					"query": "",
+					"scene": null
 				},
 				{
 					"id": 3,
 					"name": "阅读",
-					"pathName": "pages/read/main",
-					"query": "id=1110748762236493826",
+					"pathName": "pages/listen/main",
+					"query": "id=1110748762236493826&share=1",
 					"scene": null
 				},
 				{
@@ -100,7 +101,7 @@
 					"id": 8,
 					"name": "阅读",
 					"pathName": "pages/listenWork/main",
-					"query": "id=1110840422484611074&share=1",
+					"query": "id=1110851306229534721&share=1",
 					"scene": null
 				}
 			]

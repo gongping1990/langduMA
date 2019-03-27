@@ -65,6 +65,10 @@
              @tap="clickRead">去朗读</div>
       </div>
     </wux-popup>
+    <div class="more-course">
+      <text class="more-course_text">更多课文</text>
+      <div class="more-course_icon"></div>
+    </div>
   </div>
 </template>
 
@@ -100,14 +104,14 @@ export default {
     subtitle () {
       return `${this.gradeArr[this.courseData.grade]}·${this.courseData.semester == 1 ? '上册' : '下册'}`
     },
-    userInfo() {
+    userInfo () {
       return store.state.userInfo
     }
   },
 
   watch: {
-    userInfo(n, o) {
-      if(n.id && !o.id && this.$root.$mp.query) {
+    userInfo (n, o) {
+      if (n.id && !o.id && this.$root.$mp.query) {
         this.getCourseDetail()
       }
     }
@@ -147,7 +151,7 @@ export default {
         this.total = data.resultData.total
       })
     },
-    clickItem(id) {
+    clickItem (id) {
       this.showPopup = false
       this.globalData.audio.stop()
       wx.redirectTo({ url: '/pages/listen/main?id=' + id });
@@ -164,7 +168,7 @@ export default {
     changeRead () {
       this.showRead = !this.showRead
     },
-    bindEnded() {
+    bindEnded () {
       console.log('end')
       this.finishFangdu()
       this.changeRead()
@@ -181,7 +185,7 @@ export default {
   mounted () {
     this.id = this.$root.$mp.query.id
     this.share = this.$root.$mp.query.share
-    if(this.userInfo.id) {
+    if (this.userInfo.id) {
       this.getCourseDetail()
     }
     setTimeout(() => {
@@ -195,11 +199,11 @@ export default {
     // let app = getApp()
   },
 
-  onHide() {
+  onHide () {
     this.globalData.audio.stop()
   },
 
-  onUnload() {
+  onUnload () {
     console.log('unload')
     this.globalData.audio.stop()
   }
@@ -211,6 +215,23 @@ export default {
   padding-top: 1px;
   height: 100vh;
   background-color: #01141d;
+  .more-course {
+    @include flex-center;
+    position: absolute;
+    right: 0;
+    top: 45%;
+    width: 86px;
+    height: 30px;
+    z-index: 1000;
+    font-size: 12px;
+    color: #fff;
+    background: rgba(255, 255, 255, 0.16);
+    border-radius: 100px 0px 0px 100px;
+    &_icon {
+      @include bg('/read/kczy-button-more.png');
+      width: 10px;
+    }
+  }
   .read-popup {
     position: relative;
     @include flex-column-center;
@@ -302,7 +323,7 @@ export default {
         margin-right: 12px;
       }
       &.active {
-        color: #30C0FF;
+        color: #30c0ff;
         .popup-item_icon {
           display: block;
         }

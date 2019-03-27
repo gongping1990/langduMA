@@ -1,6 +1,6 @@
 {
   "navigationBarTitleText": "我的",
   "usingComponents": {
-
+    "wux-swipe-action": "/static/wux/swipe-action/index"
   }
 }

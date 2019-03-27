@@ -12,7 +12,8 @@
     "pages/myWorks/main",
     "pages/myCard/main",
     "pages/authorize/main",
-    "pages/listenWork/main"
+    "pages/listenWork/main",
+    "pages/otherUser/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

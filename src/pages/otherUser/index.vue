@@ -9,30 +9,17 @@
       <div class="ld-user-footer">
         <div class="-footer-title">作品集</div>
 
-        <wux-swipe-action autoClose useSlots v-for="(item, index) of dataList" :key="index">
-          <div slot="right" @click="delItem" class="-footer-action">
-            <img class="-right-img" src="https://pub.file.k12.vip/read/my/zp-icon-delete.png"/>
-          </div>
-          <div class="-footer-item">
-            <img class="-item-img" src="https://pub.file.k12.vip/read/my/zp-button-share.png"/>
-            <div class="-item-left">
-              <div class="-item-title">
-                <span>《{{item.coursename|| "这是一本测试"}}》</span>
-                <img class="-img" src="https://pub.file.k12.vip/read/my/msfd-button-play.png"/>
-              </div>
-            </div>
-            <div class="-item-down">
-              <div class="-item-time">{{grade || "一年级"}} · {{semester || "上学期"}} | 日期: {{item.gmtCreate ||
-                "2019-04-21"}}
-              </div>
-              <div class="-item-num">
-                <img class="-img" src="https://pub.file.k12.vip/read/icon-good.png"/>
-                <span>{{item.likes || 0}}</span>
-              </div>
+        <div class="-footer-item -other-item" v-for="(item, index) of dataList" :key="index">
+          <div class="-other-left">
+            <div class="-other-title">《{{item.coursename|| "这是一本测试"}}》</div>
+            <div class="-other-time">{{grade || '一年级'}} · {{semester || '上学期'}} | 日期: {{item.gmtCreate || "2019-04-21"}}</div>
+            <div class="-other-num">
+              <img class="-img" src="https://pub.file.k12.vip/read/rank/icon-good2.png"/>
+              <span>{{item.likes || 0}}</span>
             </div>
           </div>
-        </wux-swipe-action>
-
+          <img class="-other-img" src="https://pub.file.k12.vip/read/course/kczy-button-play.png"/>
+        </div>
       </div>
       <div class="ld-user-wrap">
         <img class="-img" :src="userInfo.headimage"/>
@@ -72,11 +59,13 @@
         },
         isFetching: false,
         dataList: [],
-        userInfo: ""
+        userInfo: "",
+        queryInfo: ""
       };
     },
 
     mounted() {
+      this.queryInfo = this.$root.$mp.query
       this.getWorkList();
       this.getMessageInfo();
     },
@@ -84,20 +73,20 @@
     components: {},
 
     methods: {
-      delItem() {
-      },
       bindLoadItem() {
-        console.log("aaaa");
+        console.log('aaaa')
         if (this.page.current < Math.ceil(this.page.total / this.page.size)) {
           this.page.current++;
-          this.getWorkList();
+          this.getWorkList()
         }
       },
       getWorkList() {
         this.isFetching = true;
-        api.work.myWorksList({
+
+        api.work.otherWorksList ({
           current: this.page.current,
-          size: this.page.size
+          size: this.page.size,
+          userId: this.queryInfo.userId
         })
           .then(({ data }) => {
             if (this.page.current > 1) {
@@ -113,7 +102,10 @@
       },
       getMessageInfo() {
         this.isFetching = true;
-        api.work.myMessage()
+
+        api.work.otherMessage ({
+          userId: this.queryInfo.userId
+        })
           .then(({ data }) => {
             this.userInfo = data.resultData;
             this.isFetching = false;
@@ -243,29 +235,29 @@
             text-overflow: ellipsis;
             overflow: hidden;
             white-space: nowrap;
-            height: 22px;
-            font-size: 16px;
-            font-weight: 600;
-            color: rgba(29, 27, 27, 1);
-            line-height: 22px;
+            height:22px;
+            font-size:16px;
+            font-weight:600;
+            color:rgba(29,27,27,1);
+            line-height:22px;
             margin-bottom: 8px;
           }
 
           .-other-time {
-            height: 14px;
-            font-size: 10px;
-            font-weight: 300;
-            color: rgba(112, 115, 116, 1);
-            line-height: 14px;
+            height:14px;
+            font-size:10px;
+            font-weight:300;
+            color:rgba(112,115,116,1);
+            line-height:14px;
             margin-bottom: 12px;
           }
 
           .-other-num {
-            height: 17px;
-            font-size: 12px;
-            font-weight: 500;
-            color: rgba(112, 115, 116, 1);
-            line-height: 17px;
+            height:17px;
+            font-size:12px;
+            font-weight:500;
+            color:rgba(112,115,116,1);
+            line-height:17px;
 
             .-img {
               margin-right: 4px;
@@ -275,9 +267,10 @@
           }
         }
 
+
         .-other-img {
-          width: 32px;
-          height: 32px;
+          width:32px;
+          height:32px;
         }
       }
     }

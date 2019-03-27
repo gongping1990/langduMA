@@ -23,7 +23,24 @@ const work = {
     return axios.post('/work/finishFangdu', params)
   },
   save(params) {
-    return axios.post('/work/save', params)
+    return axios.post('/work/save',params)
+  },otherMessage(params) {
+    return axios.get('/work/getPersonalHomepage',params)
+  },
+  myMessage(params) {
+    return axios.get('/work/getPersonalHomepageByMe',params)
+  },
+  otherWorksList(params) {
+    return axios.get('/work/listByOtherWorksCollection',params)
+  },
+  myWorksList(params) {
+    return axios.get('/work/listByWorksCollection',params)
+  },
+  myShareWorksList(params) {
+    return axios.get('/work/listByShareWorks',params)
+  },
+  shareDetail(params) {
+    return axios.get('/work/getShareWorkDetails',params)
   }
 }
 

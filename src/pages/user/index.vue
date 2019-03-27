@@ -9,7 +9,7 @@
       <div class="ld-user-footer">
         <div class="-footer-title">作品集</div>
 
-        <wux-swipe-action autoClose useSlots v-for="(item, index) of 2" :key="index" >
+        <wux-swipe-action autoClose useSlots v-for="(item, index) of dataList" :key="index" >
           <div slot="right" @click="openDel" class="-footer-action">
             <img class="-right-img" src="https://pub.file.k12.vip/read/my/zp-icon-delete.png"/>
           </div>

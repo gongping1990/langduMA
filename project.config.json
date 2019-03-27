@@ -37,7 +37,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 6,
+			"current": 8,
 			"list": [
 				{
 					"id": -1,
@@ -91,6 +91,13 @@
 					"name": "我的成就卡",
 					"pathName": "pages/myCard/main",
 					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "排行榜2",
+					"pathName": "pages/popularityRank/main",
+					"query": "type=1",
 					"scene": null
 				}
 			]

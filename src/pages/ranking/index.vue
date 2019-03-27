@@ -17,14 +17,15 @@
           <div class="-one">
             <div class="-one-img">
               <img class="-one-img-header"
-                   src="https://wx.qlogo.cn/mmhead/DQUJ1lic9u2tgaIBMEvzETXs9SnwSjpLmXyHFibWDd3Ws/132">
+                   @click="lookOtherWorks(twoInfo.userId)"
+                   :src="twoInfo.headimgurl">
             </div>
             <div class="-one-name">
-              良辰美景小林哥aaa
+              {{twoInfo.nickname}}
             </div>
             <div class="-one-num">
               <img class="-one-num-img" src="https://pub.file.k12.vip/read/wind/icon-good2.png"/>
-              <span>233</span>
+              <span>{{twoInfo.count}}</span>
             </div>
             <img class="-one-image" src="https://pub.file.k12.vip/read/wind/2.png"/>
           </div>
@@ -32,24 +33,26 @@
             <div class="-two-img">
               <img class="-two-img-crown" src="https://pub.file.k12.vip/read/rank/icon-head champion.png"/>
               <img class="-two-img-header"
-                   src="https://wx.qlogo.cn/mmhead/DQUJ1lic9u2tgaIBMEvzETXs9SnwSjpLmXyHFibWDd3Ws/132">
+                   @click="lookOtherWorks(oneInfo.userId)"
+                   :src="oneInfo.headimgurl">
             </div>
-            <div class="-two-name">heaven小林哥</div>
+            <div class="-two-name">{{oneInfo.nickname}}</div>
             <div class="-two-num">
               <img class="-two-num-img" src="https://pub.file.k12.vip/read/wind/icon-good1.png"/>
-              <span>1233</span>
+              <span>{{oneInfo.count}}</span>
             </div>
             <img class="-two-image" src="https://pub.file.k12.vip/read/wind/1.png"/>
           </div>
           <div class="-one">
             <div class="-one-img">
               <img class="-one-img-header"
-                   src="https://wx.qlogo.cn/mmhead/DQUJ1lic9u2tgaIBMEvzETXs9SnwSjpLmXyHFibWDd3Ws/132"/>
+                   @click="lookOtherWorks(threeInfo.userId)"
+                   :src="threeInfo.headimgurl"/>
             </div>
-            <div class="-one-name">Yasaman F</div>
+            <div class="-one-name">{{threeInfo.nickname}}</div>
             <div class="-one-num -three-num">
               <img class="-one-num-img" src="https://pub.file.k12.vip/read/wind/icon-good3.png"/>
-              <span>33</span>
+              <span>{{threeInfo.count}}</span>
             </div>
             <img class="-one-image -three-image" src="https://pub.file.k12.vip/read/wind/3.png"/>
           </div>
@@ -57,24 +60,26 @@
       </div>
       <div class="ld-ranking-down">
         <div class="-down-title" v-if="!isShowHeader">佳作推荐</div>
-        <div class="-down-item" v-for="(item,index) of 6" :key="index">
-          <div class="-down-item-tip" :class="{'-rq':index == '0','-tj':index==1}">{{index== 1 ? "教师推荐": "人气之星"}}</div>
+        <div class="-down-item" v-for="(item,index) of dataList" :key="index">
+          <div class="-down-item-tip" v-if="item.workId!=0" :class="{'-rq':item.workId == '2','-tj':item.workId=='1'}">
+            {{tagList[item.workId-1]}}
+          </div>
           <div class="-down-item-left">
             <div class="-left-top">
-              <div class="-left-top-img"></div>
+              <img class="-left-top-img" @click="lookOtherWorks(item.userId)" :src="item.headimgurl"/>
               <div class="-left-top-text">
-                <div class="-user-name">heaven小林哥</div>
-                <div class="-book-name">《天地人》</div>
+                <div class="-user-name">{{item.nickname}}</div>
+                <div class="-book-name">《{{item.course}}》</div>
               </div>
             </div>
             <div class="-left-down">
               <div class="-left-down-text">
                 <img class="-left-down-text-img" src="https://pub.file.k12.vip/read/wind/icon-playing.png"/>
-                123000
+                {{item.pv}}
               </div>
               <div class="-left-down-text">
                 <img class="-left-down-text-img-two" src="https://pub.file.k12.vip/read/rank/icon-good2.png"/>
-                2933
+                {{item.likes}}
               </div>
             </div>
           </div>
@@ -88,24 +93,39 @@
 </template>
 
 <script>
+  import api from "../../request/api";
 
   export default {
     data() {
       return {
         page: {
           current: 1,
-          size: 20,
+          size: 10,
           total: ""
         },
+        tagList: ["教师推荐", "人气之星"],
         isShowHeader: false,
         isFetching: false,
-        dataList: []
+        dataList: [],
+        oneInfo: [],
+        twoInfo: [],
+        threeInfo: []
       };
     },
 
     components: {},
 
+    mounted() {
+      this.getRecommendList();
+      this.getThreeList();
+    },
+
     methods: {
+      lookOtherWorks(id) {
+        wx.navigateTo({
+          url: `/pages/otherUser/main?userId=${id}`
+        });
+      },
       scrollTopFn(e) {
         if (e.mp.detail.scrollTop > 324) {
           this.isShowHeader = true;
@@ -117,26 +137,39 @@
       bindLoadItem() {
         if (this.page.current < Math.ceil(this.page.total / this.page.size)) {
           this.page.current++;
-          this.getList()
+          this.getList();
         }
       },
       toJump() {
+        console.log(1);
         wx.navigateTo({
           url: `/pages/popularityRank/main?type=1`
         });
       },
-      getList() {
+      getThreeList() {
         this.isFetching = true;
-        api.userAccount.getUserAccountIncomeList({
+        api.user.getTopThreeRank()
+          .then(({ data }) => {
+            this.oneInfo = data.resultData.length == 1 && data.resultData[0];
+            this.twoInfo = data.resultData.length == 2 && data.resultData[1];
+            this.threeInfo = data.resultData.length == 3 && data.resultData[2];
+            this.isFetching = false;
+          }, () => {
+            this.isFetching = false;
+          });
+      },
+      getRecommendList() {
+        this.isFetching = true;
+        api.user.getRecommendRank({
           current: this.page.current,
           size: this.page.size
         }).then(({ data }) => {
           if (this.page.current > 1) {
-            this.dataList = this.dataList.concat(data.resultData.records)
+            this.dataList = this.dataList.concat(data.resultData.records);
           } else {
             this.dataList = data.resultData.records;
           }
-          this.page.total = data.resultData.total
+          this.page.total = data.resultData.total;
           this.isFetching = false;
         }, () => {
           this.isFetching = false;
@@ -396,7 +429,6 @@
               border-radius: 50%;
               width: 36px;
               height: 36px;
-              background: rgba(216, 216, 216, 1);
             }
 
             &-text {
@@ -431,13 +463,13 @@
               line-height: 17px;
 
               &-img {
-                width:14px;
-                height:11px;
+                width: 14px;
+                height: 11px;
               }
 
               &-img-two {
-                width:11px;
-                height:11px;
+                width: 11px;
+                height: 11px;
               }
             }
           }

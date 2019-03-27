@@ -18,6 +18,21 @@ const work = {
   },
   getMyCardList(params) {
     return axios.get('/work/listByAchievementCard',params)
+  },
+  otherMessage(params) {
+    return axios.get('/work/getPersonalHomepage',params)
+  },
+  myMessage(params) {
+    return axios.get('/work/getPersonalHomepageByMe',params)
+  },
+  otherWorksList(params) {
+    return axios.get('/work/listByOtherWorksCollection',params)
+  },
+  myWorksList(params) {
+    return axios.get('/work/listByWorksCollection',params)
+  },
+  myShareWorksList(params) {
+    return axios.get('/work/listByShareWorks',params)
   }
 }
 

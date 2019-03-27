@@ -14,7 +14,7 @@
         <div class="-content-item-one">
           <div class="-img">
             <img class="-img-crown" src="https://pub.file.k12.vip/read/rank/icon-head champion.png"/>
-            <img class="-img-header" :src="dataItem.headimgurl">
+            <img class="-img-header" @click="lookOtherWorks(dataItem.userId)" :src="dataItem.headimgurl">
           </div>
           <div class="-item-one-wrap">
             <div class="-item-one-wrap-text">
@@ -36,7 +36,7 @@
           <img v-else-if="index==1" class="-item-img" src="https://pub.file.k12.vip/read/rank/icon-3rd.png"/>
           <div class="-item-left" v-else>{{index+2}}</div>
           <div class="-item-center">
-            <img class="-item-center-img"
+            <img @click="lookOtherWorks(item.userId)" class="-item-center-img"
                  :src="item.headimgurl"/>
             <div class="-item-center-text">
               <div class="-name">{{item.nickname}}</div>
@@ -55,15 +55,15 @@
     <div class="ld-popularityRank-footer">
       <div class="-footer-wrap">
         <div class="item-wrap -footer-item">
-          <div class="-item-left -footer-num">200</div>
+          <div class="-item-left -footer-num">{{myInfo.rank}}</div>
           <div class="-item-center -footer-center">
             <img class="-item-center-img"
-                 src="https://wx.qlogo.cn/mmhead/DQUJ1lic9u2tgaIBMEvzETXs9SnwSjpLmXyHFibWDd3Ws/132"/>
+                 :src="myInfo.headimgurl"/>
             <div class="-item-center-text">
-              <div class="-name">阿萨大师</div>
+              <div class="-name">{{myInfo.nickname}}</div>
               <div class="-zan">
                 <img class="-zan-img" src="https://pub.file.k12.vip/read/rank/icon-good2.png"/>
-                <span>29</span>
+                <span>{{myInfo.count}}</span>
               </div>
             </div>
           </div>
@@ -73,22 +73,22 @@
       </div>
     </div>
 
-    <wux-popup :visible="isOpenPopup" position="bottom" @close="openPopup">
+    <wux-popup :visible="isOpenPopup" position="bottom" @close="closePopup">
       <div class="ld-popularityRank-popup-content" :class="{'-more': isOpenMore}">
         <div class="-popup-title">叫大家来给你的作品点赞吧</div>
         <div class="-popup-item" v-if="!isOpenMore">
           <div class="-item-tip">赞最多</div>
           <div class="-item-left">
             <div class="-item-title">
-              <span>《天地人》</span>
+              <span>《{{queryInfo.name}}》</span>
               <img class="-img" src="https://pub.file.k12.vip/read/my/msfd-button-play.png"/>
             </div>
           </div>
           <div class="-item-down">
-            <div class="-item-time">日期: 2019-23-12</div>
+            <div class="-item-time">日期: {{}}</div>
             <div class="-item-num">
               <img class="-img" src="https://pub.file.k12.vip/read/icon-good.png"/>
-              <span>{{11111111110}}</span>
+              <span>{{myInfo.count}}</span>
             </div>
           </div>
         </div>
@@ -98,8 +98,8 @@
                      scroll-y
                      @scroll="scrollTopFn"
                      scroll-with-animation>
-          <div class="-popup-item -popup-item-more" v-for="(item, index) of 4" :key="index"
-               :class="{'-active': index==0}">
+          <div class="-popup-item -popup-item-more" v-for="(item, index) of dataShareList" :key="index"
+               :class="{'-active-item': index==0}">
             <div class="-item-tip" v-if="index==0">赞最多</div>
             <div class="-item-left">
               <div class="-item-title">
@@ -132,16 +132,23 @@
       return {
         page: {
           current: 1,
-          size: 20,
+          size: 10,
+          total: ""
+        },
+        pageShareWork: {
+          current: 1,
+          size: 10,
           total: ""
         },
         isFetching: false,
         isOpenPopup: false,
         isOpenMore: false,
         dataList: [],
-        dataItem: '',
+        dataShareList: [],
+        dataItem: "",
         queryInfo: "",
-        tabType: "1"
+        tabType: "1",
+        myInfo: ""
       };
     },
 
@@ -152,27 +159,41 @@
     },
 
     mounted() {
+      //type: 1为周次，2为单课排行
       if (this.queryInfo.type == 1) {
         this.getWeekList();
       } else {
-        this.getItemList()
+        this.getMyRankInfo();
+        this.getItemList();
       }
     },
 
     methods: {
+      lookOtherWorks(id) {
+        wx.navigateTo({
+          url: `/pages/otherUser/main?userId=${id}`
+        });
+      },
       openMore() {
         this.isOpenMore = !this.isOpenMore;
+        this.getShareWorksList();
       },
       openPopup() {
-        this.isOpenPopup = !this.isOpenPopup;
-        this.queryInfo.type == 1 && this.openMore();
+        this.isOpenPopup = true;
+        if (this.queryInfo.type == 1) {
+          this.openMore();
+        }
+      },
+      closePopup () {
+        this.isOpenMore = false
+        this.isOpenPopup = false
       },
       changeTab(num) {
         this.tabType = num;
         if (this.queryInfo.type == 1) {
           this.getWeekList();
         } else {
-          this.getItemList()
+          this.getItemList();
         }
       },
       bindLoadItem() {
@@ -182,13 +203,15 @@
           if (this.queryInfo.type == 1) {
             this.getWeekList();
           } else {
-            this.getItemList()
+            this.getItemList();
           }
         }
       },
       getWeekList() {
         this.isFetching = true;
         api.user.getUserLikeRank({
+          current: this.page.current,
+          size: this.page.size,
           nowWeek: this.tabType == 1
         }).then(({ data }) => {
           if (this.page.current > 1) {
@@ -216,14 +239,45 @@
           }
           this.page.total = data.resultData.total;
           if (this.dataList.length) {
-            this.dataItem = this.dataList[0]
-            this.dataList.splice(0,1)
+            this.dataItem = this.dataList[0];
+            this.dataList.splice(0, 1);
           }
           this.isFetching = false;
         }, () => {
           this.isFetching = false;
         });
-        ;
+      },
+      getShareWorksList() {
+        api.work.myShareWorksList({
+          current: this.pageShareWork.current,
+          size: this.pageShareWork.size
+        }).then(({ data }) => {
+          if (this.pageShareWork.current > 1) {
+            this.dataShareList = this.dataShareList.concat(data.resultData.records);
+          } else {
+            this.dataShareList = data.resultData.records;
+          }
+          this.pageShareWork.total = data.resultData.total;
+
+          this.isFetching = false;
+        }, () => {
+          this.isFetching = false;
+        });
+      },
+      getMyRankInfo() {
+        api.user.userLikeRankForMe({
+          courseId: this.queryInfo.id
+        })
+          .then(({ data }) => {
+            this.myInfo = data.resultData;
+            this.myInfo = {
+              count: '693',
+              headimgurl: 'https://wx.qlogo.cn/mmhead/DQUJ1lic9u2tgaIBMEvzETXs9SnwSjpLmXyHFibWDd3Ws/132',
+              nickname: '我是浪成美好',
+              rank: '21',
+              workId: 'sssssss'
+            }
+          });
       }
     },
 
@@ -397,8 +451,8 @@
           color: #30C0FFFF !important;
         }
 
-        .-footer-center{
-          width: 70%!important;
+        .-footer-center {
+          width: 70% !important;
         }
 
         .-footer-img {
@@ -506,7 +560,7 @@
         }
       }
 
-      .-active {
+      .-active-item {
         background: rgba(245, 245, 245, 1);
       }
 

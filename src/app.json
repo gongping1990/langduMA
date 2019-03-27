@@ -11,7 +11,8 @@
     "pages/share/main",
     "pages/myWorks/main",
     "pages/myCard/main",
-    "pages/authorize/main"
+    "pages/authorize/main",
+    "pages/listenWork/main"
   ],
   "window": {
     "backgroundTextStyle": "light",

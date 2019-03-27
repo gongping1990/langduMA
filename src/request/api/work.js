@@ -18,6 +18,12 @@ const work = {
   },
   getMyCardList(params) {
     return axios.get('/work/listByAchievementCard',params)
+  },
+  finishFangdu(params) {
+    return axios.post('/work/finishFangdu', params)
+  },
+  save(params) {
+    return axios.post('/work/save', params)
   }
 }
 

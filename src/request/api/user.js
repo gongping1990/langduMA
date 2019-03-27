@@ -11,7 +11,9 @@ const user = {
   getUserLikeRank(params) {
     return axios.get('/user/userLikeRank', params)
   },
-
+  updateUserPhoneByMa(params) {
+    return axios.post('/user/updateUserPhoneByMa', params)
+  }
 
 }
 

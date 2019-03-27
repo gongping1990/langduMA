@@ -38,9 +38,9 @@
       <div class="details-info">
         <div class="details-info_left">
           <i class="details-info_line"></i>
-          <text class="details-info_text">{{detailData.aloudReading}} 位同学已会读</text>
+          <text class="details-info_text">{{detailData.alreadyread}} 位同学已会读</text>
         </div>
-        <text class="details-info_text">1200 位同学正在听</text>
+        <text class="details-info_text">{{detailData.nowlistening}} 位同学正在听</text>
       </div>
     </div>
     <div class="action">
@@ -69,14 +69,12 @@
       </wux-badge>
     </div>
     <div class="details-footer">
-      <div class="details-footer_content">
+      <div class="details-footer_content" v-if="list.length">
         <div class="details-avatar">
-          <image class="details-avatar_image" />
-          <image class="details-avatar_image" />
-          <image class="details-avatar_image" />
+          <image class="details-avatar_image" :src="item.headimage" v-for="item in list" :key="item.userId" />
         </div>
         <div class="details-message">
-          ··· heaven小林哥… 等已解锁
+          ··· {{list[0].nikename}}… 等已解锁
         </div>
       </div>
       <text class="link-btn" @click="toJump">查看人气排行 ></text>
@@ -104,6 +102,7 @@ export default {
   data () {
     return {
       detailData: {},
+      list: [],
       showPopup: false
     }
   },
@@ -128,6 +127,13 @@ export default {
     },
     getPhoneNumber (res) {
       console.log(res)
+      let {encryptedData,iv} = res.mp.detail
+      api.user.updateUserPhoneByMa({
+        encryptedData,
+        iv
+      }).then(({data}) => {
+        store.commit('updateUserInfo', data.resultData)
+      })
     },
     changePopup () {
       this.showPopup = !this.showPopup
@@ -140,12 +146,21 @@ export default {
         id: this.$root.$mp.query.id
       }).then(({ data }) => {
         this.detailData = data.resultData
+        this.queryunlockcourselist()
+      })
+    },
+    queryunlockcourselist() {
+      api.course.queryunlockcourselist({
+        courseId: this.detailData.id
+      }).then(({data}) => {
+        this.list = data.resultData
       })
     }
   },
 
   mounted () {
     this.getCourseDetail()
+
     // let app = getApp()
   }
 }
@@ -198,6 +213,8 @@ export default {
   }
   &-footer {
     position: absolute;
+    left: 0;
+    right: 0;
     bottom: 0;
     padding: 12px 24px;
 

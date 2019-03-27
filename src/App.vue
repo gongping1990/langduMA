@@ -13,12 +13,12 @@ export default {
             code: res.code
           }).then(({ data }) => {
             store.commit('updateUserInfo', data.resultData)
-            if (data.resultData.id) {
+            if (!data.resultData.id) {
               wx.getSetting({
                 success (res) {
                   console.log(res)
                   if (!res.authSetting['scope.userInfo']) {
-                    wx.redirectTo({ url: '/pages/authorize/main' });
+                    wx.navigateTo({ url: '/pages/authorize/main'})
                   }
                 }
               })

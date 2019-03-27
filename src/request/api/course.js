@@ -6,6 +6,9 @@ const course = {
   },
   getById(params) {
   return axios.get('/course/getQtById/' + params.id)
+  },
+  queryunlockcourselist(params) {
+    return axios.post('/course/queryunlockcourselist',params)
   }
 }
 

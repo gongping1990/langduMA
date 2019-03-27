@@ -1,5 +1,6 @@
 <template>
-  <div class="read-component" :class="className">
+  <div class="read-component"
+       :class="className">
     <div class="lyric">
       <text class="lyric-title">《{{title}}》</text>
       <text class="lyric-subtitle">{{subtitle}}</text>
@@ -49,7 +50,7 @@
           <text class="end-time">{{endTime}}</text>
         </div>
         <div class="control-list"
-             v-if="showList"
+             v-if="showList && !share"
              @tap="clickList"></div>
       </div>
       <div class="control-content">
@@ -63,7 +64,9 @@
              v-if="!paused"
              @tap="clickNext">下一句</div>
       </div>
-      <slot></slot>
+      <div v-if="share" @tap="clickReadBtn" class="share-btn">
+        我要朗读
+      </div>
     </div>
   </div>
 </template>
@@ -73,11 +76,15 @@ export default {
   props: {
     lyricText: {
       type: String,
-      default: `[00:00.00]时钟不要走\n[00:04.22]让我脆弱一分钟\n[00:07.44]要多久才能习惯被放手\n[00:15.80]马克杯空了 暖暖的温热\n[00:22.66]却还在我手中停留\n[00:27.96]\n[00:29.79]勇气不要走\n[00:32.20]给我理由再冲动\n[00:35.69]去相信爱情 就算还在痛\n[00:43.96]如果我不说不会有人懂\n[00:50.72]失去你我有多寂寞\n[00:55.61]还是愿意\n[00:57.58]付出一切仅仅为了一个好梦\n[01:03.98]梦里有人真心爱我 陪我快乐也陪我沉默\n[01:11.26]没有无缘无故的痛承受越多越成熟\n[01:18.63]能让你拥抱更好的我\n[01:25.03] 谁也不要走\n[01:28.27]应该是一种奢求\n[01:31.90]可是我只想 握紧你的手\n[01:39.78]我宁愿等候 也不愿错过\n[01:46.63]你对我微笑的时候\n[01:56.78]\n[02:18.91]还是愿意\n[02:21.32]用尽全力仅仅为了一个以后\n[02:27.87]哪怕生命并不温柔哪怕被幸福一再反驳\n[02:34.87]也要相信伤痕累累 其实只是在琢磨\n[02:42.07]能让你为之一亮 的我`
+      default: ''
     },
     lyricSrc: {
       type: String,
       default: ''
+    },
+    share: {
+      type: Boolean,
+      default: false
     },
     title: {
       type: String,
@@ -136,13 +143,25 @@ export default {
   },
 
   watch: {
-    lyricSrc(n,o) {
-      if(n) {
+    lyricSrc (n, o) {
+      if (n) {
         console.log(n)
         this.audio.src = n
       }
+    },
+    lyricText (n, o) {
+      console.log(n, 111)
+      this.lyricArr = this.sliceNull(this.parseLyric(n))
     }
   },
+
+  // computed: {
+  //   line() {
+  //     let a = this.lyricText.split(/\\n/)
+  //     console.log(a)
+  //     return 11
+  //   }
+  // },
 
   methods: {
     play () {
@@ -151,8 +170,14 @@ export default {
     pause () {
       this.audio.pause()
     },
-    stop() {
+    stop () {
       this.audio.stop()
+    },
+    setIndex (n) {
+      this.lyricIndex = n ? n : 0
+    },
+    clickReadBtn() {
+      this.$emit('clickRead')
     },
     catchtouchmove () {
       return true
@@ -167,7 +192,7 @@ export default {
       this.$emit('paused', this.audio.paused)
     },
     clickNext () {
-      if(this.lyricIndex == this.lyricArr.length - 1) {
+      if (this.lyricIndex == this.lyricArr.length - 1) {
         return
       }
       this.audio.seek(this.lyricArr[this.lyricIndex + 1][0])
@@ -192,18 +217,16 @@ export default {
     changeLyric (e) {
       this.$emit('changeLyric', e)
     },
-    clickList() {
+    clickList () {
       this.$emit('clickList')
     },
     parseLyric (text) {
+      console.log(text, 111)
       let result = [];
-      let lines = text.split('\n'), //切割每一行
+      let lines = text.split(/\n/), //切割每一行
         pattern = /\[\d{2}:\d{2}.\d{2}\]/g; //用于匹配时间的正则表达式，匹配的结果类似[xx:xx.xx]
-
+      console.log(lines)
       //去掉不含时间的行
-      while (!pattern.test(lines[0])) {
-        lines = lines.slice(1);
-      };
 
       //上面用'\n'生成数组时，结果中最后一个为空元素，这里将去掉
       lines[lines.length - 1].length === 0 && lines.pop();
@@ -268,14 +291,15 @@ export default {
 
       this.audio.onEnded(() => {
         console.log('end')
-        this.progress = 100
+        this.progress = 0
+        this.startTime = '00:00'
         this.$emit('progress', 100)
         this.$emit('ended')
       })
 
       this.audio.onTimeUpdate(() => {
         console.log('update')
-        this.$emit('timeUpdate',{
+        this.$emit('timeUpdate', {
           currentTime: this.audio.currentTime,
           formatCurrentTime: this.timeToFormat(this.audio.currentTime)
         })
@@ -292,12 +316,12 @@ export default {
         if ((this.lyricIndex != this.lyricArr.length - 1) && !this.tapSwiper) {
 
           this.lyricArr.forEach((e, i) => {
-            let {lyricIndex} = this
+            let { lyricIndex } = this
             let currentTime = this.audio.currentTime
-            if (lyricIndex == this.lyricArr.length - 2 && currentTime > this.lyricArr[this.lyricArr.length - 1][0]) {
+            if (lyricIndex == this.lyricArr.length - 2 && currentTime > (this.lyricArr[this.lyricArr.length - 1][0] - 0.9)) {
               this.lyricIndex = this.lyricArr.length - 1
               return;
-            } else if(lyricIndex != this.lyricArr.length - 1) {
+            } else if (lyricIndex != this.lyricArr.length - 1) {
               if (currentTime >= e[0] && currentTime < this.lyricArr[i + 1][0]) {
                 this.lyricIndex = i
                 return;
@@ -329,7 +353,6 @@ export default {
     }
   },
   mounted () {
-    this.lyricArr = this.sliceNull(this.parseLyric(this.lyricText))
     this.audio = this.globalData.audio
     console.log(this.lyricArr)
     this.initAudio()
@@ -364,6 +387,22 @@ export default {
     width: 280px;
     border-top: 1px rgba($color: #fff, $alpha: 0.4) dashed;
   }
+}
+.share-btn {
+  @include flex-center;
+  margin-top: 15px;
+  width: 327px;
+  height: 42px;
+  font-size: 15px;
+  font-weight: 500;
+  color: #fff;
+  background: linear-gradient(
+    90deg,
+    rgba(151, 240, 94, 1) 0%,
+    rgba(56, 226, 146, 1) 100%
+  );
+  box-shadow: 0px 3px 8px -3px rgba(183, 242, 175, 0.4);
+  border-radius: 26px;
 }
 .mask-top {
   position: absolute;
@@ -414,7 +453,7 @@ export default {
     font-size: 12px;
     color: rgba($color: #fff, $alpha: 0.75);
     border-radius: 18px;
-    border:1px solid rgba(255,255,255,0.16);
+    border: 1px solid rgba(255, 255, 255, 0.16);
   }
   &-content {
     @include flex-center;
@@ -428,7 +467,7 @@ export default {
   &-header {
     @include flex-center;
     justify-content: space-between;
-    margin-bottom: 31px;
+    margin-bottom: 10px;
   }
 
   &-progress {
@@ -454,7 +493,7 @@ export default {
         left: 0;
         top: 50%;
         height: 4px;
-        background-color: #30C0FF;
+        background-color: #30c0ff;
         border-radius: 20px;
         transform: translateY(-50%);
       }
@@ -463,14 +502,13 @@ export default {
 }
 .lyric {
   @include flex-column-center;
-  margin-top: 32px;
   &-title {
     font-size: 24px;
     color: rgba($color: #fff, $alpha: 0.75);
     margin-bottom: 8px;
   }
   &-subtitle {
-    margin-bottom: 32px;
+    margin-bottom: 12px;
     font-size: 12px;
     color: rgba($color: #fff, $alpha: 0.4);
   }
@@ -487,24 +525,23 @@ export default {
     padding: 0 10px;
     font-size: 15px;
     color: rgba($color: #fff, $alpha: 0.4);
-    background-color: #01141D;
+    background-color: #01141d;
 
     &.active {
-      font-size: 20px;
+      font-size: 18px;
       font-weight: 500;
-      color: #30C0FF;
+      color: #30c0ff;
     }
     &.isReady {
       font-size: 17px !important;
       color: #fff;
     }
-
   }
 }
 
 .readPage {
   .lyric-text.active {
-    color: #38E292!important;
+    color: #38e292 !important;
   }
 }
 </style>

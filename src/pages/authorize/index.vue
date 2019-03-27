@@ -32,7 +32,7 @@ export default {
         signature
       }).then(({data}) => {
         store.commit('updateUserInfo', data.resultData)
-        wx.redirectTo({ url: '/pages/index/main' });
+        wx.navigateBack()
       })
     }
   }

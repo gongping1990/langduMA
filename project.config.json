@@ -20,6 +20,8 @@
 		"hidedInDevtools": []
 	},
 	"scripts": {},
+	"simulatorType": "wechat",
+	"simulatorPluginLibVersion": {},
 	"condition": {
 		"search": {
 			"current": -1,
@@ -37,7 +39,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 6,
+			"current": 8,
 			"list": [
 				{
 					"id": -1,
@@ -60,10 +62,11 @@
 					"query": ""
 				},
 				{
-					"id": 2,
+					"id": 3,
 					"name": "阅读",
 					"pathName": "pages/read/main",
-					"query": ""
+					"query": "id=1110748762236493826",
+					"scene": null
 				},
 				{
 					"id": -1,
@@ -91,6 +94,13 @@
 					"name": "我的成就卡",
 					"pathName": "pages/myCard/main",
 					"query": "",
+					"scene": null
+				},
+				{
+					"id": 8,
+					"name": "阅读",
+					"pathName": "pages/listenWork/main",
+					"query": "id=1110840422484611074&share=1",
 					"scene": null
 				}
 			]

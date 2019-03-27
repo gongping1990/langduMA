@@ -7,8 +7,8 @@
         <wux-circle :sAngle="270"
                     :strokeWidth="2"
                     :size="60"
-                    :animate="false"
-                    :percent="percent"
+                    :speed="5000"
+                    :percent="percentOne"
                     backgroundColor="#01141D"
                     color="#66FFF8">
           <div class="circle-text">{{percent}}<text>%</text></div>
@@ -21,8 +21,7 @@
         <text class="mask-text">请准备···</text>
       </div>
     </div>
-    <div class="introduce"
-         @tap="bindEnded">
+    <div class="introduce">
       <image :src="userInfo.headimgurl"
              mode="widthFix"
              class="introduce-image" />
@@ -40,8 +39,7 @@
           :disabled="disabled"
           @ended="bindEnded"
           @progress="changeProgress"
-          @timeUpdate="changeTimeUpdate"
-          v-if="show">
+          @timeUpdate="changeTimeUpdate">
     </read>
     <div class="control"
          v-if="!isStart">
@@ -59,7 +57,7 @@
                :style="{'width': progress + '%'}"></div>
         </div>
         <div class="reset-btn"
-             v-if="isPlay || isEnd"
+             v-if="isPlay == false || isEnd"
              @tap="clickReset">重录</div>
         <div class="play-btn ly"
              v-if="!isEnd"
@@ -67,6 +65,7 @@
           <text class="play-btn_text">{{currentTime}}</text>
         </div>
         <div class="play-btn bf"
+             :class="{'paused': audioPause}"
              v-else
              @tap="clickRecorderPlay"></div>
         <div class="save-btn"
@@ -88,6 +87,36 @@
         </div>
       </div>
     </wux-popup>
+    <wux-popup :visible="showSuccessTwo"
+               @close="changeSuccessPopupTwo">
+      <div class="reset-popup">
+        <div class="reset-popup_icon"></div>
+        <text class="reset-popup_text">恭喜您录制完成 </text>
+        <text class="reset-popup_content">赶快分享到班级群</text>
+        <text class="reset-popup_content">集赞争做“人气之星”</text>
+        <div class="reset-popup_btn">
+          <button class="reset-popup_confim reset-popup_share"
+                  open-type="share">
+            分享到班级群
+          </button>
+        </div>
+      </div>
+    </wux-popup>
+    <wux-popup :visible="showSuccess"
+               @close="changeSuccessPopup">
+      <div class="success-popup">
+        <text class="success-popup_text">解锁新成就</text>
+        <text class="success-popup_title">《{{courseData.name}}》</text>
+        <image class="success-popup_image"
+               :src="courseData.comAchievement" />
+        <text class="success-popup_text">快去跟同学们秀一下吧！</text>
+        <text class="success-popup_text"> 获得同学们的点赞，可以登上人气榜做明星哟~</text>
+        <button class="success-popup_btn"
+                open-type="share">
+          分享到班级群
+        </button>
+      </div>
+    </wux-popup>
   </div>
 </template>
 
@@ -99,16 +128,18 @@ import api from '../../request/api'
 export default {
   data () {
     return {
+      showSuccessTwo: false,
+      showSuccess: false,
       showAchieve: false,
       showRead: false,
       showPopup: false,
-      show: true,
+      show: false,
       disabled: false,
       showMask: false,
       percent: 0,
       downTime: 3,
       timer: null,
-      isStart: true,
+      isStart: false,
       paused: false,
       progress: 0,
       recorder: null,
@@ -116,7 +147,9 @@ export default {
       isEnd: false,
       currentTime: '00:00',
       courseData: {},
-      showReset: false
+      showReset: false,
+      audioPause: true,
+      percentOne: 0
     }
   },
 
@@ -161,12 +194,14 @@ export default {
         this.isEnd = true
         this.recorderSrc = e.tempFilePath
         this.audio.src = e.tempFilePath
+        this.clickRecorderPlay()
       })
     },
     clickResetConfim () {
       this.recorder.stop()
+      this.$refs.read.stop()
       setTimeout(() => {
-        this.$refs.read.stop()
+
         this.currentTime = '00:00'
         this.isPlay = null
         this.isEnd = false
@@ -181,6 +216,13 @@ export default {
       this.recorder.pause()
     },
     clickSave () {
+      wx.showLoading({
+        title: '保存中...', //提示的内容,
+        mask: true, //显示透明蒙层，防止触摸穿透,
+        success: res => {}
+      });
+      this.audio.stop()
+      this.audioPause = false
       console.log(this.recorderSrc)
       wx.uploadFile({
         url: 'https://huoke.test.k12.vip/declaim/common/uploadPublicFile', //开发者服务器 url
@@ -190,13 +232,25 @@ export default {
           'content-type': 'multipart/form-data'
         },
         success: res => {
-
-          console.log(res)
-        },
-        fail: () => {
-          console.log(fail)
+          let data = JSON.parse(res.data)
+          this.saveFile(data.resultData.url)
         },
       });
+    },
+    saveFile (voiceUrl) {
+
+      api.work.save({
+        courseId: this.courseData.id,
+        voiceUrl
+      }).then(({ data }) => {
+        wx.hideLoading();
+        if(data.resultData.curworksNum == 1) {
+          this.showSuccess = true
+        } else {
+          this.showSuccessTwo = true
+        }
+        this.workId = data.resultData.workId
+      })
     },
     changeReset () {
       console.log('cancel')
@@ -250,6 +304,12 @@ export default {
     changePopup () {
       this.showPopup = !this.showPopup
     },
+    changeSuccessPopup () {
+      this.showSuccess = !this.showSuccess
+    },
+    changeSuccessPopupTwo () {
+      this.showSuccessTwo = !this.showSuccessTwo
+    },
     changeAchieve () {
       this.showAchieve = !this.showAchieve
     },
@@ -258,7 +318,7 @@ export default {
     },
     clickStart () {
       wx.getSetting({
-        success (res) {
+        success: (res) => {
           if (!res.authSetting['scope.record']) {
             wx.authorize({
               scope: 'scope.record',
@@ -268,6 +328,7 @@ export default {
             })
           } else {
             this.showMask = true
+            this.percentOne = 100
             this.timer = setInterval(() => {
               let random = Math.floor(10 * Math.random())
               if (this.percent != 100) {
@@ -290,10 +351,12 @@ export default {
         this.downTime -= 1
         if (!this.downTime) {
           clearInterval(this.timer)
+          this.$refs.read.setIndex()
           this.downTime = 3
           this.percent = 0
           this.isStart = true
           this.showMask = false
+          this.clickRecorderStart()
         }
       }, 1000);
     },
@@ -302,6 +365,7 @@ export default {
         id: this.$root.$mp.query.id
       }).then(({ data }) => {
         this.courseData = data.resultData
+        this.show = true
         this.getCourseList()
       })
     },
@@ -312,6 +376,16 @@ export default {
   mounted () {
     this.recorder = wx.getRecorderManager()
     this.audio = wx.createInnerAudioContext()
+    this.audio.onPlay(() => {
+      this.audioPause = false
+    })
+    this.audio.onPause(() => {
+      this.audioPause = true
+    })
+
+    this.audio.onEnded(() => {
+      this.audioPause = false
+    })
     this.initRecorder()
     wx.getSetting({
       success (res) {
@@ -335,6 +409,22 @@ export default {
   onHide () {
     this.audio.destroy()
     this.recorder.stop()
+  },
+
+  onUnload () {
+    this.audio.destroy()
+    this.recorder.stop()
+  },
+
+  onShareAppMessage () {
+    return {
+      title: `我的孩子刚朗读了《${this.courseData.name}》，非常棒，请给TA点个赞吧！`,
+      path: '/pages/share/main?id=' + this.workId,
+      success: res => {
+        this.showSuccessTwo = false
+        this.showSuccess = false
+      }
+    };
   }
 }
 </script>
@@ -344,16 +434,51 @@ export default {
   padding-top: 1px;
   height: 100vh;
   background-color: #01141d;
+  line-height: 20px;
+  .success-popup {
+    @include flex-column-center;
+    &_text {
+      font-size: 14px;
+      color: rgba($color: #fff, $alpha: 0.75);
+    }
+    &_title {
+      font-size: 20px;
+      color: #fff;
+    }
+    &_image {
+      margin: 16px 0;
+      width: 180px;
+      height: 240px;
+      box-shadow: 0px 0px 16px -2px rgba(174, 194, 203, 0.4);
+      border-radius: 6px;
+    }
+    &_btn {
+      @include flex-center;
+      margin-top: 24px;
+      width: 263px;
+      height: 40px;
+      font-size: 15px;
+      font-weight: 500;
+      color: #fff;
+      background: linear-gradient(
+        90deg,
+        rgba(102, 255, 248, 1) 0%,
+        rgba(48, 192, 255, 1) 100%
+      );
+      border-radius: 26px;
+    }
+  }
   .reset-popup {
     @include flex-column-center;
+    padding: 24px 0;
     width: 327px;
-    height: 178px;
+    line-height: 26px;
     background: rgba(3, 26, 36, 1);
     box-shadow: 0px 2px 10px 0px rgba(1, 21, 31, 1);
     border-radius: 16px;
     &_text {
       font-size: 20px;
-      color: rgba($color: #fff, $alpha: 0.75);
+      color: rgba($color: #fff, $alpha: 1);
     }
     &_content {
       font-size: 16px;
@@ -378,6 +503,17 @@ export default {
     &_confim {
       margin-left: 31px;
       color: #30c0ff;
+    }
+    &_share {
+      margin-left: 0;
+      width: 263px;
+      background-color: #031a24;
+    }
+    &_icon {
+      @include bg('/read/zyld-icon-done.png');
+      margin-bottom: 12px;
+      width: 56px;
+      height: 56px;
     }
   }
   .progress {
@@ -500,7 +636,10 @@ export default {
         @include bg('/read/zyld-button-start.png');
       }
       &.bf {
-        @include bg('/read/');
+        @include bg('/read/zyld-button-play.png');
+      }
+      &.paused {
+        @include bg('/read/zyld-button-pause.png');
       }
       &_text {
         font-size: 13px;
@@ -640,7 +779,7 @@ export default {
     }
     &-title {
       font-size: 15px;
-      color: #4a4a4a;
+      color: #fff;
     }
     &-weight {
       font-weight: 500;

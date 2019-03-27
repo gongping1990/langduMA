@@ -1,17 +1,14 @@
 <template>
   <div class="read">
-    <div class="introduce"
+    <!-- <div class="introduce"
          v-if="!hideIntroduce"
          :class="{'show': showIntroduce}">
       <image class="introduce-image"
              mode="widthFix"
-             :src="courseData.headImage" />
-      <div class="introduce-content">
-        <div class="introduce-title">朗读老师：<text class="introduce-weight">{{courseData.teacherName}}</text></div>
-        <text class="introduce-text">{{courseData.teacherIntroduce}}</text>
-      </div>
+             :src="detailData.headimage" />
+      <div class="introduce-title">朗读老师：<text class="introduce-weight">{{courseData.teacherName}}</text></div>
+      <text class="introduce-text">{{courseData.teacherIntroduce}}</text>
     </div>
-
     <read ref="read"
           :share="share"
           :title="courseData.name"
@@ -64,7 +61,7 @@
         <div class="read-popup_btn"
              @tap="clickRead">去朗读</div>
       </div>
-    </wux-popup>
+    </wux-popup> -->
   </div>
 </template>
 
@@ -77,39 +74,36 @@ export default {
   data () {
     return {
       gradeArr: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '初中'],
-      courseData: {},
       detailData: {},
       showAchieve: false,
       showRead: false,
-      showPopup: false,
       show: true,
       showIntroduce: false,
-      hideIntroduce: false,
-      courseList: [],
-      total: 0,
-      share: 0,
-      id: 0,
-      page: {
-        current: 1,
-        size: 10
-      }
+      workId: 0,
     }
   },
 
   computed: {
-    subtitle () {
-      return `${this.gradeArr[this.courseData.grade]}·${this.courseData.semester == 1 ? '上册' : '下册'}`
-    },
-    userInfo() {
+    // subtitle () {
+    //   return `${this.gradeArr[this.courseData.grade]}·${this.courseData.semester == 1 ? '上册' : '下册'}`
+    // },
+    userInfo () {
       return store.state.userInfo
     }
   },
 
   watch: {
-    userInfo(n, o) {
-      if(n.id && !o.id && this.$root.$mp.query) {
-        this.getCourseDetail()
+    userInfo (n, o) {
+      if (n.id && !o.id && this.$root.$mp.query) {
+        this.getWorkDetail()
       }
+    },
+    workId (n, o) {
+      console.log(n)
+      if (this.userInfo.id && n) {
+        this.getWorkDetail()
+      }
+
     }
   },
 
@@ -118,45 +112,16 @@ export default {
   },
 
   methods: {
-    getCourseDetail () {
-      api.course.getById({
-        id: this.$root.$mp.query.id
+    getWorkDetail () {
+      api.work.getById({
+        id: this.workId
       }).then(({ data }) => {
-        this.courseData = data.resultData
-        this.getCourseList()
+        this.detailData = data.resultData
       })
     },
-    /**
-     * 获取课程列表
-     * @param [params] (Object)
-     * {
-     *  current: 页码，
-     *  grade: 年级,
-     *  semester: 学期，
-     *  size: 条数
-     * }
-     */
-    getCourseList () {
-      api.course.queryPage({
-        size: this.page.size,
-        current: this.page.current,
-        grade: this.courseData.grade,
-        semester: this.courseData.semester
-      }).then(({ data }) => {
-        this.courseList = data.resultData.records
-        this.total = data.resultData.total
-      })
-    },
-    clickItem(id) {
-      this.showPopup = false
-      this.globalData.audio.stop()
-      wx.redirectTo({ url: '/pages/listen/main?id=' + id });
-    },
+
     clickRead () {
       wx.navigateTo({ url: '/pages/read/main?id=' + this.$root.$mp.query.id });
-    },
-    changePopup () {
-      this.showPopup = !this.showPopup
     },
     changeAchieve () {
       this.showAchieve = !this.showAchieve
@@ -164,8 +129,7 @@ export default {
     changeRead () {
       this.showRead = !this.showRead
     },
-    bindEnded() {
-      console.log('end')
+    bindEnded () {
       this.finishFangdu()
       this.changeRead()
     },
@@ -179,11 +143,9 @@ export default {
 
 
   mounted () {
-    this.id = this.$root.$mp.query.id
+    this.workId = this.$root.$mp.query.id
+    console.log(this.workId, 111)
     this.share = this.$root.$mp.query.share
-    if(this.userInfo.id) {
-      this.getCourseDetail()
-    }
     setTimeout(() => {
       this.showIntroduce = true
       setTimeout(() => {
@@ -195,11 +157,11 @@ export default {
     // let app = getApp()
   },
 
-  onHide() {
+  onHide () {
     this.globalData.audio.stop()
   },
 
-  onUnload() {
+  onUnload () {
     console.log('unload')
     this.globalData.audio.stop()
   }
@@ -302,7 +264,7 @@ export default {
         margin-right: 12px;
       }
       &.active {
-        color: #30C0FF;
+        color: #30c0ff;
         .popup-item_icon {
           display: block;
         }
@@ -317,39 +279,28 @@ export default {
   }
 
   .introduce {
+    @include flex-column-center;
     box-sizing: border-box;
     margin: 16px auto;
     padding: 16px;
-    display: flex;
     width: 327px;
     height: 108px;
-    background: #031a24;
+    background: rgba(3, 26, 36, 1);
     box-shadow: 0px 2px 10px 0px rgba(1, 21, 31, 1);
     border-radius: 16px;
-    transform: translateX(120%);
-    transition: all 0.5s;
-    &.show {
-      transform: translateX(0);
-    }
     &-image {
+      margin-bottom: 8px;
       width: 48px;
       height: 48px;
-      margin-right: 16px;
+      border-radius: 50%;
       background-color: #d8d8d8;
     }
     &-title {
       font-size: 15px;
-      color: rgba($color: #fff, $alpha: 0.75);
+      color: #fff;
     }
     &-weight {
       font-weight: 500;
-    }
-    &-text {
-      @include line-clamp(3);
-      width: 231px;
-      font-size: 12px;
-      line-height: 17px;
-      color: rgba($color: #fff, $alpha: 0.4);
     }
   }
 }

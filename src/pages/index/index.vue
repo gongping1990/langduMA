@@ -285,7 +285,6 @@ export default {
       border-radius: 6px 6px 0px 0px;
       color: #fff;
       font-weight: bold;
-      transition: all 0.3s;
       .class-name,
       .class-text {
         writing-mode: vertical-lr;

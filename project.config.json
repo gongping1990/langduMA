@@ -39,7 +39,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 2,
+			"current": 9,
 			"list": [
 				{
 					"id": -1,
@@ -102,6 +102,13 @@
 					"name": "阅读",
 					"pathName": "pages/listenWork/main",
 					"query": "id=1110851306229534721&share=1",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "aaaaa",
+					"pathName": "pages/popularityRank/main",
+					"query": "type=2&id=1110748762236493826&name=我是什么",
 					"scene": null
 				}
 			]

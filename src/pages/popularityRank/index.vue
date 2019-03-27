@@ -6,7 +6,8 @@
       </span>
       <span :class="{'-active': tabType == '2'}" @click="changeTab(2)" v-if="queryInfo.type == 1">上周排行</span>
     </div>
-    <scroll-view class="ld-popularityRank-content"
+
+    <scroll-view class="ld-popularityRank-content" :class="{'-content-wrap-height':!isShowMyWork}"
                  @scrolltolower="bindLoadItem"
                  scroll-y
                  scroll-with-animation>
@@ -52,6 +53,7 @@
         </div>
       </div>
     </scroll-view>
+
     <div class="ld-popularityRank-footer" v-if="isShowMyWork">
       <div class="-footer-wrap">
         <div class="item-wrap -footer-item">
@@ -310,6 +312,10 @@
       font-weight: 500;
       color: #1D1B1B;
       line-height: 28px;
+    }
+
+    .-content-wrap-height {
+      height: calc(100vh - 60px)!important;
     }
 
     &-header {

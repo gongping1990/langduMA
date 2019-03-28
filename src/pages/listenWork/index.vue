@@ -15,7 +15,7 @@
     <read ref="read"
           :showList="false"
           :title="detailData.coursename"
-          :subtitle="detailData.grade + '·' + detailData.semester"
+          :subtitle="detailData.grade ? detailData.grade + '·' + detailData.semester : ''"
           :lyricSrc="detailData.voiceUrl"
           :lyricText="detailData.coursecontent"
           @clickRead="clickRead"

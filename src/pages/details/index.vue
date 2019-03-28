@@ -168,7 +168,7 @@ export default {
     }
   },
 
-  mounted () {
+  onShow () {
     this.getCourseDetail()
 
     // let app = getApp()

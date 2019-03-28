@@ -95,6 +95,9 @@ export default {
 
   computed: {
     subtitle () {
+      if(!this.courseData.grade) {
+        return ''
+      }
       return `${this.gradeArr[this.courseData.grade]}·${this.courseData.semester == 1 ? '上册' : '下册'}`
     },
     userInfo () {

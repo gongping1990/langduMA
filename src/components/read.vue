@@ -167,9 +167,11 @@ export default {
 
   methods: {
     play () {
+      console.log('clickPlay')
       this.audio.play()
     },
     pause () {
+      console.log('clickPause')
       this.audio.pause()
     },
     stop () {
@@ -177,6 +179,9 @@ export default {
     },
     setIndex (n) {
       this.lyricIndex = n ? n : 0
+    },
+    setSrc (url) {
+      this.audio.src = url
     },
     clickReadBtn () {
       this.$emit('clickRead')
@@ -191,7 +196,6 @@ export default {
       } else {
         this.audio.pause()
       }
-      this.$emit('paused', this.audio.paused)
     },
     clickNext () {
       if (this.lyricIndex == this.lyricArr.length - 1) {
@@ -275,11 +279,13 @@ export default {
       this.audio.onPlay(() => {
         this.paused = false
         console.log('play')
+        this.$emit('paused', this.audio.paused)
         this.$emit('play')
       })
 
       this.audio.onPause(() => {
         this.paused = true
+        this.$emit('paused', this.audio.paused)
         this.$emit('pause')
       })
 

@@ -37,6 +37,7 @@
           :lyricText="courseData.introduction"
           :showControl="false"
           :disabled="disabled"
+          @paused="bindPaused"
           @ended="bindEnded"
           @progress="changeProgress"
           @timeUpdate="changeTimeUpdate">
@@ -197,20 +198,27 @@ export default {
         console.log('pause')
       })
       this.recorder.onStop((e) => {
-        this.isPlay = false
-        this.isEnd = true
-        this.recorderSrc = e.tempFilePath
-        this.audio.src = e.tempFilePath
+        console.log(!this.destroy)
+        if (!this.destroy) {
+          this.isPlay = false
+          this.isEnd = true
+          this.recorderSrc = e.tempFilePath
+          this.$refs.read.setSrc(e.tempFilePath)
+        }
         if (!this.isReset && !this.destroy) {
           this.clickRecorderPlay()
         }
       })
     },
+    bindPaused (paused) {
+      if (!this.isEnd) return
+      this.audioPause = paused
+    },
     clickResetConfim () {
       this.isReset = true
       this.recorder.stop()
-      this.audio.stop()
       this.$refs.read.stop()
+      this.$refs.read.setSrc(this.courseData.authorVrAudio)
       setTimeout(() => {
 
         this.currentTime = '00:00'
@@ -232,8 +240,7 @@ export default {
         mask: true, //显示透明蒙层，防止触摸穿透,
         success: res => { }
       });
-      this.audio.stop()
-      console.log(this.recorderSrc)
+      this.$refs.read.pause()
       wx.uploadFile({
         url: 'https://huoke.test.k12.vip/declaim/common/uploadPublicFile', //开发者服务器 url
         filePath: this.recorderSrc, //要上传文件资源的路径
@@ -269,17 +276,20 @@ export default {
     },
     bindEnded () {
       this.$refs.read.stop()
-      this.recorder.stop()
+      this.audioPause = true
+      if (!this.recorder.paused) {
+        this.recorder.stop()
+      }
     },
     changeTimeUpdate (params) {
       this.currentTime = params.formatCurrentTime
     },
     clickRecorderPlay () {
-      console.log(this.audio.paused)
-      if (this.audio.paused) {
-        this.audio.play()
+      console.log(this.globalData.audio.src)
+      if (this.$refs.read.paused) {
+        this.$refs.read.play()
       } else {
-        this.audio.pause()
+        this.$refs.read.pause()
       }
     },
     clickRecorderStart () {
@@ -390,23 +400,23 @@ export default {
 
 
   mounted () {
-    this.destroy = true
+    this.destroy = false
     this.recorder = wx.getRecorderManager()
-    this.audio = wx.createInnerAudioContext()
-    this.audio.onPlay(() => {
-      this.audioPause = false
-    })
-    this.audio.onPause(() => {
-      this.audioPause = true
-    })
+    // this.audio = wx.createInnerAudioContext()
+    // this.audio.onPlay(() => {
+    //   this.audioPause = false
+    // })
+    // this.audio.onPause(() => {
+    //   this.audioPause = true
+    // })
 
-    this.audio.onStop(() => {
-      this.audioPause = true
-    })
+    // this.audio.onStop(() => {
+    //   this.audioPause = true
+    // })
 
-    this.audio.onEnded(() => {
-      this.audioPause = true
-    })
+    // this.audio.onEnded(() => {
+    //   this.audioPause = true
+    // })
     this.initRecorder()
     wx.getSetting({
       success: (res) => {
@@ -438,16 +448,18 @@ export default {
   },
 
   onShow () {
-    wx.getSetting({success: res => {
+    this.destroy = false
+    wx.getSetting({      success: res => {
         if (res.authSetting['scope.record'] == false) {
           this.isAuth = false
         } else {
           this.isAuth = true
         }
-      }});
+      }    });
   },
 
   onUnload () {
+    this.destroy = true
     if (this.timer) {
       clearInterval(this.timer)
     }
@@ -478,10 +490,8 @@ export default {
     this.isReset = false
     this.percentOne = 0
     this.isAuth = true
-    this.destroy = true
     this.globalData.audio.stop()
     this.globalData.audio.src = ''
-    this.audio.destroy()
   },
 
   onShareAppMessage () {

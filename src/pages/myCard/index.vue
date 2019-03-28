@@ -13,9 +13,8 @@
 
       <div class="ld-my-card-content">
         <div class="-content-item" v-for="(item, index) of dataList" :key="index">
-          <div class="-content-item-img"
-               style="background: url('https://pub.file.k12.vip/2019/03/25/1110002707316191234.png') no-repeat;background-size: cover;">
-            <div class="-content-item-img-header">
+          <div class="-content-item-img" :style="{background: 'url('+item.impAchievement+') no-repeat;background-size: cover;'}">
+            <div class="-content-item-img-header" v-if="item.rank!=-1">
               <div class="-header-bg">
                 <span>{{item.rank}} 名</span>
               </div>
@@ -44,7 +43,7 @@
       return {
         page: {
           current: 1,
-          size: 20,
+          size: 10,
           total: 0
         },
         isFetching: false,
@@ -53,7 +52,11 @@
       };
     },
 
-    components: {},
+    computed:{
+      bgStyle (data) {
+        return ``
+      },
+    },
 
     mounted() {
       this.getList()

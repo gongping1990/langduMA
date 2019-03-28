@@ -65,7 +65,7 @@
               <div class="-name">{{myInfo.nickname}}</div>
               <div class="-zan">
                 <img class="-zan-img" src="https://pub.file.k12.vip/read/rank/icon-good2.png"/>
-                <span>{{myInfo.count}}</span>
+                <span>{{myInfo.likes}}</span>
               </div>
             </div>
           </div>
@@ -78,6 +78,7 @@
     <wux-popup :visible="isOpenPopup" position="bottom" @close="closePopup">
       <div class="ld-popularityRank-popup-content" :class="{'-more': isOpenMore}">
         <div class="-popup-title">叫大家来给你的作品点赞吧</div>
+
         <div class="-popup-item" v-if="!isOpenMore">
           <div class="-item-tip">赞最多</div>
           <div class="-item-left">
@@ -87,21 +88,22 @@
             </div>
           </div>
           <div class="-item-down">
-            <div class="-item-time">日期: {{}}</div>
+            <div class="-item-time">日期: {{myInfo.createTime}}</div>
             <div class="-item-num">
               <img class="-img" src="https://pub.file.k12.vip/read/icon-good.png"/>
-              <span>{{myInfo.count}}</span>
+              <span>{{myInfo.likes}}</span>
             </div>
           </div>
         </div>
+
         <scroll-view class="-popup-item-wrap"
                      v-if="isOpenMore"
-                     @scrolltolower="bindLoadItem"
+                     @scrolltolower="bindLoadItemShareWork"
                      scroll-y
                      @scroll="scrollTopFn"
                      scroll-with-animation>
           <div class="-popup-item -popup-item-more" v-for="(item, index) of dataShareList" :key="index"
-               :class="{'-active-item': index==0}">
+               :class="{'-active-item': item.id == popupItem.id}" @click="changeItem(item)">
             <div class="-item-tip" v-if="index==0">赞最多</div>
             <div class="-item-left">
               <div class="-item-title">
@@ -118,6 +120,7 @@
             </div>
           </div>
         </scroll-view>
+
         <div class="-popup-more" @click="openMore" v-if="!isOpenMore">选择其他作品 ></div>
       </div>
 
@@ -128,6 +131,7 @@
 
 <script>
   import api from "../../request/api";
+  import dayjs from 'dayjs'
 
   export default {
     data() {
@@ -149,13 +153,26 @@
         dataList: [],
         dataShareList: [],
         dataItem: "",
+        popupItem: "",
         queryInfo: "",
         tabType: "1",
         myInfo: {}
       };
     },
 
-    components: {},
+    onShareAppMessage () {
+      return {
+        title: `我的孩子刚朗读了《${this.popupItem.coursename}》，非常棒，请给TA点个赞吧！`,
+        path: '/pages/share/main?id=' + this.popupItem.id,
+        success: res => {
+          wx.showToast({
+            title: '分享成功',
+            icon: "none",
+            duration: 2000
+          })
+        }
+      };
+    },
 
     onLoad() {
       this.queryInfo = this.$root.$mp.query;
@@ -173,6 +190,9 @@
     },
 
     methods: {
+      changeItem (data) {
+        this.popupItem = data
+      },
       lookOtherWorks(id) {
         wx.navigateTo({
           url: `/pages/otherUser/main?userId=${id}`
@@ -180,12 +200,13 @@
       },
       openMore() {
         this.isOpenMore = !this.isOpenMore;
-        this.getShareWorksList();
+        this.getItemWorksList();
       },
       openPopup() {
         this.isOpenPopup = true;
         if (this.queryInfo.type == 1) {
-          this.openMore();
+          this.getShareWorksList();
+          this.isOpenMore = true
         }
       },
       closePopup () {
@@ -202,13 +223,22 @@
         }
       },
       bindLoadItem() {
-
         if (this.page.current < Math.ceil(this.page.total / this.page.size)) {
           this.page.current++;
           if (this.queryInfo.type == 1) {
             this.getWeekList();
           } else {
             this.getItemList();
+          }
+        }
+      },
+      bindLoadItemShareWork() {
+        if (this.pageShareWork.current < Math.ceil(this.pageShareWork.total / this.pageShareWork.size)) {
+          this.pageShareWork.current++;
+          if (this.queryInfo.type == 1) {
+            this.getShareWorksList();
+          } else {
+            this.getItemWorksList();
           }
         }
       },
@@ -255,6 +285,7 @@
           this.isFetching = false;
         });
       },
+      //周榜排名分享列表
       getShareWorksList() {
         api.work.myShareWorksList({
           current: this.pageShareWork.current,
@@ -272,25 +303,48 @@
           this.isFetching = false;
         });
       },
+      // 单课排行分享列表
+      getItemWorksList() {
+        api.work.getSingleList({
+          current: this.pageShareWork.current,
+          size: this.pageShareWork.size,
+          courseid: this.queryInfo.id
+        }).then(({ data }) => {
+          if (this.pageShareWork.current > 1) {
+            this.dataShareList = this.dataShareList.concat(data.resultData.records);
+          } else {
+            this.dataShareList = data.resultData.records;
+          }
+          this.pageShareWork.total = data.resultData.total;
+
+          this.isFetching = false;
+        }, () => {
+          this.isFetching = false;
+        });
+      },
       getMyRankInfo() {
+        this.isShowMyWork = true
         api.user.userLikeRankForMe({
           courseId: this.queryInfo.id
         })
           .then(({ data }) => {
             if (data.resultData != null) {
               this.myInfo = data.resultData
+              this.myInfo.createTime = dayjs(this.myInfo.createTime).format('YYYY-MM-DD HH:mm:ss')
             } else {
               this.isShowMyWork = false
             }
           });
       },
       getMyWeekInfo() {
+        this.isShowMyWork = true
         api.user.weekLikeRankForMe({
           nowWeek: this.tabType == 1
         })
           .then(({ data }) => {
             if (data.resultData != null) {
               this.myInfo = data.resultData
+              this.myInfo.createTime = dayjs(this.myInfo.createTime).format('YYYY-MM-DD HH:mm:ss')
             } else {
               this.isShowMyWork = false
             }

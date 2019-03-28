@@ -92,7 +92,7 @@
       };
     },
 
-    mounted() {
+    onShow() {
       this.getWorkList();
       this.getMessageInfo();
     },
@@ -255,6 +255,22 @@
           right: 0;
           width: 36px;
           height: 36px;
+        }
+
+        .-item-tip {
+          position: absolute;
+          top: 0;
+          left: 0;
+          font-size: 10px;
+          font-weight: 400;
+          width: 56px;
+          height: 18px;
+          background: linear-gradient(45deg, rgba(255, 82, 128, 1) 0%, rgba(255, 102, 142, 1) 100%);
+          border-radius: 86px 0 100px 0;
+          color: rgba(255, 255, 255, 1);
+          line-height: 18px;
+          text-align: center;
+          padding-left: 4px;
         }
 
         .-item-left {

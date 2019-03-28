@@ -16,9 +16,10 @@
           <span class="-end">{{duration}}</span>
         </div>
       </div>
-      <div class="-header-right">
+      <div class="-header-right" @click="audioPlay">
         <div class="-header-right-img">
-          <img class="-img" @click="audioPlay" src="https://pub.file.k12.vip/read/lesson/kczy-button-play.png"/>
+          <img v-if="!isPlay" class="-img" src="https://pub.file.k12.vip/read/lesson/kczy-button-play.png"/>
+          <img v-if="isPlay" class="-img" src="https://pub.file.k12.vip/read/zyld-button-play.png"/>
         </div>
       </div>
     </div>
@@ -103,7 +104,6 @@
 
     mounted() {
       this.getShareDetail();
-      this.init();
     },
 
     methods: {
@@ -113,6 +113,7 @@
         });
       },
       init() {
+        console.log('初始化播放')
         this.innerAudioContext = wx.createInnerAudioContext();
         this.innerAudioContext.src = this.shareInfo.voiceUrl;
         this.innerAudioContext.onPlay(() => {
@@ -208,6 +209,7 @@
         }).then(({ data }) => {
           this.shareInfo = data.resultData;
           this.isFetching = false;
+          this.init();
         }, () => {
           this.isFetching = false;
         });

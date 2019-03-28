@@ -358,7 +358,7 @@ export default {
   },
   mounted () {
     if(this.lyricText) {
-      this.lyricArr = this.sliceNull(this.parseLyric(n))
+      this.lyricArr = this.sliceNull(this.parseLyric(this.lyricText))
     }
     this.audio = this.globalData.audio
     this.initAudio()

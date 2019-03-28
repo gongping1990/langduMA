@@ -286,6 +286,9 @@ export default {
     }
     &_line {
       position: absolute;
+      right: -13px;
+      top: 50%;
+      margin-top: -4px;
       width: 1px;
       height: 8px;
       background-color: rgba($color: #000000, $alpha: 0.3);

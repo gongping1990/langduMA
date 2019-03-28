@@ -64,7 +64,9 @@
              v-if="!paused"
              @tap="clickNext">下一句</div>
       </div>
-      <div v-if="share" @tap="clickReadBtn" class="share-btn">
+      <div v-if="share"
+           @tap="clickReadBtn"
+           class="share-btn">
         我要朗读
       </div>
     </div>
@@ -104,7 +106,7 @@ export default {
     },
     showLine: {
       type: Boolean,
-      default: true
+      default: false
     },
     swiperHeight: {
       type: Number,
@@ -176,7 +178,7 @@ export default {
     setIndex (n) {
       this.lyricIndex = n ? n : 0
     },
-    clickReadBtn() {
+    clickReadBtn () {
       this.$emit('clickRead')
     },
     catchtouchmove () {
@@ -292,6 +294,8 @@ export default {
       this.audio.onEnded(() => {
         console.log('end')
         this.progress = 0
+        this.lyricIndex = 0
+        this.paused = true
         this.startTime = '00:00'
         this.$emit('progress', 100)
         this.$emit('ended')
@@ -353,17 +357,33 @@ export default {
     }
   },
   mounted () {
+    if(this.lyricText) {
+      this.lyricArr = this.sliceNull(this.parseLyric(n))
+    }
     this.audio = this.globalData.audio
-    console.log(this.lyricArr)
     this.initAudio()
   },
-  destroyed () {
-    this.audio.stop()
-    console.log('destroyed')
-  },
   onHide () {
+    this.lyricIndex = 0
+    this.startTime = '00:00'
+    this.endTime = '00:00'
+    this.progress = 0
+    this.tapSwiper = false
+    this.timer = null
+    this.paused = true
     this.audio.stop()
     console.log('hide')
+  },
+  onUnload () {
+    this.lyricIndex = 0
+    this.startTime = '00:00'
+    this.endTime = '00:00'
+    this.progress = 0
+    this.tapSwiper = false
+    this.timer = null
+    this.paused = true
+    this.audio.stop()
+    console.log('Unload ')
   }
 }
 </script>

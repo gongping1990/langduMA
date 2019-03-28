@@ -11,7 +11,7 @@
                :key="item">
           <swiper-item class="swiper-item">
             <image mode="widthFix"
-                   :src="item.urffffl"
+                   :src="item.url"
                    class="slide-image"
                    :class="swiperIndex == index ? 'active' : ''" />
           </swiper-item>

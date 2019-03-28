@@ -155,7 +155,8 @@ export default {
       audioPause: true,
       isReset: false,
       percentOne: 0,
-      isAuth: true
+      isAuth: true,
+      destroy: false
     }
   },
 
@@ -200,7 +201,7 @@ export default {
         this.isEnd = true
         this.recorderSrc = e.tempFilePath
         this.audio.src = e.tempFilePath
-        if (!this.isReset) {
+        if (!this.isReset && !this.destroy) {
           this.clickRecorderPlay()
         }
       })
@@ -208,6 +209,7 @@ export default {
     clickResetConfim () {
       this.isReset = true
       this.recorder.stop()
+      this.audio.stop()
       this.$refs.read.stop()
       setTimeout(() => {
 
@@ -231,7 +233,6 @@ export default {
         success: res => { }
       });
       this.audio.stop()
-      this.audioPause = false
       console.log(this.recorderSrc)
       wx.uploadFile({
         url: 'https://huoke.test.k12.vip/declaim/common/uploadPublicFile', //开发者服务器 url
@@ -344,6 +345,7 @@ export default {
           } else {
             this.showMask = true
             this.percentOne = 100
+            this.isStart = true
             this.timer = setInterval(() => {
               let random = Math.floor(10 * Math.random())
               if (this.percent != 100) {
@@ -369,7 +371,6 @@ export default {
           this.$refs.read.setIndex()
           this.downTime = 3
           this.percent = 0
-          this.isStart = true
           this.showMask = false
           this.clickRecorderStart()
         }
@@ -389,6 +390,7 @@ export default {
 
 
   mounted () {
+    this.destroy = true
     this.recorder = wx.getRecorderManager()
     this.audio = wx.createInnerAudioContext()
     this.audio.onPlay(() => {
@@ -398,8 +400,12 @@ export default {
       this.audioPause = true
     })
 
+    this.audio.onStop(() => {
+      this.audioPause = true
+    })
+
     this.audio.onEnded(() => {
-      this.audioPause = false
+      this.audioPause = true
     })
     this.initRecorder()
     wx.getSetting({
@@ -418,6 +424,8 @@ export default {
         }
         if (res.authSetting['scope.record'] == false) {
           this.isAuth = false
+        } else {
+          this.isAuth = true
         }
       },
 
@@ -429,27 +437,51 @@ export default {
     // let app = getApp()
   },
 
-  onShow() {
-    wx.getSetting({
-      success: (res) => {
-        console.log(res)
-        if (res.authSetting['scope.record']) {
+  onShow () {
+    wx.getSetting({success: res => {
+        if (res.authSetting['scope.record'] == false) {
+          this.isAuth = false
+        } else {
           this.isAuth = true
         }
-      },
-
-    })
-  },
-
-  onHide () {
-    console.log('hide')
-    this.audio.destroy()
-    this.recorder.stop()
+      }});
   },
 
   onUnload () {
+    if (this.timer) {
+      clearInterval(this.timer)
+    }
+    if (!this.recorder.paused) {
+      this.recorder.stop()
+    }
+    this.showSuccessTwo = false
+    this.showSuccess = false
+    this.showAchieve = false
+    this.showRead = false
+    this.showPopup = false
+    this.show = false
+    this.disabled = false
+    this.showMask = false
+    this.percent = 0
+    this.downTime = 3
+    this.timer = null
+    this.isStart = false
+    this.paused = false
+    this.progress = 0
+    this.recorder = null
+    this.isPlay = null
+    this.isEnd = false
+    this.currentTime = '00:00'
+    this.courseData = {}
+    this.showReset = false
+    this.audioPause = true
+    this.isReset = false
+    this.percentOne = 0
+    this.isAuth = true
+    this.destroy = true
+    this.globalData.audio.stop()
+    this.globalData.audio.src = ''
     this.audio.destroy()
-    this.recorder.stop()
   },
 
   onShareAppMessage () {

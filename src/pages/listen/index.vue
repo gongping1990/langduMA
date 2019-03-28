@@ -44,15 +44,6 @@
              @tap="changePopup"></div>
       </div>
     </wux-popup>
-    <wux-popup :visible="showAchieve"
-               @close="changeAchieve">
-      <div class="achieve">
-        <div class="achieve-image"></div>
-        <text class="achieve-text">自由朗读课文就能解锁我哟~</text>
-        <div class="achieve-btn"
-             @tap="changeAchieve">我知道了</div>
-      </div>
-    </wux-popup>
     <wux-popup :visible="showRead"
                @close="changeRead">
       <div class="read-popup">
@@ -65,7 +56,9 @@
              @tap="clickRead">去朗读</div>
       </div>
     </wux-popup>
-    <div class="more-course" v-if="share" @tap="toHome">
+    <div class="more-course"
+         v-if="share"
+         @tap="toHome">
       <text class="more-course_text">更多课文</text>
       <div class="more-course_icon"></div>
     </div>
@@ -151,7 +144,7 @@ export default {
         this.total = data.resultData.total
       })
     },
-    toHome() {
+    toHome () {
       wx.switchTab({ url: '/pages/index/main' });
     },
     clickItem (id) {
@@ -173,7 +166,6 @@ export default {
       this.showRead = !this.showRead
     },
     bindEnded () {
-      console.log('end')
       this.finishFangdu()
       this.changeRead()
     },
@@ -186,7 +178,7 @@ export default {
 
 
 
-  mounted () {
+  onShow () {
     this.id = this.$root.$mp.query.id
     this.share = this.$root.$mp.query.share
     if (this.userInfo.id) {
@@ -204,11 +196,39 @@ export default {
   },
 
   onHide () {
+    this.showAchieve = false
+    this.showRead = false
+    this.showPopup = false
+    this.show = true
+    this.showIntroduce = false
+    this.hideIntroduce = false
+    this.total = 0
+    this.share = 0
+    this.id = 0
+    this.page = {
+      current: 1,
+      size: 10
+    }
+    this.globalData.audio.src = ''
     this.globalData.audio.stop()
   },
 
   onUnload () {
+    this.showAchieve = false
+    this.showRead = false
+    this.showPopup = false
+    this.show = true
+    this.showIntroduce = false
+    this.hideIntroduce = false
+    this.total = 0
+    this.share = 0
+    this.id = 0
+    this.page = {
+      current: 1,
+      size: 10
+    }
     console.log('unload')
+    this.globalData.audio.src = ''
     this.globalData.audio.stop()
   }
 }
@@ -312,7 +332,7 @@ export default {
       color: rgba($color: #fff, $alpha: 0.75);
       padding-left: 24px;
     }
-    &-srcoll {
+    &-scroll {
       height: 344px;
     }
     &-item {

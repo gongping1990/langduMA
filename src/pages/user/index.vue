@@ -92,7 +92,7 @@
       };
     },
 
-    mounted() {
+    onShow() {
       this.getWorkList();
       this.getMessageInfo();
     },

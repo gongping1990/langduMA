@@ -39,7 +39,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": -1,
+			"current": 4,
 			"list": [
 				{
 					"id": -1,
@@ -70,10 +70,10 @@
 					"scene": null
 				},
 				{
-					"id": -1,
+					"id": 4,
 					"name": "分享",
 					"pathName": "pages/share/main",
-					"query": "",
+					"query": "id=1111192430139002882",
 					"scene": null
 				},
 				{

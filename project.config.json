@@ -39,7 +39,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 10,
+			"current": -1,
 			"list": [
 				{
 					"id": -1,
@@ -84,13 +84,6 @@
 					"scene": null
 				},
 				{
-					"id": 6,
-					"name": "排行榜",
-					"pathName": "pages/popularityRank/main",
-					"query": "type=2&id=1108188928168517633&name=测试课程02",
-					"scene": null
-				},
-				{
 					"id": -1,
 					"name": "我的成就卡",
 					"pathName": "pages/myCard/main",
@@ -116,6 +109,13 @@
 					"name": "我的",
 					"pathName": "pages/user/main",
 					"query": "",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "单课排行",
+					"pathName": "pages/popularityRank/main",
+					"query": "type=2&id=1111094342251384833&name=吃水不忘挖井人",
 					"scene": null
 				}
 			]

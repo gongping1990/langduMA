@@ -65,7 +65,7 @@
              @tap="clickRead">去朗读</div>
       </div>
     </wux-popup>
-    <div class="more-course">
+    <div class="more-course" v-if="share" @tap="toHome">
       <text class="more-course_text">更多课文</text>
       <div class="more-course_icon"></div>
     </div>
@@ -151,9 +151,13 @@ export default {
         this.total = data.resultData.total
       })
     },
+    toHome() {
+      wx.switchTab({ url: '/pages/index/main' });
+    },
     clickItem (id) {
-      this.showPopup = false
       this.globalData.audio.stop()
+      this.showRead = false
+      this.showPopup = false
       wx.redirectTo({ url: '/pages/listen/main?id=' + id });
     },
     clickRead () {
@@ -222,14 +226,17 @@ export default {
     top: 45%;
     width: 86px;
     height: 30px;
-    z-index: 1000;
+    z-index: 10;
     font-size: 12px;
     color: #fff;
     background: rgba(255, 255, 255, 0.16);
     border-radius: 100px 0px 0px 100px;
     &_icon {
       @include bg('/read/kczy-button-more.png');
-      width: 10px;
+      margin-left: 8px;
+      margin-top: 2px;
+      width: 8px;
+      height: 13.3px;
     }
   }
   .read-popup {

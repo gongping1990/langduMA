@@ -133,4 +133,7 @@ export default {
 button::after {
   border: none;
 }
+.button-hover, button {
+  background-color: transparent !important;
+}
 </style>

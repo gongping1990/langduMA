@@ -39,7 +39,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 9,
+			"current": 3,
 			"list": [
 				{
 					"id": -1,
@@ -65,7 +65,7 @@
 				{
 					"id": 3,
 					"name": "阅读",
-					"pathName": "pages/listen/main",
+					"pathName": "pages/read/main",
 					"query": "id=1110748762236493826&share=1",
 					"scene": null
 				},

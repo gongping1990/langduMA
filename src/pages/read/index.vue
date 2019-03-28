@@ -45,8 +45,12 @@
          v-if="!isStart">
       <text class="control-text">请阅读课文，准备朗读</text>
       <div class="control-btn"
+           v-if="isAuth"
            @tap="clickStart">
       </div>
+      <button open-type="openSetting"
+              v-else
+              class="control-btn"></button>
     </div>
     <div class="recorder-control control"
          :class="{'bg': !isEnd}"
@@ -149,7 +153,9 @@ export default {
       courseData: {},
       showReset: false,
       audioPause: true,
-      percentOne: 0
+      isReset: false,
+      percentOne: 0,
+      isAuth: true
     }
   },
 
@@ -194,10 +200,13 @@ export default {
         this.isEnd = true
         this.recorderSrc = e.tempFilePath
         this.audio.src = e.tempFilePath
-        this.clickRecorderPlay()
+        if (!this.isReset) {
+          this.clickRecorderPlay()
+        }
       })
     },
     clickResetConfim () {
+      this.isReset = true
       this.recorder.stop()
       this.$refs.read.stop()
       setTimeout(() => {
@@ -219,7 +228,7 @@ export default {
       wx.showLoading({
         title: '保存中...', //提示的内容,
         mask: true, //显示透明蒙层，防止触摸穿透,
-        success: res => {}
+        success: res => { }
       });
       this.audio.stop()
       this.audioPause = false
@@ -244,7 +253,7 @@ export default {
         voiceUrl
       }).then(({ data }) => {
         wx.hideLoading();
-        if(data.resultData.curworksNum == 1) {
+        if (data.resultData.curworksNum == 1) {
           this.showSuccess = true
         } else {
           this.showSuccessTwo = true
@@ -281,6 +290,7 @@ export default {
           this.recorder.resume()
         }
       } else {
+        this.isReset = false
         this.$refs.read.play()
         this.disabled = true
         console.log(this.recorder)
@@ -319,7 +329,12 @@ export default {
     clickStart () {
       wx.getSetting({
         success: (res) => {
+          if (res.authSetting['scope.record'] == false) {
+            this.isAuth = false
+            return
+          }
           if (!res.authSetting['scope.record']) {
+            console.log(res)
             wx.authorize({
               scope: 'scope.record',
               success () {
@@ -388,16 +403,24 @@ export default {
     })
     this.initRecorder()
     wx.getSetting({
-      success (res) {
+      success: (res) => {
         if (!res.authSetting['scope.record']) {
           wx.authorize({
             scope: 'scope.record',
             success () {
               console.log('授权成功')
+            },
+            fail: () => {
+              this.isAuth = false
+              console.log('fail')
             }
           })
         }
-      }
+        if (res.authSetting['scope.record'] == false) {
+          this.isAuth = false
+        }
+      },
+
     })
     if (this.userInfo.id) {
       this.getCourseDetail()
@@ -406,7 +429,20 @@ export default {
     // let app = getApp()
   },
 
+  onShow() {
+    wx.getSetting({
+      success: (res) => {
+        console.log(res)
+        if (res.authSetting['scope.record']) {
+          this.isAuth = true
+        }
+      },
+
+    })
+  },
+
   onHide () {
+    console.log('hide')
     this.audio.destroy()
     this.recorder.stop()
   },
@@ -530,7 +566,7 @@ export default {
       top: 50%;
       height: 3px;
       border-radius: 2px;
-      background-color: #4a4a4a;
+      background-color: #38e292;
       transform: translateY(-50%);
     }
   }

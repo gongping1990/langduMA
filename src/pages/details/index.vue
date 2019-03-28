@@ -13,13 +13,14 @@
     <div class="details-content">
       <div class="details-cover"
            @tap="changePopup">
-        <div class="details-cover_mask" v-if="!detailData.unlocktype">
+        <div class="details-cover_mask"
+             v-if="!detailData.unlocktype">
           <div class="details-cover_bg"></div>
           <image src="https://pub.file.k12.vip/read/lesson/kczy-button-lock.png"
                  mode="widthFix" />
         </div>
         <image class="details-cover-image"
-               :src="detailData.comAchievement"
+               :src="detailData.impAchievement"
                mode="scaleToFill"
                lazy-load="false" />
         <div class="details-cover_popover"
@@ -63,25 +64,31 @@
         <div class="wdzp-btn">
           <image class="action-image"
                  mode="widthFix"
-                 src="https://pub.file.k12.vip/read/lesson/kczy-button-works.png" @click="myWork"/>
-          <text class="action-text" @click="myWork">我的作品</text>
+                 src="https://pub.file.k12.vip/read/lesson/kczy-button-works.png"
+                 @click="myWork" />
+          <text class="action-text"
+                @click="myWork">我的作品</text>
         </div>
       </wux-badge>
     </div>
     <div class="details-footer">
-      <div class="details-footer_content" v-if="list.length">
+      <div class="details-footer_content"
+           v-if="list.length">
         <div class="details-avatar">
-          <image class="details-avatar_image" :src="item.headimage" v-for="item in list" :key="item.userId" />
+          <image class="details-avatar_image"
+                 :src="item.headimage"
+                 v-for="item in list"
+                 :key="item.userId" />
         </div>
         <div class="details-message">
           ··· {{list[0].nikename}}… 等已解锁
         </div>
       </div>
-      <text class="link-btn" @click="toJump">查看人气排行 ></text>
+      <text class="link-btn"
+            @click="toJump">查看人气排行 ></text>
     </div>
 
-    <wux-popup closable
-               :visible="showPopup">
+    <wux-popup :visible="showPopup">
       <div class="popup">
         <image class="popup-image"
                :src="detailData.comAchievement"
@@ -127,13 +134,16 @@ export default {
     },
     getPhoneNumber (res) {
       console.log(res)
-      let {encryptedData,iv} = res.mp.detail
-      api.user.updateUserPhoneByMa({
-        encryptedData,
-        iv
-      }).then(({data}) => {
-        store.commit('updateUserInfo', data.resultData)
-      })
+      let { encryptedData, iv } = res.mp.detail
+      if (encryptedData && iv) {
+        api.user.updateUserPhoneByMa({
+          encryptedData,
+          iv
+        }).then(({ data }) => {
+          store.commit('updateUserInfo', data.resultData)
+          this.navigateTo('listen')
+        })
+      }
     },
     changePopup () {
       this.showPopup = !this.showPopup
@@ -149,10 +159,10 @@ export default {
         this.queryunlockcourselist()
       })
     },
-    queryunlockcourselist() {
+    queryunlockcourselist () {
       api.course.queryunlockcourselist({
         courseId: this.detailData.id
-      }).then(({data}) => {
+      }).then(({ data }) => {
         this.list = data.resultData
       })
     }
@@ -359,7 +369,7 @@ export default {
     &_arrow {
       position: absolute;
       top: 50%;
-      left: -12px;
+      left: -10px;
       margin-top: -6px;
       border: 6px transparent solid;
       border-right-color: #ff668e;

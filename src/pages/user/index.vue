@@ -9,29 +9,33 @@
       <div class="ld-user-footer">
         <div class="-footer-title">作品集</div>
 
-        <wux-swipe-action autoClose useSlots v-for="(item, index) of dataList" :key="index" >
-          <div slot="right" @click="openDel" class="-footer-action">
-            <img class="-right-img" src="https://pub.file.k12.vip/read/my/zp-icon-delete.png"/>
-          </div>
-          <div class="-footer-item" @click="lookOtherRead(item.id)">
-            <img class="-item-img" src="https://pub.file.k12.vip/read/my/zp-button-share.png"/>
-            <div class="-item-left">
-              <div class="-item-title">
-                <span>《{{item.coursename|| "这是一本测试"}}》</span>
-                <img class="-img" src="https://pub.file.k12.vip/read/my/msfd-button-play.png"/>
+        <div class="-footer-wrap" v-for="(item, index) of dataList" :key="index" >
+          <van-swipe-cell :right-width="65">
+            <button open-type='share' :data-item="item" class="-share-btn">
+              <img class="-share-img" src="https://pub.file.k12.vip/read/my/zp-button-share.png"/>
+            </button>
+            <div class="-footer-item" @click="lookOtherRead(item.id)">
+              <div class="-item-tip" v-if="index==0 && item.likes!=0">赞最多</div>
+              <div class="-item-left">
+                <div class="-item-title">
+                  <span>《{{item.coursename}}》</span>
+                  <img class="-img" src="https://pub.file.k12.vip/read/my/msfd-button-play.png"/>
+                </div>
+              </div>
+              <div class="-item-down">
+                <div class="-item-time">日期: {{item.gmtCreate}}</div>
+                <div class="-item-num">
+                  <img class="-img" src="https://pub.file.k12.vip/read/icon-good.png"/>
+                  <span>{{item.likes || 0}}</span>
+                </div>
               </div>
             </div>
-            <div class="-item-down">
-              <div class="-item-time">{{grade || "一年级"}} · {{semester || "上学期"}} | 日期: {{item.gmtCreate ||
-                "2019-04-21"}}
-              </div>
-              <div class="-item-num">
-                <img class="-img" src="https://pub.file.k12.vip/read/icon-good.png"/>
-                <span>{{item.likes || 0}}</span>
-              </div>
+
+            <div slot="right" @click="openDel(item)" class="-footer-action">
+              <img class="-right-img" src="https://pub.file.k12.vip/read/my/zp-icon-delete.png"/>
             </div>
-          </div>
-        </wux-swipe-action>
+          </van-swipe-cell>
+        </div>
 
       </div>
       <div class="ld-user-wrap">
@@ -95,15 +99,30 @@
 
     components: {},
 
+    onShareAppMessage (options) {
+      const item = options.target.dataset.item
+
+      return {
+        title: `我的孩子刚朗读了《${item.coursename}》，非常棒，请给TA点个赞吧！`,
+        path: '/pages/share/main?id=' + item.id,
+        success: res => {
+          wx.showToast({
+            title: '分享成功',
+            icon: "none",
+            duration: 2000
+          })
+        }
+      };
+    },
+
     methods: {
-      openDel(e) {
-        console.log(e, "e");
-        this.dataItem = e;
+      openDel(data) {
+        this.dataItem = data;
         this.isShowDel = !this.isShowDel;
       },
-      delItem(e) {
+      delItem() {
         api.work.delItemWork({
-          id: e
+          id: this.dataItem.id
         }).then(res => {
           if (res.data.code == "200") {
             wx.showToast({
@@ -111,10 +130,12 @@
               icon: "none",
               duration: 2000
             });
+            this.isShowDel = false;
+            this.getWorkList();
           }
         });
       },
-      lookOtherRead (id) {
+      lookOtherRead(id) {
         wx.navigateTo({
           url: `/pages/listenWork/main?id=${id}`
         });
@@ -175,6 +196,25 @@
     }
 
     &-footer {
+
+      .-footer-wrap {
+        position: relative;
+
+        .-share-btn {
+          position: absolute;
+          top: -18px;
+          right: 24px;
+          background: none;
+          padding: 0;
+          line-height: 0;
+          z-index: 999;
+
+          .-share-img {
+            width: 36px;
+            height: 36px;
+          }
+        }
+      }
 
       .-footer-action {
         position: relative;
@@ -366,22 +406,22 @@
         &-num-one {
           font-size: 22px;
           font-weight: bold;
-          color: #FF668EFF;
+          color: #FF668E;
         }
         &-num-two {
           font-size: 22px;
           font-weight: bold;
-          color: #30C0FFFF;
+          color: #30C0FF;
         }
         &-num-three {
           font-size: 22px;
           font-weight: bold;
-          color: #38E292FF;
+          color: #38E292;
         }
 
         &-tip {
           width: 44px;
-          color: #707374FF;
+          color: #707374;
           font-size: 12px;
         }
       }

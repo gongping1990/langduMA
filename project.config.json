@@ -39,7 +39,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 3,
+			"current": 5,
 			"list": [
 				{
 					"id": -1,
@@ -65,7 +65,7 @@
 				{
 					"id": 3,
 					"name": "阅读",
-					"pathName": "pages/read/main",
+					"pathName": "pages/listen/main",
 					"query": "id=1110748762236493826&share=1",
 					"scene": null
 				},
@@ -77,10 +77,10 @@
 					"scene": null
 				},
 				{
-					"id": -1,
+					"id": 5,
 					"name": "我的作品",
 					"pathName": "pages/myWorks/main",
-					"query": "",
+					"query": "id=1110748762236493826&name=我是什么",
 					"scene": null
 				},
 				{

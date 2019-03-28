@@ -26,15 +26,15 @@
         <div class="-name">{{userInfo.nikename}}</div>
         <div class="-text">
           <div>
-            <div class="-text-num-one">{{userInfo.likes}}</div>
+            <div class="-num-one">{{userInfo.likes}}</div>
             <div class="-text-tip">赞</div>
           </div>
           <div>
-            <div class="-text-num-two">{{userInfo.achCards}}</div>
+            <div class="-num-two">{{userInfo.achCards}}</div>
             <div class="-text-tip">成就卡</div>
           </div>
           <div>
-            <div class="-text-num-three">{{userInfo.readdays}}</div>
+            <div class="-num-three">{{userInfo.readdays}}</div>
             <div class="-text-tip">朗读(天)</div>
           </div>
 
@@ -328,25 +328,25 @@
           }
         }
 
-        &-num-one {
+        .-num-one {
           font-size: 22px;
           font-weight: bold;
-          color: #FF668EFF;
+          color: #FF668E;
         }
-        &-num-two {
+        .-num-two {
           font-size: 22px;
           font-weight: bold;
-          color: #30C0FFFF;
+          color: #30C0FF;
         }
-        &-num-three {
+        .-num-three {
           font-size: 22px;
           font-weight: bold;
-          color: #38E292FF;
+          color: #38E292;
         }
 
         &-tip {
           width: 44px;
-          color: #707374FF;
+          color: #707374;
           font-size: 12px;
         }
       }

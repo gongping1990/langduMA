@@ -157,7 +157,7 @@
       },
       likeFn() {
         api.user.likeContent({
-          id: "1108305547498700805"
+          id: this.$root.$mp.query.id
         }).then(({ data }) => {
           this.getShareDetail();
           wx.showToast({
@@ -184,7 +184,7 @@
         }
 
         api.user.reportContent({
-          id: "1108305547498700805",
+          id: this.$root.$mp.query.id,
           reportReason: this.reportInfo
         }).then(({ data }) => {
           this.toReport();
@@ -204,7 +204,7 @@
       getShareDetail() {
         this.isFetching = true;
         api.work.shareDetail({
-          id: "1108305547498700805"
+          id: this.$root.$mp.query.id
         }).then(({ data }) => {
           this.shareInfo = data.resultData;
           this.isFetching = false;

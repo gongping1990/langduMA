@@ -39,7 +39,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 3,
+			"current": 10,
 			"list": [
 				{
 					"id": -1,
@@ -65,8 +65,13 @@
 				{
 					"id": 3,
 					"name": "阅读",
+<<<<<<< HEAD
 					"pathName": "pages/read/main",
 					"query": "id=1111095092390072322",
+=======
+					"pathName": "pages/listen/main",
+					"query": "id=1110748762236493826&share=1",
+>>>>>>> d6fa735ab05a0c6790c669e01dc6da001c070933
 					"scene": null
 				},
 				{
@@ -77,10 +82,10 @@
 					"scene": null
 				},
 				{
-					"id": -1,
+					"id": 5,
 					"name": "我的作品",
 					"pathName": "pages/myWorks/main",
-					"query": "",
+					"query": "id=1111094342251384833&name=吃水不忘挖井人",
 					"scene": null
 				},
 				{
@@ -109,6 +114,13 @@
 					"name": "aaaaa",
 					"pathName": "pages/popularityRank/main",
 					"query": "type=2&id=1110748762236493826&name=我是什么",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "我的",
+					"pathName": "pages/user/main",
+					"query": "",
 					"scene": null
 				}
 			]

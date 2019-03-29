@@ -7,12 +7,12 @@
       <span :class="{'-active': tabType == '2'}" @click="changeTab(2)" v-if="queryInfo.type == 1">上周排行</span>
     </div>
 
-    <scroll-view class="ld-popularityRank-content" :class="{'-content-wrap-height':!isShowMyWork}"
+    <scroll-view class="ld-popularityRank-content" v-if="dataItem"
                  @scrolltolower="bindLoadItem"
                  scroll-y
                  scroll-with-animation>
       <div class="ld-popularityRank-content-wrap">
-        <div class="-content-item-one"  @click="lookOtherWorks(dataItem.userId)">
+        <div class="-content-item-one" @click="lookOtherWorks(dataItem.userId)">
           <div class="-img">
             <img class="-img-crown" src="https://pub.file.k12.vip/read/rank/icon-head champion.png"/>
             <img class="-img-header" :src="dataItem.headimage || dataItem.headimgurl">
@@ -54,10 +54,12 @@
       </div>
     </scroll-view>
 
-    <div class="ld-popularityRank-footer" v-if="isShowMyWork">
+    <div class="ld-popularityRank-footer">
       <div class="-footer-wrap">
         <div class="item-wrap -footer-item">
-          <div class="-item-left -footer-num">{{myInfo.rank}}</div>
+          <div class="-item-left -footer-num" :class="{'-footer-no': myInfo.rank=='-1'}">
+            {{myInfo.rank=="-1" ? "未上榜" : myInfo.rank }}
+          </div>
           <div class="-item-center -footer-center">
             <img class="-item-center-img"
                  :src="myInfo.headimage"/>
@@ -75,8 +77,13 @@
       </div>
     </div>
 
-    <wux-popup :visible="isOpenPopup" position="bottom" @close="closePopup">
-      <div class="ld-popularityRank-popup-content" :class="{'-more': isOpenMore}">
+    <div v-if="!dataItem" class="ld-popularityRank-noDate">
+      <img class="-img" src="https://pub.file.k12.vip/read/icon-null-list.png"/>
+      <div class="-text">暂无作品上榜，赶快分享作品集赞冲榜吧！</div>
+    </div>
+
+    <wux-popup :visible="isOpenPopup" :position="!myInfo.workId ? 'center' : 'bottom'" @close="closePopup">
+      <div class="ld-popularityRank-popup-content" :class="{'-more': isOpenMore}" v-if="myInfo.workId">
         <div class="-popup-title">叫大家来给你的作品点赞吧</div>
 
         <div class="-popup-item" v-if="!isOpenMore">
@@ -123,15 +130,24 @@
 
         <div class="-popup-more" @click="openMore" v-if="!isOpenMore">选择其他作品 ></div>
       </div>
-
-      <button open-type="share" class="ld-popularityRank-popup-btn">分享到班级群</button>
+      <div class="ld-popularityRank-popup-no" v-if="!myInfo.workId">
+        <div class="-text-one">你还没有朗读作品</div>
+        <div class="-text-two">快去朗读吧</div>
+        <div class="-text-btn-wrap">
+          <div class="-btn-one" @click="closePopup" v-if="queryInfo.type == 2">取消</div>
+          <div class="-btn-two" @click="toRead" v-if="queryInfo.type == 2">我要朗读</div>
+          <div class="-btn-three" @click="closePopup" v-if="queryInfo.type == 1">我知道了</div>
+        </div>
+      </div>
+      <button open-type="share" class="ld-popularityRank-popup-btn" v-if="myInfo.workId">分享到班级群</button>
     </wux-popup>
   </div>
 </template>
 
 <script>
   import api from "../../request/api";
-  import dayjs from 'dayjs'
+  import store from "../../store";
+  import dayjs from "dayjs";
 
   export default {
     data() {
@@ -160,18 +176,24 @@
       };
     },
 
-    onShareAppMessage () {
+    onShareAppMessage() {
       return {
         title: `我的孩子刚朗读了《${this.isOpenMore ? this.popupItem.coursename : this.queryInfo.name}》，非常棒，请给TA点个赞吧！`,
         path: `/pages/share/main?id=${this.isOpenMore ? this.popupItem.id : this.myInfo.workId}`,
         success: res => {
           wx.showToast({
-            title: '分享成功',
+            title: "分享成功",
             icon: "none",
             duration: 2000
-          })
+          });
         }
       };
+    },
+
+    computed: {
+      userInfo() {
+        return store.state.userInfo;
+      }
     },
 
     onLoad() {
@@ -179,6 +201,7 @@
     },
 
     mounted() {
+      this.closePopup();
       //type: 1为周次，2为单课排行
       if (this.queryInfo.type == 1) {
         this.getWeekList();
@@ -190,8 +213,14 @@
     },
 
     methods: {
-      changeItem (data) {
-        this.popupItem = data
+      toRead() {
+        wx.navigateTo({
+          url: `/pages/read/main?id=${this.queryInfo.id}`
+        });
+        this.isOpenPopup = false
+      },
+      changeItem(data) {
+        this.popupItem = data;
       },
       lookOtherWorks(id) {
         wx.navigateTo({
@@ -206,12 +235,12 @@
         this.isOpenPopup = true;
         if (this.queryInfo.type == 1) {
           this.getShareWorksList();
-          this.isOpenMore = true
+          this.isOpenMore = true;
         }
       },
-      closePopup () {
-        this.isOpenMore = false
-        this.isOpenPopup = false
+      closePopup() {
+        this.isOpenMore = false;
+        this.isOpenPopup = false;
       },
       changeTab(num) {
         this.tabType = num;
@@ -258,6 +287,8 @@
           if (this.dataList.length) {
             this.dataItem = this.dataList[0];
             this.dataList.splice(0, 1);
+          } else {
+            this.dataItem = ''
           }
           this.isFetching = false;
         }, () => {
@@ -279,6 +310,8 @@
           if (this.dataList.length) {
             this.dataItem = this.dataList[0];
             this.dataList.splice(0, 1);
+          } else {
+            this.dataItem = ''
           }
           this.isFetching = false;
         }, () => {
@@ -297,7 +330,7 @@
             this.dataShareList = data.resultData.records;
           }
           this.pageShareWork.total = data.resultData.total;
-          this.popupItem = this.dataShareList[0]
+          this.popupItem = this.dataShareList[0];
           this.isFetching = false;
         }, () => {
           this.isFetching = false;
@@ -316,35 +349,45 @@
             this.dataShareList = data.resultData.records;
           }
           this.pageShareWork.total = data.resultData.total;
-          this.popupItem = this.dataShareList[0]
+          this.popupItem = this.dataShareList[0];
           this.isFetching = false;
         }, () => {
           this.isFetching = false;
         });
       },
       getMyRankInfo() {
-        this.isShowMyWork = true
+        this.isShowMyWork = true;
         api.work.userLikeRankForMe({
           courseId: this.queryInfo.id
         })
           .then(({ data }) => {
-            if (data.resultData != null && data.resultData.rank != '-1') {
-              this.myInfo = data.resultData
+            if (data.resultData != null) {
+              this.myInfo = data.resultData;
+              // this.myInfo.gmtCreate = dayjs(+this.myInfo.gmtCreate).format('YYYY-MM-DD HH:mm:ss')
             } else {
-              this.isShowMyWork = false
+              this.isShowMyWork = false;
             }
           });
       },
       getMyWeekInfo() {
-        this.isShowMyWork = true
+        this.isShowMyWork = true;
         api.user.weekLikeRankForMe({
           nowWeek: this.tabType == 1
         })
           .then(({ data }) => {
-            if (data.resultData != null && data.resultData.rank != '-1') {
-              this.myInfo = data.resultData
+            if (data.resultData != null) {
+              this.myInfo = data.resultData;
+              // this.myInfo.gmtCreate = dayjs(+this.myInfo.gmtCreate).format('YYYY-MM-DD HH:mm:ss')
+              this.myInfo.workId = '11'
             } else {
-              this.isShowMyWork = false
+              this.dataItem = ''
+              this.myInfo = {
+                workId: '',
+                likes: '0',
+                headimage: this.userInfo.headimgurl,
+                nickname: this.userInfo.nickname,
+                rank: '-1'
+              }
             }
           });
       }
@@ -367,7 +410,26 @@
     }
 
     .-content-wrap-height {
-      height: calc(100vh - 60px)!important;
+      height: calc(100vh - 60px) !important;
+    }
+
+    &-noDate {
+      margin-top: 119px;
+      text-align: center;
+
+      .-img {
+        width: 229px;
+        height: 123px;
+      }
+
+      .-text {
+        margin-top: 10px;
+        height:17px;
+        font-size:12px;
+        font-weight:400;
+        color:rgba(112,115,116,1);
+        line-height:17px;
+      }
     }
 
     &-header {
@@ -514,6 +576,13 @@
           color: #30C0FFFF !important;
         }
 
+        .-footer-no {
+          font-size:12px!important;
+          font-weight:500;
+          margin-right: 16px;
+          color:rgba(255,102,142,1)!important;
+        }
+
         .-footer-center {
           width: 70% !important;
         }
@@ -637,6 +706,67 @@
         font-size: 13px;
         font-weight: 400;
         color: #707374FF;
+      }
+    }
+
+    &-popup-no {
+      width: 327px;
+      height: 178px;
+      background: rgba(255, 255, 255, 1);
+      border-radius: 16px;
+
+      .-text-one {
+        color: #1D1B1B;
+        font-size: 20px;
+        line-height: 28px;
+        padding-top: 32px;
+      }
+
+      .-text-two {
+        color: #1D1B1B;
+        font-size: 16px;
+        line-height: 28px;
+        margin-bottom: 32px;
+      }
+
+      .-text-btn-wrap {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 0 48px;
+
+        .-btn-one {
+          width: 100px;
+          height: 40px;
+          border-radius: 26px;
+          border: 1px solid rgba(0, 0, 0, 0.16);
+          font-size: 15px;
+          font-weight: 500;
+          color: rgba(112, 115, 116, 1);
+          line-height: 40px;
+        }
+
+        .-btn-two {
+          width: 100px;
+          height: 40px;
+          background: linear-gradient(90deg, rgba(102, 255, 248, 1) 0%, rgba(48, 192, 255, 1) 100%);
+          border-radius: 26px;
+          font-size: 15px;
+          font-weight: 500;
+          color: rgba(255, 255, 255, 1);
+          line-height: 40px;
+        }
+
+        .-btn-three {
+          font-size: 15px;
+          font-weight: 500;
+          color: rgba(255, 255, 255, 1);
+          line-height: 40px;
+          width: 263px;
+          height: 40px;
+          background: linear-gradient(90deg, rgba(102, 255, 248, 1) 0%, rgba(48, 192, 255, 1) 100%);
+          border-radius: 26px;
+        }
       }
     }
 

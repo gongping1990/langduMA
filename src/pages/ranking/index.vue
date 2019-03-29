@@ -8,12 +8,12 @@
                  scroll-y
                  @scroll="scrollTopFn"
                  scroll-with-animation>
-      <div class="ld-ranking-top">
+      <div class="ld-ranking-top" :class="{'ld-ranking-bg': isShowTop }" >
         <div class="-top-title">
           <div class="-top-title-left">上周人气之星</div>
           <div class="-top-title-right" @click="toJump">查看本周排行></div>
         </div>
-        <div class="-top-content">
+        <div class="-top-content" v-if="isShowTop">
           <div class="-one">
             <div class="-one-img">
               <img class="-one-img-header"
@@ -57,11 +57,15 @@
             <img class="-one-image -three-image" src="https://pub.file.k12.vip/read/wind/3.png"/>
           </div>
         </div>
+        <div v-if="!isShowTop">
+          <img class="-top-no-bg" src="https://pub.file.k12.vip/read/week-rank-bg.png"/>
+        </div>
       </div>
       <div class="ld-ranking-down">
         <div class="-down-title" v-if="!isShowHeader">佳作推荐</div>
-        <div class="-down-item" v-for="(item,index) of dataList" :key="index" @click="lookOtherRead(item)" >
-          <div class="-down-item-tip" v-if="item.recommend!=0" :class="{'-rq':item.recommend == '2','-tj':item.recommend=='1'}">
+        <div class="-down-item" v-for="(item,index) of dataList" :key="index" @click="lookOtherRead(item)">
+          <div class="-down-item-tip" v-if="item.recommend!=0"
+               :class="{'-rq':item.recommend == '2','-tj':item.recommend=='1'}">
             {{tagList[item.recommend-1]}}
           </div>
           <div class="-down-item-left">
@@ -105,6 +109,7 @@
         },
         tagList: ["教师推荐", "人气之星"],
         isShowHeader: false,
+        isShowTop: false,
         isFetching: false,
         dataList: [],
         oneInfo: [],
@@ -121,8 +126,8 @@
     },
 
     methods: {
-      lookOtherRead (data) {
-        if(data.myself) {
+      lookOtherRead(data) {
+        if (data.myself) {
           wx.navigateTo({
             url: `/pages/listenWork/main?id=${data.workId}`
           });
@@ -161,6 +166,7 @@
         this.isFetching = true;
         api.user.getTopThreeRank()
           .then(({ data }) => {
+            this.isShowTop = data.resultData.length != 0;
             this.oneInfo = data.resultData.length == 1 && data.resultData[0];
             this.twoInfo = data.resultData.length == 2 && data.resultData[1];
             this.threeInfo = data.resultData.length == 3 && data.resultData[2];
@@ -233,11 +239,14 @@
       }
     }
 
-    &-top {
+    &-bg {
       background: url("https://pub.file.k12.vip/read/wind/backgroud.png");
       background-size: cover;
-      padding: 0 24px 0 24px;
       height: 351px;
+    }
+
+    &-top {
+      padding: 0 24px 0 24px;
 
       .-top-title {
         display: flex;
@@ -375,6 +384,13 @@
             height: 107px;
           }
         }
+      }
+
+      .-top-no-bg {
+        margin-top: 24px;
+        width:327px;
+        height:244px;
+        border-radius:16px;
       }
     }
 

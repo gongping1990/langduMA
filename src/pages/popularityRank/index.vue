@@ -88,7 +88,7 @@
             </div>
           </div>
           <div class="-item-down">
-            <div class="-item-time">日期: {{myInfo.createTime}}</div>
+            <div class="-item-time">日期: {{myInfo.gmtCreate}}</div>
             <div class="-item-num">
               <img class="-img" src="https://pub.file.k12.vip/read/icon-good.png"/>
               <span>{{myInfo.likes}}</span>
@@ -104,7 +104,7 @@
                      scroll-with-animation>
           <div class="-popup-item -popup-item-more" v-for="(item, index) of dataShareList" :key="index"
                :class="{'-active-item': item.id == popupItem.id}" @click="changeItem(item)">
-            <div class="-item-tip" v-if="index==0">赞最多</div>
+            <div class="-item-tip" v-if="index==0 && queryInfo.type == 2">赞最多</div>
             <div class="-item-left">
               <div class="-item-title">
                 <span>《{{item.coursename}}》</span>
@@ -297,7 +297,7 @@
             this.dataShareList = data.resultData.records;
           }
           this.pageShareWork.total = data.resultData.total;
-
+          this.popupItem = this.dataShareList[0]
           this.isFetching = false;
         }, () => {
           this.isFetching = false;
@@ -316,7 +316,7 @@
             this.dataShareList = data.resultData.records;
           }
           this.pageShareWork.total = data.resultData.total;
-
+          this.popupItem = this.dataShareList[0]
           this.isFetching = false;
         }, () => {
           this.isFetching = false;
@@ -330,7 +330,6 @@
           .then(({ data }) => {
             if (data.resultData != null && data.resultData.rank != '-1') {
               this.myInfo = data.resultData
-              this.myInfo.createTime = dayjs(this.myInfo.createTime).format('YYYY-MM-DD HH:mm:ss')
             } else {
               this.isShowMyWork = false
             }
@@ -344,7 +343,6 @@
           .then(({ data }) => {
             if (data.resultData != null && data.resultData.rank != '-1') {
               this.myInfo = data.resultData
-              this.myInfo.createTime = dayjs(this.myInfo.createTime).format('YYYY-MM-DD HH:mm:ss')
             } else {
               this.isShowMyWork = false
             }

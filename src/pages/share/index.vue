@@ -219,6 +219,9 @@
       },
       onHide () {
         this.innerAudioContext.destroy()
+      },
+      onUnload () {
+        this.innerAudioContext.destroy()
       }
     }
   };

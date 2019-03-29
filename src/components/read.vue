@@ -556,7 +556,9 @@ export default {
     @include flex-center;
   }
   &-text {
+    @include flex-center;
     padding: 0 10px;
+    height: 40px;
     font-size: 15px;
     color: rgba($color: #fff, $alpha: 0.4);
     background-color: #01141d;

@@ -124,11 +124,11 @@
       lookOtherRead (data) {
         if(data.myself) {
           wx.navigateTo({
-            url: `/pages/listenWork/main?id=${data.id}`
+            url: `/pages/listenWork/main?id=${data.workId}`
           });
         } else {
           wx.navigateTo({
-            url: `/pages/share/main?id=${data.id}`
+            url: `/pages/share/main?id=${data.workId}`
           });
         }
       },

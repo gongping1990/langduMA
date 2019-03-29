@@ -357,11 +357,11 @@ export default {
       position: absolute;
       bottom: 0;
       right: 0;
-      width: 54px;
+      width: 68px;
       height: 24px;
       font-size: 12px;
       color: #fff;
-      background: rgba(155, 155, 155, 1);
+      background: rgba(0, 0, 0, 0.16);
       border-radius: 100px 0px 6px 0px;
       image {
         width: 11px;

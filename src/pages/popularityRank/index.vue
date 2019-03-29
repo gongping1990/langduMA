@@ -15,7 +15,7 @@
         <div class="-content-item-one"  @click="lookOtherWorks(dataItem.userId)">
           <div class="-img">
             <img class="-img-crown" src="https://pub.file.k12.vip/read/rank/icon-head champion.png"/>
-            <img class="-img-header" :src="dataItem.headimgurl">
+            <img class="-img-header" :src="dataItem.headimage || dataItem.headimgurl">
           </div>
           <div class="-item-one-wrap">
             <div class="-item-one-wrap-text">
@@ -38,7 +38,7 @@
           <div class="-item-left" v-else>{{index+2}}</div>
           <div class="-item-center">
             <img class="-item-center-img"
-                 :src="item.headimgurl"/>
+                 :src="item.headimage || item.headimgurl"/>
             <div class="-item-center-text">
               <div class="-name">{{item.nickname}}</div>
               <div class="-zan">
@@ -60,7 +60,7 @@
           <div class="-item-left -footer-num">{{myInfo.rank}}</div>
           <div class="-item-center -footer-center">
             <img class="-item-center-img"
-                 :src="myInfo.headimgurl"/>
+                 :src="myInfo.headimage"/>
             <div class="-item-center-text">
               <div class="-name">{{myInfo.nickname}}</div>
               <div class="-zan">
@@ -324,7 +324,7 @@
       },
       getMyRankInfo() {
         this.isShowMyWork = true
-        api.user.userLikeRankForMe({
+        api.work.userLikeRankForMe({
           courseId: this.queryInfo.id
         })
           .then(({ data }) => {

@@ -15,7 +15,6 @@
               <img class="-share-img" src="https://pub.file.k12.vip/read/my/zp-button-share.png"/>
             </button>
             <div class="-footer-item" @click="lookOtherRead(item.id)">
-              <div class="-item-tip" v-if="index==0 && item.likes!=0">赞最多</div>
               <div class="-item-left">
                 <div class="-item-title">
                   <span>《{{item.coursename}}》</span>
@@ -142,7 +141,6 @@
         });
       },
       bindLoadItem() {
-        console.log("aaaa");
         if (this.page.current < Math.ceil(this.page.total / this.page.size)) {
           this.page.current++;
           this.getWorkList();

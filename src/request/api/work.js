@@ -41,6 +41,9 @@ const work = {
   },
   shareDetail(params) {
     return axios.get('/work/getShareWorkDetails',params)
+  },
+  userLikeRankForMe(params) {
+    return axios.get('/work/getMyBestWorkByCourse',params)
   }
 }
 

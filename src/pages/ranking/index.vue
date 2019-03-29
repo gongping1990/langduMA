@@ -60,7 +60,7 @@
       </div>
       <div class="ld-ranking-down">
         <div class="-down-title" v-if="!isShowHeader">佳作推荐</div>
-        <div class="-down-item" v-for="(item,index) of dataList" :key="index" @click="lookOtherRead(item.workId)" >
+        <div class="-down-item" v-for="(item,index) of dataList" :key="index" @click="lookOtherRead(item)" >
           <div class="-down-item-tip" v-if="item.recommend!=0" :class="{'-rq':item.recommend == '2','-tj':item.recommend=='1'}">
             {{tagList[item.recommend-1]}}
           </div>
@@ -121,10 +121,16 @@
     },
 
     methods: {
-      lookOtherRead (id) {
-        wx.navigateTo({
-          url: `/pages/listenWork/main?id=${id}`
-        });
+      lookOtherRead (data) {
+        if(data.myself) {
+          wx.navigateTo({
+            url: `/pages/listenWork/main?id=${data.id}`
+          });
+        } else {
+          wx.navigateTo({
+            url: `/pages/share/main?id=${data.id}`
+          });
+        }
       },
       lookOtherWorks(id) {
         wx.navigateTo({

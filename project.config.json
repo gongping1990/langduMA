@@ -39,7 +39,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 3,
+			"current": 12,
 			"list": [
 				{
 					"id": -1,
@@ -116,6 +116,20 @@
 					"name": "单课排行",
 					"pathName": "pages/popularityRank/main",
 					"query": "type=2&id=1111094342251384833&name=吃水不忘挖井人",
+					"scene": null
+				},
+				{
+					"id": 11,
+					"name": "分享",
+					"pathName": "pages/popularityRank/main",
+					"query": "id=1111192430139002882&type=2",
+					"scene": null
+				},
+				{
+					"id": 12,
+					"name": "周排行",
+					"pathName": "pages/popularityRank/main",
+					"query": "type=1",
 					"scene": null
 				}
 			]

@@ -98,7 +98,7 @@
       <div class="reset-popup">
         <div class="reset-popup_close" @tap="changeSuccessPopupTwo"></div>
         <div class="reset-popup_icon"></div>
-        <text class="reset-popup_text">恭喜您录制完成 </text>
+        <text class="reset-popup_text">恭喜你录制完成 </text>
         <text class="reset-popup_content">赶快分享到班级群</text>
         <text class="reset-popup_content">集赞争做“人气之星”</text>
         <div class="reset-popup_btn">

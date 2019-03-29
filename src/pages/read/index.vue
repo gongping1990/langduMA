@@ -226,7 +226,7 @@ export default {
       this.isReset = true
       this.recorder.stop()
       this.$refs.read.stop()
-      this.$refs.read.setSrc(this.courseData.authorVrAudio)
+      this.$refs.read.setSrc(this.courseData.authorBgMusic)
       setTimeout(() => {
 
         this.currentTime = '00:00'

@@ -392,7 +392,7 @@ export default {
           this.showMask = false
           setTimeout(() => {
             this.clickRecorderStart()
-          }, 2000);
+          }, 1000);
         }
       }, 1000);
     },

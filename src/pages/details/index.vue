@@ -312,8 +312,7 @@ export default {
     margin-bottom: 24p;
     width: 120px;
     height: 160px;
-    background: rgba(208, 208, 208, 1);
-    box-shadow: 0px 6px 16px 0px rgba(0, 0, 0, 0.1);
+
     &_bg {
       position: absolute;
       left: 0;
@@ -345,6 +344,7 @@ export default {
       width: 120px;
       height: 160px;
       border-radius: 6px;
+      box-shadow: 0px 6px 16px 0px rgba(0, 0, 0, 0.1);
     }
     &_popover {
       @include flex-center;

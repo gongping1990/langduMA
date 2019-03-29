@@ -34,7 +34,7 @@
           :isReady="!isStart"
           :title="courseData.name"
           :subtitle="subtitle"
-          :lyricSrc="courseData.bgMusic"
+          :lyricSrc="courseData.authorBgMusic"
           :lyricText="courseData.introduction"
           :showControl="false"
           :disabled="disabled"

@@ -167,7 +167,7 @@ export default {
     },
     clickRead () {
       wx.navigateTo({ url: '/pages/read/main?id=' + this.$root.$mp.query.id });
-      this.changeRead()
+      this.showRead = false
     },
     changePopup () {
       this.showPopup = !this.showPopup

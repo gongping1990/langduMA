@@ -34,7 +34,7 @@
           :isReady="!isStart"
           :title="courseData.name"
           :subtitle="subtitle"
-          :lyricSrc="courseData.authorVrAudio"
+          :lyricSrc="courseData.bgMusic"
           :lyricText="courseData.introduction"
           :showControl="false"
           :disabled="disabled"
@@ -383,7 +383,6 @@ export default {
     },
     donwTimeStart () {
       this.timer = setInterval(() => {
-        console.log(2)
         this.downTime -= 1
         if (!this.downTime) {
           clearInterval(this.timer)

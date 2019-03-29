@@ -30,11 +30,11 @@
         </div>
         <div class="-content-title-name">{{shareInfo.nickName}}</div>
         <div class="-content-title-text">
-          <div class="-text-one" v-if="!shareInfo.liked">还差<span
-            class="-text-em"> {{shareInfo.shortOfLikeCount}} </span>个赞
+          <div class="-text-one" v-if="!shareInfo.liked">
+            我刚读了《{{shareInfo.courseName}}》
           </div>
           <div class="-text-one" v-if="shareInfo.liked">感谢你的点赞鼓励</div>
-          <div class="-text-two" v-if="!shareInfo.liked">就可以进前{{shareInfo.shortOfLike}}名啦，请给我点个赞吧</div>
+          <div class="-text-two" v-if="!shareInfo.liked">请给我点个赞吧</div>
           <div class="-text-two" v-if="shareInfo.liked">这是我朗读获得的成就卡片</div>
         </div>
       </div>

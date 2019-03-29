@@ -75,11 +75,10 @@
     methods: {
       lookOtherRead (id) {
         wx.navigateTo({
-          url: `/pages/listenWork/main?id=${id}`
+          url: `/pages/share/main?id=${id}`
         });
       },
       bindLoadItem() {
-        console.log('aaaa')
         if (this.page.current < Math.ceil(this.page.total / this.page.size)) {
           this.page.current++;
           this.getWorkList()

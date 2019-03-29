@@ -19,7 +19,7 @@
       <div class="-header-right" @click="audioPlay">
         <div class="-header-right-img">
           <img v-if="!isPlay" class="-img" src="https://pub.file.k12.vip/read/lesson/kczy-button-play.png"/>
-          <img v-if="isPlay" class="-img" src="https://pub.file.k12.vip/read/zyld-button-play.png"/>
+          <img v-if="isPlay" class="-img" src="https://pub.file.k12.vip/2019/03/29/1111513347918516225.png"/>
         </div>
       </div>
     </div>

@@ -132,6 +132,7 @@
             });
             this.isShowDel = false;
             this.getWorkList();
+            this.getMessageInfo();
           }
         });
       },

@@ -79,9 +79,10 @@
                  :src="item.headimage"
                  v-for="item in list"
                  :key="item.userId" />
+          <span class="details-more">···</span>
         </div>
         <div class="details-message">
-          ··· {{list[0].nikename}}… 等已解锁
+          {{list[0].nikename}}… 等已解锁
         </div>
       </div>
       <text class="link-btn"
@@ -252,6 +253,12 @@ export default {
       }
     }
   }
+
+  &-more {
+    font-size: 12px;
+    color: #707374;
+  }
+
   .action {
     @include flex-center;
     &-text {

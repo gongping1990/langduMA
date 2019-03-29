@@ -162,8 +162,8 @@
 
     onShareAppMessage () {
       return {
-        title: `我的孩子刚朗读了《${this.popupItem.coursename}》，非常棒，请给TA点个赞吧！`,
-        path: '/pages/share/main?id=' + this.popupItem.id,
+        title: `我的孩子刚朗读了《${this.isOpenMore ? this.popupItem.coursename : this.queryInfo.name}》，非常棒，请给TA点个赞吧！`,
+        path: `/pages/share/main?id=${this.isOpenMore ? this.popupItem.id : this.myInfo.workId}`,
         success: res => {
           wx.showToast({
             title: '分享成功',

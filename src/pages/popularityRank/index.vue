@@ -328,7 +328,7 @@
           courseId: this.queryInfo.id
         })
           .then(({ data }) => {
-            if (data.resultData != null) {
+            if (data.resultData != null && data.resultData.rank != '-1') {
               this.myInfo = data.resultData
               this.myInfo.createTime = dayjs(this.myInfo.createTime).format('YYYY-MM-DD HH:mm:ss')
             } else {
@@ -342,7 +342,7 @@
           nowWeek: this.tabType == 1
         })
           .then(({ data }) => {
-            if (data.resultData != null) {
+            if (data.resultData != null && data.resultData.rank != '-1') {
               this.myInfo = data.resultData
               this.myInfo.createTime = dayjs(this.myInfo.createTime).format('YYYY-MM-DD HH:mm:ss')
             } else {

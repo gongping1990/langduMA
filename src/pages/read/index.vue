@@ -96,6 +96,7 @@
     <wux-popup :visible="showSuccessTwo"
                @close="changeSuccessPopupTwo">
       <div class="reset-popup">
+        <div class="reset-popup_close" @tap="changeSuccessPopupTwo"></div>
         <div class="reset-popup_icon"></div>
         <text class="reset-popup_text">恭喜您录制完成 </text>
         <text class="reset-popup_content">赶快分享到班级群</text>
@@ -109,6 +110,7 @@
       </div>
     </wux-popup>
     <wux-popup :visible="showSuccess"
+               closable
                @close="changeSuccessPopup">
       <div class="success-popup">
         <text class="success-popup_text">解锁新成就</text>
@@ -210,6 +212,11 @@ export default {
           this.clickRecorderPlay()
         }
       })
+    },
+    myWork () {
+      wx.navigateTo({
+        url: `/pages/myWorks/main?id=${this.courseData.id}&name=${this.courseData.name}`
+      });
     },
     bindPaused (paused) {
       if (!this.isEnd) return
@@ -327,9 +334,11 @@ export default {
     },
     changeSuccessPopup () {
       this.showSuccess = !this.showSuccess
+      this.myWork()
     },
     changeSuccessPopupTwo () {
       this.showSuccessTwo = !this.showSuccessTwo
+      this.myWork()
     },
     changeAchieve () {
       this.showAchieve = !this.showAchieve
@@ -554,6 +563,7 @@ export default {
     }
   }
   .reset-popup {
+    position: relative;
     @include flex-column-center;
     padding: 24px 0;
     width: 327px;
@@ -561,6 +571,15 @@ export default {
     background: rgba(3, 26, 36, 1);
     box-shadow: 0px 2px 10px 0px rgba(1, 21, 31, 1);
     border-radius: 16px;
+    &_close {
+      @include bg('/read/button-icon-close.png');
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      width: 15px;
+      height: 15px;
+
+    }
     &_text {
       font-size: 20px;
       color: rgba($color: #fff, $alpha: 1);

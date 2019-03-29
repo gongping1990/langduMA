@@ -142,7 +142,7 @@
       bindLoadItem() {
         if (this.page.current < Math.ceil(this.page.total / this.page.size)) {
           this.page.current++;
-          this.getList();
+          this.getRecommendList();
         }
       },
       toJump() {

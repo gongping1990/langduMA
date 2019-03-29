@@ -286,6 +286,8 @@
           if (this.dataList.length) {
             this.dataItem = this.dataList[0];
             this.dataList.splice(0, 1);
+          } else {
+            this.dataItem = ''
           }
           this.isFetching = false;
         }, () => {
@@ -307,6 +309,8 @@
           if (this.dataList.length) {
             this.dataItem = this.dataList[0];
             this.dataList.splice(0, 1);
+          } else {
+            this.dataItem = ''
           }
           this.isFetching = false;
         }, () => {

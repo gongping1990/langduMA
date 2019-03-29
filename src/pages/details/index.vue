@@ -50,7 +50,7 @@
         <image class="action-image"
                mode="widthFix"
                src="https://pub.file.k12.vip/read/lesson/kczy-button-read.png" />
-        <text class="action-text">自由朗读</text>
+        <text class="action-text">朗读课文</text>
       </div>
       <button v-if="!userInfo.phone"
               class="play-btn"
@@ -94,7 +94,7 @@
         <image class="popup-image"
                :src="detailData.comAchievement"
                mode="widthFix" />
-        <text class="popup-text">自由朗读课文就能解锁我哟~</text>
+        <text class="popup-text">朗读课文就能解锁我哟~</text>
         <div class="popup-btn"
              @tap="changePopup">我知道了</div>
       </div>

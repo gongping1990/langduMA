@@ -1,7 +1,7 @@
 <template>
   <div class="read-component"
        :class="className">
-    <div class="lyric">
+    <div class="lyric" v-if="lyricArr">
       <text class="lyric-title">《{{title}}》</text>
       <text class="lyric-subtitle">{{subtitle}}</text>
       <div class="lyric-scroll"

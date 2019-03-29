@@ -39,7 +39,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 4,
+			"current": 8,
 			"list": [
 				{
 					"id": -1,
@@ -98,9 +98,9 @@
 					"scene": null
 				},
 				{
-					"id": -1,
+					"id": 8,
 					"name": "aaaaa",
-					"pathName": "pages/popularityRank/main",
+					"pathName": "pages/authorize/main",
 					"query": "type=2&id=1110748762236493826&name=我是什么",
 					"scene": null
 				},

@@ -147,13 +147,14 @@ export default {
   watch: {
     lyricSrc (n, o) {
       if (n) {
-        console.log(n)
         this.audio.src = n
       }
     },
     lyricText (n, o) {
-      console.log(n, 111)
-      this.lyricArr = this.sliceNull(this.parseLyric(n))
+      if(n) {
+        this.lyricArr = this.sliceNull(this.parseLyric(n))
+      }
+
     }
   },
 
@@ -198,7 +199,7 @@ export default {
       }
     },
     clickNext () {
-      if (this.lyricIndex == this.lyricArr.length - 1) {
+      if (this.lyricIndex == this.lyricArr.length - 2) {
         return
       }
       this.audio.seek(this.lyricArr[this.lyricIndex + 1][0])
@@ -308,21 +309,16 @@ export default {
       })
 
       this.audio.onTimeUpdate(() => {
-        console.log('update')
-        this.$emit('timeUpdate', {
-          currentTime: this.audio.currentTime,
-          formatCurrentTime: this.timeToFormat(this.audio.currentTime)
-        })
+        this.startTime = this.timeToFormat(this.audio.currentTime)
+        this.progress = Math.floor((this.audio.currentTime / this.audio.duration) * 100)
+
         if (this.endTime == '00:00') {
           this.endTime = this.timeToFormat(this.audio.duration)
           this.$emit('duration', {
             duration: this.audio.duration
           })
         }
-        this.startTime = this.timeToFormat(this.audio.currentTime)
-        this.progress = Math.floor((this.audio.currentTime / this.audio.duration) * 100)
-        this.$emit('progress', this.progress)
-        console.log()
+
         if ((this.lyricIndex != this.lyricArr.length - 1) && !this.tapSwiper) {
 
           this.lyricArr.forEach((e, i) => {
@@ -331,7 +327,7 @@ export default {
             if (lyricIndex == this.lyricArr.length - 2 && currentTime > (this.lyricArr[this.lyricArr.length - 1][0] - 0.9)) {
               this.lyricIndex = this.lyricArr.length - 1
               return;
-            } else if (lyricIndex != this.lyricArr.length - 1) {
+            } else if (lyricIndex != this.lyricArr.length - 2) {
               if (currentTime >= e[0] && currentTime < this.lyricArr[i + 1][0]) {
                 this.lyricIndex = i
                 return;
@@ -340,6 +336,11 @@ export default {
 
           })
         }
+        this.$emit('timeUpdate', {
+          currentTime: this.audio.currentTime,
+          formatCurrentTime: this.timeToFormat(this.audio.currentTime)
+        })
+        this.$emit('progress', this.progress)
       })
 
     },
@@ -363,32 +364,39 @@ export default {
     }
   },
   mounted () {
-    if(this.lyricText) {
+    console.log(111)
+    console.log('show read')
+    if (this.lyricText) {
       this.lyricArr = this.sliceNull(this.parseLyric(this.lyricText))
     }
     this.audio = this.globalData.audio
     this.initAudio()
   },
   onHide () {
-    this.lyricIndex = 0
-    this.startTime = '00:00'
-    this.endTime = '00:00'
-    this.progress = 0
-    this.tapSwiper = false
-    this.timer = null
-    this.paused = true
     this.audio.stop()
+    setTimeout(() => {
+      this.lyricIndex = 0
+      this.startTime = '00:00'
+      this.endTime = '00:00'
+      this.progress = 0
+      this.tapSwiper = false
+      this.timer = null
+      this.paused = true
+    }, 1000);
     console.log('hide')
   },
   onUnload () {
-    this.lyricIndex = 0
-    this.startTime = '00:00'
-    this.endTime = '00:00'
-    this.progress = 0
-    this.tapSwiper = false
-    this.timer = null
-    this.paused = true
     this.audio.stop()
+    setTimeout(() => {
+      this.lyricIndex = 0
+      this.startTime = '00:00'
+      this.endTime = '00:00'
+      this.progress = 0
+      this.tapSwiper = false
+      this.timer = null
+      this.paused = true
+    }, 1000);
+
     console.log('Unload ')
   }
 }

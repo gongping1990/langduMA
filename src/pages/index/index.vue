@@ -111,7 +111,9 @@ export default {
   },
 
   onReachBottom() {
+    console.log(111)
     if(this.courseList.length < this.total) {
+      this.page.size += 10
       this.getCourseList()
     }
   },

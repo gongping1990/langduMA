@@ -29,6 +29,7 @@
     </div>
 
     <read ref="read"
+          v-if="showRead"
           className="readPage"
           :isReady="!isStart"
           :title="courseData.name"
@@ -285,7 +286,6 @@ export default {
       this.currentTime = params.formatCurrentTime
     },
     clickRecorderPlay () {
-      console.log(this.globalData.audio.src)
       if (this.$refs.read.paused) {
         this.$refs.read.play()
       } else {
@@ -400,6 +400,9 @@ export default {
 
 
   mounted () {
+    setTimeout(() => {
+      this.showRead = true
+    }, 500);
     this.destroy = false
     this.recorder = wx.getRecorderManager()
     // this.audio = wx.createInnerAudioContext()
@@ -448,6 +451,7 @@ export default {
   },
 
   onShow () {
+    this.showRead = true
     this.destroy = false
     wx.getSetting({      success: res => {
         if (res.authSetting['scope.record'] == false) {
@@ -459,6 +463,7 @@ export default {
   },
 
   onUnload () {
+    this.showRead = false
     this.destroy = true
     if (this.timer) {
       clearInterval(this.timer)

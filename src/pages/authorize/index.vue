@@ -1,10 +1,8 @@
 <template>
   <div class="counter-warp">
-    <button
-      open-type="getUserInfo"
-      @getuserinfo="getUserInfo"
-      lang="zh_CN"
-      >
+    <button open-type="getUserInfo"
+            @getuserinfo="getUserInfo"
+            lang="zh_CN">
       授权登录
     </button>
   </div>
@@ -22,18 +20,20 @@ export default {
     }
   },
   methods: {
-    getUserInfo(res) {
-      let {encryptedData, iv, rawData, signature} = res.mp.detail
-      console.log(res)
-      api.user.updateUserWxMa({
-        encryptedData,
-        iv,
-        rawData,
-        signature
-      }).then(({data}) => {
-        store.commit('updateUserInfo', data.resultData)
-        wx.navigateBack()
-      })
+    getUserInfo (res) {
+      let { encryptedData, iv, rawData, signature } = res.mp.detail
+      if (encryptedData && iv) {
+        api.user.updateUserWxMa({
+          encryptedData,
+          iv,
+          rawData,
+          signature
+        }).then(({ data }) => {
+          store.commit('updateUserInfo', data.resultData)
+          wx.navigateBack()
+        })
+      }
+
     }
   }
 }

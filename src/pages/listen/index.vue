@@ -13,6 +13,7 @@
     </div>
 
     <read ref="read"
+          v-if="showReadComponent"
           :share="share"
           :title="courseData.name"
           :subtitle="subtitle"
@@ -27,6 +28,7 @@
       <div class="popup">
         <div class="popup-title">选择课文</div>
         <scroll-view scroll-y
+                     @scrolltolower="bindscrolltolower"
                      scroll-with-animation
                      class="popup-scroll">
           <div class="popup-list ">
@@ -76,6 +78,7 @@ export default {
       gradeArr: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '初中'],
       courseData: {},
       detailData: {},
+      showReadComponent: true,
       showAchieve: false,
       showRead: false,
       showPopup: false,
@@ -147,6 +150,12 @@ export default {
         this.total = data.resultData.total
       })
     },
+    bindscrolltolower() {
+      if(this.courseList.length < this.total) {
+        this.page.size += 10
+        this.getCourseList()
+      }
+    },
     toHome () {
       wx.switchTab({ url: '/pages/index/main' });
     },
@@ -184,6 +193,7 @@ export default {
   onShow () {
     this.id = this.$root.$mp.query.id
     this.share = this.$root.$mp.query.share
+    this.showReadComponent = true
     if (this.userInfo.id) {
       this.getCourseDetail()
     }
@@ -199,6 +209,7 @@ export default {
   },
 
   onHide () {
+    this.showReadComponent = false
     this.showAchieve = false
     this.showRead = false
     this.showPopup = false
@@ -217,6 +228,7 @@ export default {
   },
 
   onUnload () {
+    this.showReadComponent = false
     this.showAchieve = false
     this.showRead = false
     this.showPopup = false

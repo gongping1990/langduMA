@@ -363,7 +363,7 @@
           .then(({ data }) => {
             if (data.resultData != null) {
               this.myInfo = data.resultData;
-              this.myInfo.gmtCreate = dayjs(+this.myInfo.gmtCreate).format('YYYY-MM-DD HH:mm:ss')
+              // this.myInfo.gmtCreate = dayjs(+this.myInfo.gmtCreate).format('YYYY-MM-DD HH:mm:ss')
             } else {
               this.isShowMyWork = false;
             }
@@ -377,7 +377,7 @@
           .then(({ data }) => {
             if (data.resultData != null) {
               this.myInfo = data.resultData;
-              this.myInfo.gmtCreate = dayjs(+this.myInfo.gmtCreate).format('YYYY-MM-DD HH:mm:ss')
+              // this.myInfo.gmtCreate = dayjs(+this.myInfo.gmtCreate).format('YYYY-MM-DD HH:mm:ss')
               this.myInfo.workId = '11'
             } else {
               this.dataItem = ''

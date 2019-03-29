@@ -179,6 +179,7 @@
     },
 
     mounted() {
+      this.closePopup()
       //type: 1为周次，2为单课排行
       if (this.queryInfo.type == 1) {
         this.getWeekList();

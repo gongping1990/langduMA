@@ -88,7 +88,7 @@
             </div>
           </div>
           <div class="-item-down">
-            <div class="-item-time">日期: {{myInfo.createTime}}</div>
+            <div class="-item-time">日期: {{myInfo.gmtCreate}}</div>
             <div class="-item-num">
               <img class="-img" src="https://pub.file.k12.vip/read/icon-good.png"/>
               <span>{{myInfo.likes}}</span>
@@ -330,7 +330,6 @@
           .then(({ data }) => {
             if (data.resultData != null && data.resultData.rank != '-1') {
               this.myInfo = data.resultData
-              this.myInfo.createTime = dayjs(this.myInfo.createTime).format('YYYY-MM-DD HH:mm:ss')
             } else {
               this.isShowMyWork = false
             }
@@ -344,7 +343,6 @@
           .then(({ data }) => {
             if (data.resultData != null && data.resultData.rank != '-1') {
               this.myInfo = data.resultData
-              this.myInfo.createTime = dayjs(this.myInfo.createTime).format('YYYY-MM-DD HH:mm:ss')
             } else {
               this.isShowMyWork = false
             }

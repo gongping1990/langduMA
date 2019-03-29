@@ -210,6 +210,9 @@
           this.shareInfo = data.resultData;
           this.isFetching = false;
           this.init();
+          setTimeout(()=>{
+            this.audioPlay()
+          },1000)
         }, () => {
           this.isFetching = false;
         });

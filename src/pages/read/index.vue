@@ -226,14 +226,14 @@ export default {
       this.isReset = true
       this.recorder.stop()
       this.$refs.read.stop()
-      this.$refs.read.setSrc(this.courseData.authorBgMusic)
-      setTimeout(() => {
 
+      setTimeout(() => {
+        this.$refs.read.setSrc(this.courseData.authorBgMusic)
         this.currentTime = '00:00'
         this.isPlay = null
         this.isEnd = false
         this.changeReset()
-      }, 500);
+      }, 1000);
     },
     clickStop () {
       this.recorder.stop()

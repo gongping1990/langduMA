@@ -7,7 +7,7 @@
              mode="widthFix"
              :src="detailData.headimgurl" />
       <div class="introduce-title">朗读者：<text class="introduce-weight">{{detailData.nickname}}</text></div>
-      <div class="zan-num">
+      <div class="zan-num" @tap="likeContent">
         <div class="zan-icon"></div>
         {{detailData.likes}}
       </div>
@@ -90,9 +90,26 @@ export default {
         this.detailData = data.resultData
       })
     },
-
+    likeContent() {
+      api.user.likeContent({
+        id: this.detailData.id
+      }).then(({data}) => {
+        wx.showToast({
+          title: '点赞成功！', //提示的内容,
+          icon: 'none', //图标,
+          duration: 2000, //延迟时间,
+          mask: true, //显示透明蒙层，防止触摸穿透,
+          success: res => {}
+        });
+        if(data.resultData) {
+          this.detailData.likes += 1
+        } else {
+          this.detailData.likes -= 1
+        }
+      })
+    },
     clickRead () {
-      wx.navigateTo({ url: '/pages/read/main?id=' + this.$root.$mp.query.id });
+      wx.navigateTo({ url: '/pages/read/main?id=' + this.detailData.courseId});
     },
     changeAchieve () {
       this.showAchieve = !this.showAchieve

@@ -1,7 +1,7 @@
 <template>
   <div class="read-component"
        :class="className">
-    <div class="lyric">
+    <div class="lyric" v-if="lyricArr">
       <text class="lyric-title">《{{title}}》</text>
       <text class="lyric-subtitle">{{subtitle}}</text>
       <div class="lyric-scroll"
@@ -556,7 +556,9 @@ export default {
     @include flex-center;
   }
   &-text {
+    @include flex-center;
     padding: 0 10px;
+    height: 40px;
     font-size: 15px;
     color: rgba($color: #fff, $alpha: 0.4);
     background-color: #01141d;

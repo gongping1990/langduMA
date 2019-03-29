@@ -254,6 +254,7 @@ export default {
   padding-top: 1px;
   height: 100vh;
   background-color: #01141d;
+  overflow: hidden;
   .more-course {
     @include flex-center;
     position: absolute;

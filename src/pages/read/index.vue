@@ -382,7 +382,9 @@ export default {
           this.downTime = 3
           this.percent = 0
           this.showMask = false
-          this.clickRecorderStart()
+          setTimeout(() => {
+            this.clickRecorderStart()
+          }, 2000);
         }
       }, 1000);
     },

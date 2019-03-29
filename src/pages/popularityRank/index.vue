@@ -79,6 +79,7 @@
 
     <div v-if="!dataItem" class="ld-popularityRank-noDate">
       <img class="-img" src="https://pub.file.k12.vip/read/icon-null-list.png"/>
+      <div class="-text">暂无作品上榜，赶快分享作品集赞冲榜吧！</div>
     </div>
 
     <wux-popup :visible="isOpenPopup" :position="!myInfo.workId ? 'center' : 'bottom'" @close="closePopup">
@@ -419,6 +420,15 @@
       .-img {
         width: 229px;
         height: 123px;
+      }
+
+      .-text {
+        margin-top: 10px;
+        height:17px;
+        font-size:12px;
+        font-weight:400;
+        color:rgba(112,115,116,1);
+        line-height:17px;
       }
     }
 

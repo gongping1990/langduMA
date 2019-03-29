@@ -15,8 +15,8 @@
         <div class="mask-top"></div>
         <div class="mask-bottom"></div>
         <swiper class="lyric-swiper"
-                previous-margin="178rpx"
-                next-margin="178rpx"
+                previous-margin="90px"
+                next-margin="90px"
                 :style="{'height': swiperHeight + 'px'}"
                 :current="lyricIndex"
                 vertical

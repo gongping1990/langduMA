@@ -52,11 +52,7 @@
       };
     },
 
-    computed:{
-      bgStyle (data) {
-        return ``
-      },
-    },
+    computed:{},
 
     mounted() {
       this.getList()

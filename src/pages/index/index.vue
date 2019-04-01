@@ -37,7 +37,6 @@
       <swiper class="class-list_swiper"
               previous-margin="280rpx"
               next-margin="280rpx"
-              circular
               :current="classIndex"
               @change="changeClassIndex">
         <block v-for="(item, index) in classList"

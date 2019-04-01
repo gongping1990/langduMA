@@ -1,10 +1,15 @@
 <script>
+const mta = require('./utils/mta_analysis.js')
 import api from './request/api'
 import store from './store'
 export default {
   created () {
     this.login()
+    mta.App.init({
+      "appID": "500675681",
+    });
   },
+
   methods: {
     login () {
       wx.login({
@@ -13,15 +18,8 @@ export default {
             code: res.code
           }).then(({ data }) => {
             store.commit('updateUserInfo', data.resultData)
-            if (!data.resultData.id) {
-              wx.getSetting({
-                success (res) {
-                  console.log(res)
-                  if (!res.authSetting['scope.userInfo']) {
-                    wx.navigateTo({ url: '/pages/authorize/main'})
-                  }
-                }
-              })
+            if (data.resultData.needAuth) {
+              wx.navigateTo({ url: '/pages/authorize/main' })
             }
 
           })
@@ -133,7 +131,8 @@ export default {
 button::after {
   border: none;
 }
-.button-hover, button {
+.button-hover,
+button {
   background-color: transparent !important;
 }
 </style>

@@ -269,8 +269,6 @@ export default {
     initAudio () {
       console.log(111)
       this.audio.src = this.lyricSrc
-      this.audio.autoplay = this.autoplay
-      console.log(this.audio.src)
       if (this.autoplay) {
         setTimeout(() => {
           this.audio.play()

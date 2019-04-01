@@ -14,6 +14,7 @@
 
     <read ref="read"
           v-if="showReadComponent"
+          autoplay
           :share="share"
           :title="courseData.name"
           :subtitle="subtitle"

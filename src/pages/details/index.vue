@@ -52,12 +52,12 @@
                src="https://pub.file.k12.vip/read/lesson/kczy-button-read.png" />
         <text class="action-text">朗读课文</text>
       </div>
-      <button v-if="!userInfo.phone"
+      <button v-if="userInfo.phone"
               class="play-btn"
               open-type="getPhoneNumber"
               @getphonenumber="getPhoneNumber">
       </button>
-      <div v-if="userInfo.phone"
+      <div v-if="!userInfo.phone"
            class="play-btn"
            @tap="navigateTo('listen')"></div>
       <wux-badge :count="detailData.uploadworks">
@@ -111,7 +111,8 @@ export default {
     return {
       detailData: {},
       list: [],
-      showPopup: false
+      showPopup: false,
+      isAuth: false
     }
   },
 
@@ -144,6 +145,8 @@ export default {
           store.commit('updateUserInfo', data.resultData)
           this.navigateTo('listen')
         })
+      } else {
+        this.navigateTo('listen')
       }
     },
     changePopup () {

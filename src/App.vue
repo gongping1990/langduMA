@@ -136,7 +136,7 @@ button {
   background-color: transparent !important;
 }
 .card-mask {
-  position: absolute;
+  position: fixed;
   left: 0;
   bottom: 54px;
   width: 58px;

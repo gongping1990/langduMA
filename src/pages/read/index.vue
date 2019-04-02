@@ -132,6 +132,7 @@
 import read from '../../components/read'
 import store from '../../store'
 import api from '../../request/api'
+import base from '../../request/base.js'
 
 export default {
   data () {
@@ -250,7 +251,7 @@ export default {
       });
       this.$refs.read.pause()
       wx.uploadFile({
-        url: 'https://huoke.test.k12.vip/declaim/common/uploadPublicFile', //开发者服务器 url
+        url: base.url + '/common/uploadPublicFile', //开发者服务器 url
         filePath: this.recorderSrc, //要上传文件资源的路径
         name: 'file', //文件对应的 key , 开发者在服务器端通过这个 key 可以获取到文件二进制内容
         header: {
@@ -513,6 +514,7 @@ export default {
     return {
       title: `我的孩子刚朗读了《${this.courseData.name}》，非常棒，请给TA点个赞吧！`,
       path: '/pages/share/main?id=' + this.workId,
+      imageUrl: 'https://pub.file.k12.vip/read/ldshared.jpeg',
       success: res => {
         this.showSuccessTwo = false
         this.showSuccess = false

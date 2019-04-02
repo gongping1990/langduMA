@@ -52,13 +52,12 @@
                src="https://pub.file.k12.vip/read/lesson/kczy-button-read.png" />
         <text class="action-text">朗读课文</text>
       </div>
-      <button v-if="userInfo.phone"
+      <!-- <button v-if="!userInfo.phone"
               class="play-btn"
               open-type="getPhoneNumber"
               @getphonenumber="getPhoneNumber">
-      </button>
-      <div v-if="!userInfo.phone"
-           class="play-btn"
+      </button> -->
+      <div class="play-btn"
            @tap="navigateTo('listen')"></div>
       <wux-badge :count="detailData.uploadworks">
         <div class="wdzp-btn">
@@ -176,6 +175,14 @@ export default {
     this.getCourseDetail()
 
     // let app = getApp()
+  },
+
+  onShareAppMessage () {
+    return {
+      title: '[获课朗读]一线名师和你一起朗读',
+      path: '/pages/index/main',
+      imageUrl: 'https://pub.file.k12.vip/read/ldshared.jpeg'
+    };
   }
 }
 </script>

@@ -247,6 +247,17 @@ export default {
     console.log('unload')
     this.globalData.audio.src = ''
     this.globalData.audio.stop()
+  },
+  onShareAppMessage () {
+    return {
+      title: `我的孩子刚朗读了《${this.courseData.name}》，非常棒，请给TA点个赞吧！`,
+      path: '/pages/index/main',
+      imageUrl: 'https://pub.file.k12.vip/read/zpshare.jpeg',
+      success: res => {
+        this.showSuccessTwo = false
+        this.showSuccess = false
+      }
+    };
   }
 }
 </script>

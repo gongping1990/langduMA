@@ -18,7 +18,9 @@
         </block>
       </swiper>
       <div class="news">
-        <image mode="widthFix" src="https://pub.file.k12.vip/read/home/icon-index-trumpet.png" class="news-image" />
+        <image mode="widthFix"
+               src="https://pub.file.k12.vip/read/home/icon-index-trumpet.png"
+               class="news-image" />
         <swiper class="news-swiper"
                 current="0"
                 circular
@@ -54,21 +56,24 @@
       </swiper>
     </div>
     <div class="home-good_list">
-      <div v-for="item in courseList" :key="item.id" class="home-good_item" @tap="goToDetails(item.id)">
+      <div v-for="item in courseList"
+           :key="item.id"
+           class="home-good_item"
+           @tap="goToDetails(item.id)">
         <div class="home-good_left">
           <text class="home-good_title">{{item.name}}</text>
           <text class="home-good_text">朗读老师：{{item.teacherName}}</text>
           <div class="home-good_num">{{item.alreadyread}} 位同学已会读</div>
         </div>
         <div class="home-good_right">
-          <image
-            class="home-good_image"
-            :src="item.comAchievement"
-            mode="widthFix"
-            lazy-load="false" />
+          <image class="home-good_image"
+                 :src="item.comAchievement"
+                 mode="widthFix"
+                 lazy-load="false" />
         </div>
       </div>
     </div>
+    <div class="card-mask" @click="clickCard"></div>
   </div>
 </template>
 
@@ -96,22 +101,22 @@ export default {
   },
 
   computed: {
-    userInfo() {
+    userInfo () {
       return store.state.userInfo
     }
   },
 
   watch: {
-    userInfo(n, o) {
-      if(n.id && !o.id) {
+    userInfo (n, o) {
+      if (n.id && !o.id) {
         this.getCourseList()
       }
     }
   },
 
-  onReachBottom() {
+  onReachBottom () {
     console.log(111)
-    if(this.courseList.length < this.total) {
+    if (this.courseList.length < this.total) {
       this.page.size += 10
       this.getCourseList()
     }
@@ -119,24 +124,34 @@ export default {
 
 
   methods: {
+    clickCard() {
+      wx.navigateTo({ url: '/pages/myCard/main' });
+    },
     // 获取banner列表
-    getBannerList() {
-      api.banner.listDefault().then(({data}) => {
+    getBannerList () {
+      api.banner.listDefault().then(({ data }) => {
         this.bannerList = data.resultData
       })
     },
     // 获取年级列表
-    getGradeList() {
-      api.grade.gradeList().then(({data}) => {
+    getGradeList () {
+      api.grade.gradeList().then(({ data }) => {
         let arr = []
         data.resultData.forEach((e, i) => {
-          let copyObj = Object.assign({}, e)
-          copyObj.semester = 1
-          copyObj.src = '"https://pub.file.k12.vip/read/home/fm/Courses cover' + (i + 1) + '.png"'
-          arr.push(copyObj)
-          e.semester = 2
-          e.src = '"https://pub.file.k12.vip/read/home/fm/Courses cover' + (i + 1) + '.png"'
-          arr.push(e)
+          if (e.id < 100) {
+            let copyObj = Object.assign({}, e)
+            copyObj.semester = 1
+            copyObj.src = '"https://pub.file.k12.vip/read/home/fm/Courses cover' + (i + (i + 1)) + '.png"'
+            arr.push(copyObj)
+            e.semester = 2
+            e.src = '"https://pub.file.k12.vip/read/home/fm/Courses cover' + (i + (i + 2)) + '.png"'
+            console.log(i)
+            arr.push(e)
+          } else {
+            e.src = '"https://pub.file.k12.vip/read/home/fm/Courses cover' + 100 + '.png"'
+            e.semester = 1
+            arr.push(e)
+          }
         })
         console.log(arr)
         this.classList = arr
@@ -152,19 +167,19 @@ export default {
      *  size: 条数
      * }
      */
-    getCourseList() {
-      api.course.queryPage(this.page).then(({data}) => {
+    getCourseList () {
+      api.course.queryPage(this.page).then(({ data }) => {
         this.courseList = data.resultData.records
         this.total = data.resultData.total
       })
     },
     // 获取荣誉播报
-    getBroadcastList() {
-      api.work.getBroadcastList().then(({data}) => {
+    getBroadcastList () {
+      api.work.getBroadcastList().then(({ data }) => {
         this.newsList = data.resultData
       })
     },
-    goToDetails(id) {
+    goToDetails (id) {
       wx.navigateTo({ url: '/pages/details/main?id=' + id });
     },
     swiperChange (e) {
@@ -202,10 +217,17 @@ export default {
     this.getBannerList()
     this.getGradeList()
     this.getBroadcastList()
-    if(this.userInfo.id) {
+    if (this.userInfo.id) {
       this.getCourseList()
     }
     // let app = getApp()
+  },
+  onShareAppMessage () {
+    return {
+      title: '[获课朗读]一线名师和你一起朗读',
+      path: '/pages/index/main',
+      imageUrl: 'https://pub.file.k12.vip/read/ldshared.jpeg'
+    };
   }
 }
 </script>
@@ -267,6 +289,7 @@ export default {
   }
   .class-list {
     padding-top: 24px;
+    background-color: #D5ECF7;
     &_swiper {
       height: 96px;
     }

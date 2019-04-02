@@ -152,6 +152,13 @@ export default {
   onUnload () {
     console.log('unload')
     this.globalData.audio.stop()
+  },
+  onShareAppMessage () {
+    return {
+      title: '[获课朗读]一线名师和你一起朗读',
+      path: '/pages/index/main',
+      imageUrl: 'https://pub.file.k12.vip/read/ldshared.jpeg'
+    };
   }
 }
 </script>

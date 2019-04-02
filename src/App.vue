@@ -135,4 +135,12 @@ button::after {
 button {
   background-color: transparent !important;
 }
+.card-mask {
+  position: absolute;
+  left: 0;
+  bottom: 54px;
+  width: 58px;
+  height: 74px;
+  @include bg('/ldcard/icon-card.png');
+}
 </style>

@@ -514,7 +514,7 @@ export default {
     return {
       title: `我的孩子刚朗读了《${this.courseData.name}》，非常棒，请给TA点个赞吧！`,
       path: '/pages/share/main?id=' + this.workId,
-      imageUrl: 'https://pub.file.k12.vip/read/ldshared.jpeg',
+      imageUrl: 'https://pub.file.k12.vip/read/zpshare.jpeg',
       success: res => {
         this.showSuccessTwo = false
         this.showSuccess = false

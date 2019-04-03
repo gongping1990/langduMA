@@ -96,6 +96,7 @@
     },
 
     onShow() {
+      wx.hideShareMenu()
       this.getWorkList();
       this.getMessageInfo();
     },

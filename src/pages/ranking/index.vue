@@ -521,7 +521,6 @@ export default {
 
         .-left-down {
           display: flex;
-          justify-content: space-between;
           align-items: center;
 
           &-text {
@@ -540,6 +539,10 @@ export default {
               width: 11px;
               height: 11px;
             }
+          }
+
+          &-text:last-child{
+            margin-left: 24px;
           }
         }
       }

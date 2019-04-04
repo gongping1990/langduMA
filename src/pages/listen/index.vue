@@ -76,7 +76,7 @@ import store from '../../store'
 export default {
   data () {
     return {
-      gradeArr: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '初中'],
+      gradeArr: ['一年级', '二年级', '三年级', '四年级', '五年级', '六年级', '初中', '古诗'],
       courseData: {},
       detailData: {},
       showReadComponent: true,
@@ -102,7 +102,13 @@ export default {
       if(!this.courseData.grade) {
         return ''
       }
-      return `${this.gradeArr[this.courseData.grade]}·${this.courseData.semester == 1 ? '上册' : '下册'}`
+
+      if(this.courseData.grade == 100) {
+        return '古诗'
+      } else {
+        return `${this.gradeArr[this.courseData.grade - 1]}·${this.courseData.semester == 1 ? '上册' : '下册'}`
+      }
+
     },
     userInfo () {
       return store.state.userInfo

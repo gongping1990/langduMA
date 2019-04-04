@@ -49,7 +49,7 @@
                  :style="'background-image:url(' + item.src + ')'"
                  :class="classIndex == index ? 'active' : ''">
               <text class="class-name">{{item.name}}</text>
-              <text class="class-text">{{item.semester == 1 ? '上册' : '下册'}}</text>
+              <text class="class-text" v-if="item.id < 100">{{item.semester == 1 ? '上册' : '下册'}}</text>
             </div>
           </swiper-item>
         </block>

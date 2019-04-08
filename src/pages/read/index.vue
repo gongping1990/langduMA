@@ -141,12 +141,17 @@ var COS = require('cos-wx-sdk-v5')
 var cos = new COS({
   // ForcePathStyle: true, // 如果使用了很多存储桶，可以通过打开后缀式，减少配置白名单域名数量，请求时会用地域域名
   getAuthorization: function (options, callback) {
+    console.log("options==>",options)
     // 异步获取签名
     wx.request({
       url: baseApi.url + '/common/getAudioCosSign',
       method: 'POST',
       data: {
-        path: options.Key
+        //  Method: options.Method,
+          path: options.Pathname
+      },
+      header: {
+        'content-type': 'application/x-www-form-urlencoded' // 默认值
       },
       dataType: 'text',
       success: function (result) {
@@ -272,24 +277,33 @@ export default {
       this.recorder.pause()
     },
     clickSave () {
-      let filename = this.recorderSrc.substr(this.recorderSrc.lastIndexOf('/') + 1);
-      console.log(filename)
+      let filename = this.recorderSrc.substr(this.recorderSrc.lastIndexOf('=') + 1);
+      let nowd = new Date();
+      let path = "declaim_audio/"+nowd.getFullYear()+"/"+nowd.getMonth()+"/"+nowd.getDate()+"/"+filename
+      console.log(path)
+      console.log('this.recorderSrc',this.recorderSrc)
       wx.showLoading({
         title: '保存中...', //提示的内容,
         mask: true, //显示透明蒙层，防止触摸穿透,
         success: res => { }
       });
       this.$refs.read.pause()
-      cos.putObject({
+      cos.postObject({
         Bucket: 'huoke-public-1254282420',
         Region: 'ap-chengdu',
-        Key: filename,
+        Key: path,
         FilePath: this.recorderSrc,
         onProgress: function (info) {
-          console.log(JSON.stringify(info));
+          console.log("上传进度==>",JSON.stringify(info));
         }
-      }, function (err, data) {
-        console.log(err || data);
+      }, (err, data) => {
+        if(err){
+          console.log("postObject err",err);
+          wx.hideLoading();
+        }else if(data && data.statusCode==200){
+          console.log("postObject data",data);
+          this.saveFile("https://pub.file.k12.vip"+data.Location.substr(data.Location.indexOf('/')))
+        }
       });
       // wx.uploadFile({
       //   url: base.url + '/common/uploadPublicFile', //开发者服务器 url

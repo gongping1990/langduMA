@@ -11,6 +11,9 @@ const common = {
   },
   showprice() {
     return axios.get('/common/showprice')
+  },
+  getAudioCosSign() {
+    return axios.post('/common/getAudioCosSign')
   }
 }
 

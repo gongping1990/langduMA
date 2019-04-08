@@ -96,7 +96,8 @@
     <wux-popup :visible="showSuccessTwo"
                @close="changeSuccessPopupTwo">
       <div class="reset-popup">
-        <div class="reset-popup_close" @tap="changeSuccessPopupTwo"></div>
+        <div class="reset-popup_close"
+             @tap="changeSuccessPopupTwo"></div>
         <div class="reset-popup_icon"></div>
         <text class="reset-popup_text">恭喜你录制完成 </text>
         <text class="reset-popup_content">赶快分享到班级群</text>
@@ -132,8 +133,34 @@
 import read from '../../components/read'
 import store from '../../store'
 import api from '../../request/api'
+import baseApi from '../../request/base.js'
 import base from '../../request/base.js'
 
+var COS = require('cos-wx-sdk-v5')
+
+var cos = new COS({
+  // ForcePathStyle: true, // 如果使用了很多存储桶，可以通过打开后缀式，减少配置白名单域名数量，请求时会用地域域名
+  getAuthorization: function (options, callback) {
+    // 异步获取签名
+    wx.request({
+      url: baseApi.url + '/common/getAudioCosSign',
+      method: 'POST',
+      data: {
+        path: options.Key
+      },
+      dataType: 'text',
+      success: function (result) {
+        console.log(result)
+        var data = JSON.parse(result.data);
+        var credentials = data.credentials;
+        callback({
+          Authorization: data.resultData.sign
+          // XCosSecurityToken: data.XCosSecurityToken, // 如果是临时密钥计算出来的签名，需要提供 XCosSecurityToken
+        });
+      }
+    });
+  }
+});
 export default {
   data () {
     return {
@@ -202,6 +229,7 @@ export default {
         console.log('pause')
       })
       this.recorder.onStop((e) => {
+        console.log(e)
         console.log(!this.destroy)
         if (!this.destroy) {
           this.isPlay = false
@@ -244,24 +272,37 @@ export default {
       this.recorder.pause()
     },
     clickSave () {
+      let filename = this.recorderSrc.substr(this.recorderSrc.lastIndexOf('/') + 1);
+      console.log(filename)
       wx.showLoading({
         title: '保存中...', //提示的内容,
         mask: true, //显示透明蒙层，防止触摸穿透,
         success: res => { }
       });
       this.$refs.read.pause()
-      wx.uploadFile({
-        url: base.url + '/common/uploadPublicFile', //开发者服务器 url
-        filePath: this.recorderSrc, //要上传文件资源的路径
-        name: 'file', //文件对应的 key , 开发者在服务器端通过这个 key 可以获取到文件二进制内容
-        header: {
-          'content-type': 'multipart/form-data'
-        },
-        success: res => {
-          let data = JSON.parse(res.data)
-          this.saveFile(data.resultData.url)
-        },
+      cos.putObject({
+        Bucket: 'huoke-public-1254282420',
+        Region: 'ap-chengdu',
+        Key: filename,
+        FilePath: this.recorderSrc,
+        onProgress: function (info) {
+          console.log(JSON.stringify(info));
+        }
+      }, function (err, data) {
+        console.log(err || data);
       });
+      // wx.uploadFile({
+      //   url: base.url + '/common/uploadPublicFile', //开发者服务器 url
+      //   filePath: this.recorderSrc, //要上传文件资源的路径
+      //   name: 'file', //文件对应的 key , 开发者在服务器端通过这个 key 可以获取到文件二进制内容
+      //   header: {
+      //     'content-type': 'multipart/form-data'
+      //   },
+      //   success: res => {
+      //     let data = JSON.parse(res.data)
+      //     this.saveFile(data.resultData.url)
+      //   },
+      // });
     },
     saveFile (voiceUrl) {
 
@@ -579,7 +620,6 @@ export default {
       right: 16px;
       width: 15px;
       height: 15px;
-
     }
     &_text {
       font-size: 20px;

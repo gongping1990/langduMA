@@ -23,6 +23,7 @@
     "build": "node build/build.js wx"
   },
   "dependencies": {
+    "cos-wx-sdk-v5": "^0.7.1",
     "mpvue": "^2.0.0",
     "vuex": "^3.0.1",
     "weapp-cookie": "^1.3.5"

@@ -196,6 +196,7 @@ export default {
 
   computed: {
     userInfo () {
+      console.log(store.state.userInfo, 'userInfo')
       return store.state.userInfo
     }
   },
@@ -275,9 +276,9 @@ export default {
     },
     clickSave () {
       let nowd = new Date();
-      let filename = nowd.getTime()+this.recorderSrc.substr(this.recorderSrc.lastIndexOf('.'));
+      let filename = this.userInfo.id + (nowd.getTime()+this.recorderSrc.substr(this.recorderSrc.lastIndexOf('.')));
       let path = "declaim_audio/"+nowd.getFullYear()+"/"+nowd.getMonth()+"/"+nowd.getDate()+"/"+filename
-      console.log(path)
+      console.log(filename,path)
       console.log('this.recorderSrc',this.recorderSrc)
       wx.showLoading({
         title: '保存中...', //提示的内容,
@@ -294,10 +295,17 @@ export default {
           console.log("上传进度==>",JSON.stringify(info));
         }
       }, (err, data) => {
+        wx.hideLoading();
         if(err){
           console.log("postObject err",err);
 
-          wx.hideLoading();
+          wx.showToast({
+            title: '保存失败', //提示的内容,
+            icon: 'error', //图标,
+            duration: 2000, //延迟时间,
+            mask: true, //显示透明蒙层，防止触摸穿透,
+            success: res => {}
+          });
         }else if(data && data.statusCode==200){
           console.log("postObject data",data);
           this.saveFile("https://pub.file.k12.vip"+data.Location.substr(data.Location.indexOf('/')))

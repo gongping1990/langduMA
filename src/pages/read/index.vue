@@ -141,7 +141,6 @@ var COS = require('cos-wx-sdk-v5')
 var cos = new COS({
   // ForcePathStyle: true, // 如果使用了很多存储桶，可以通过打开后缀式，减少配置白名单域名数量，请求时会用地域域名
   getAuthorization: function (options, callback) {
-    console.log("options==>",options)
     // 异步获取签名
     wx.request({
       url: baseApi.url + '/common/getAudioCosSign',
@@ -155,11 +154,9 @@ var cos = new COS({
       },
       dataType: 'text',
       success: function (result) {
-        console.log(result)
         var data = JSON.parse(result.data);
-        var credentials = data.credentials;
         callback({
-          Authorization: data.resultData.sign
+          Authorization: data.resultData
           // XCosSecurityToken: data.XCosSecurityToken, // 如果是临时密钥计算出来的签名，需要提供 XCosSecurityToken
         });
       }
@@ -277,8 +274,8 @@ export default {
       this.recorder.pause()
     },
     clickSave () {
-      let filename = this.recorderSrc.substr(this.recorderSrc.lastIndexOf('=') + 1);
       let nowd = new Date();
+      let filename = nowd.getTime()+this.recorderSrc.substr(this.recorderSrc.lastIndexOf('.'));
       let path = "declaim_audio/"+nowd.getFullYear()+"/"+nowd.getMonth()+"/"+nowd.getDate()+"/"+filename
       console.log(path)
       console.log('this.recorderSrc',this.recorderSrc)
@@ -299,6 +296,7 @@ export default {
       }, (err, data) => {
         if(err){
           console.log("postObject err",err);
+
           wx.hideLoading();
         }else if(data && data.statusCode==200){
           console.log("postObject data",data);

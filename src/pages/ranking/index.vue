@@ -22,7 +22,7 @@
             <div class="-one-img">
               <img class="-one-img-header"
                    @click="lookOtherWorks(twoInfo.userId)"
-                   :src="twoInfo.headimgurl">
+                   :src="twoInfo.headimage">
             </div>
             <div class="-one-name">
               {{twoInfo.nickname}}
@@ -30,7 +30,7 @@
             <div class="-one-num">
               <img class="-one-num-img"
                    src="https://pub.file.k12.vip/read/wind/icon-good2.png" />
-              <span>{{twoInfo.count}}</span>
+              <span>{{twoInfo.likes}}</span>
             </div>
             <img class="-one-image"
                  src="https://pub.file.k12.vip/read/wind/2.png" />
@@ -41,13 +41,13 @@
                    src="https://pub.file.k12.vip/read/rank/icon-head champion.png" />
               <img class="-two-img-header"
                    @click="lookOtherWorks(oneInfo.userId)"
-                   :src="oneInfo.headimgurl">
+                   :src="oneInfo.headimage">
             </div>
             <div class="-two-name">{{oneInfo.nickname}}</div>
             <div class="-two-num">
               <img class="-two-num-img"
                    src="https://pub.file.k12.vip/read/wind/icon-good1.png" />
-              <span>{{oneInfo.count}}</span>
+              <span>{{oneInfo.likes}}</span>
             </div>
             <img class="-two-image"
                  src="https://pub.file.k12.vip/read/wind/1.png" />
@@ -56,13 +56,13 @@
             <div class="-one-img">
               <img class="-one-img-header"
                    @click="lookOtherWorks(threeInfo.userId)"
-                   :src="threeInfo.headimgurl" />
+                   :src="threeInfo.headimage" />
             </div>
             <div class="-one-name">{{threeInfo.nickname}}</div>
             <div class="-one-num -three-num">
               <img class="-one-num-img"
                    src="https://pub.file.k12.vip/read/wind/icon-good3.png" />
-              <span>{{threeInfo.count}}</span>
+              <span>{{threeInfo.likes}}</span>
             </div>
             <img class="-one-image -three-image"
                  src="https://pub.file.k12.vip/read/wind/3.png" />
@@ -193,9 +193,12 @@ export default {
       api.user.getTopThreeRank()
         .then(({ data }) => {
           this.isShowTop = data.resultData.length != 0;
-          this.oneInfo = data.resultData.length == 1 && data.resultData[0];
-          this.twoInfo = data.resultData.length == 2 && data.resultData[1];
-          this.threeInfo = data.resultData.length == 3 && data.resultData[2];
+          if (data.resultData.length) {
+            this.oneInfo = data.resultData[0];
+            this.twoInfo = data.resultData[1];
+            this.threeInfo = data.resultData[2];
+          }
+
           this.isFetching = false;
         }, () => {
           this.isFetching = false;

@@ -39,7 +39,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 13,
+			"current": 9,
 			"list": [
 				{
 					"id": 0,
@@ -105,9 +105,9 @@
 					"scene": null
 				},
 				{
-					"id": -1,
-					"name": "我的",
-					"pathName": "pages/user/main",
+					"id": 9,
+					"name": "风采",
+					"pathName": "pages/ranking/main",
 					"query": "",
 					"scene": null
 				},

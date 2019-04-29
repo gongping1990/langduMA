@@ -307,7 +307,7 @@
 
             .-share-img {
               width: 28px;
-              height: 29px;
+              height: 28px;
             }
           }
         }

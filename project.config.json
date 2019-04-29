@@ -39,7 +39,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 9,
+			"current": 14,
 			"list": [
 				{
 					"id": 0,
@@ -137,6 +137,13 @@
 					"name": "单课作品",
 					"pathName": "pages/popularityRank/main",
 					"query": "type=2&id=1111624285481439234&name=识字2.金木水火土",
+					"scene": null
+				},
+				{
+					"id": 14,
+					"name": "我的成就卡",
+					"pathName": "pages/myWorks/main",
+					"query": "id=1111624192804098050&name=识字1.天地人",
 					"scene": null
 				}
 			]

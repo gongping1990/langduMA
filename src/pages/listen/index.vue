@@ -1,5 +1,5 @@
 <template>
-  <div class="read">
+  <div class="read"  :class="{share: share}">
     <!-- <div class="introduce"
          v-if="!hideIntroduce"
          :class="{'show': showIntroduce}">
@@ -275,8 +275,11 @@ export default {
   background-color: #edfff8;
   overflow: hidden;
   background: url('https://pub.file.k12.vip/read/mingshifandu/backgroud.png')
-    no-repeat 0 80%;
+    no-repeat 0 70%;
   background-size: 100%;
+  &.share {
+    background-position-y: bottom;
+  }
   .more-course {
     @include flex-center;
     position: absolute;

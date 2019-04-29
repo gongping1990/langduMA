@@ -613,11 +613,11 @@ export default {
       transform: translateY(-50%);
     }
     &-right {
-      right: 0;
+      right: -10px;
     }
     &-left {
       @include bg('/read/luzhi/zyld-icon-microphone-l.png');
-      left: 0;
+      left: -10px;
     }
   }
   .success-tc {

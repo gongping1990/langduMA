@@ -9,8 +9,8 @@
             <wux-progress status="normal"
                           :percent="percentInfo"
                           strokeWidth="2"
-                          activeColor="#30C0FF"
-                          backgroundColor="#f3f3f3" />
+                          activeColor="#36DBA4"
+                          backgroundColor="#CEF7E9" />
           </div>
           <span class="-end">{{duration}}</span>
         </div>
@@ -20,10 +20,10 @@
         <div class="-header-right-img">
           <img v-if="!isPlay"
                class="-img"
-               src="https://pub.file.k12.vip/read/lesson/kczy-button-play.png" />
+               src="https://pub.file.k12.vip/read/fenxiang/button-play.png" />
           <img v-if="isPlay"
                class="-img"
-               src="https://pub.file.k12.vip/2019/03/29/1111513347918516225.png" />
+               src="https://pub.file.k12.vip/read/fenxiang/zyld-button-pause.png" />
         </div>
       </div>
     </div>
@@ -54,7 +54,7 @@
                v-if="!shareInfo.liked">
             <img @click="likeFn"
                  class="-img"
-                 src="https://pub.file.k12.vip/read/button-good.png" />
+                 src="https://pub.file.k12.vip/read/fenxiang/button-good.png" />
           </div>
           <div class="-body-img-mask"
                v-if="!shareInfo.liked"></div>
@@ -66,6 +66,10 @@
           </div>
         </div>
       </div>
+      <div class="ld-share-footer">
+        <div class="-footer-btn"
+             @click="toListen">名师朗读欣赏</div>
+      </div>
       <div class="-content-footer">
         <div class="-content-footer-text"
              @click="toReport">
@@ -74,10 +78,6 @@
                src="https://pub.file.k12.vip/read/icon-report.png" />
         </div>
       </div>
-    </div>
-    <div class="ld-share-footer">
-      <div class="-footer-btn"
-           @click="toListen">名师朗读欣赏</div>
     </div>
 
     <wux-popup :visible="isOpenReport"
@@ -270,6 +270,11 @@ export default {
 
 <style lang="scss" scoped>
 .ld-share {
+  @include bg('/read/luzhi/background copy 2.png');
+  background-position-y: bottom;
+  padding: 1px 0;
+  padding-bottom: 129px;
+  background-color: #edfff8;
   &-header {
     display: flex;
     justify-content: space-between;
@@ -278,7 +283,7 @@ export default {
     margin: 16px 24px 24px;
     height: 87px;
     background: rgba(255, 255, 255, 1);
-    box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
+    box-shadow: 0px 2px 10px 0px rgba(177, 238, 214, 1);
     border-radius: 16px;
 
     .-header-left {
@@ -347,6 +352,7 @@ export default {
       }
 
       &-text {
+        color: #324062;
         font-size: 20px;
         line-height: 28px;
 
@@ -367,7 +373,7 @@ export default {
 
     .-content-body {
       position: relative;
-      margin-top: 32px;
+      margin-top: 12px;
 
       .-body-img {
         position: relative;
@@ -377,8 +383,8 @@ export default {
         margin: 0 auto;
         width: 150px;
         height: 200px;
-        background: rgba(74, 74, 74, 1);
-        box-shadow: 0px 6px 16px 0px rgba(48, 192, 255, 0.5);
+        background: rgba(128, 128, 128, 0.5);
+        box-shadow: 0px 8px 16px -2px rgba(169, 221, 201, 1);
         border-radius: 6px;
 
         &-mask {
@@ -423,7 +429,6 @@ export default {
     .-content-footer {
       display: flex;
       justify-content: flex-end;
-      margin-top: 65px;
       padding: 0 24px;
 
       &-text {
@@ -444,18 +449,19 @@ export default {
   }
 
   &-footer {
-    padding: 0 24px;
-    margin: 24px 0;
+    padding-top: 36px;
+    padding-bottom: 17px;
     text-align: center;
 
     .-footer-btn {
+      margin: 0 auto;
+      width: 170px;
       height: 52px;
-      background: #ffffff;
+      background: rgba(54, 219, 164, 1);
       border-radius: 26px;
-      border: 1px solid rgba(48, 192, 255, 0.24);
       font-size: 15px;
       font-weight: 500;
-      color: #30c0ff;
+      color: #fff;
       line-height: 52px;
     }
   }
@@ -488,11 +494,7 @@ export default {
     }
 
     .-popup-btn {
-      background: linear-gradient(
-        90deg,
-        rgba(102, 255, 248, 1) 0%,
-        rgba(48, 192, 255, 1) 100%
-      );
+      background:linear-gradient(270deg,rgba(72,229,186,1) 0%,rgba(57,225,192,1) 100%);
       border-radius: 26px;
       text-align: center;
       margin: 33px 32px 23px 32px;

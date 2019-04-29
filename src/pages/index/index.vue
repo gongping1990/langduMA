@@ -69,7 +69,7 @@
         </div>
         <div class="home-good_right">
           <text class="home-good_title">{{item.name}}</text>
-          <text class="home-good_text">{{item.remark}}dsadasd</text>
+          <text class="home-good_text">{{item.remark}}</text>
           <div class="home-good_footer">
             <span class="home-good_span"><i class="home-good_span_icon teacher"></i>朗读老师：{{item.teacherName}}</span>
             <div class="home-good_num">
@@ -245,6 +245,7 @@ export default {
   &-good {
     &_span {
       @include flex-center;
+      margin-right: 12px;
       font-size: 10px;
       color: #707374;
       &_icon {
@@ -386,6 +387,7 @@ export default {
       height: 28px;
     }
     &-text {
+      color: #324062;
       font-size: 13px;
       line-height: 28px;
     }

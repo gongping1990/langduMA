@@ -66,14 +66,14 @@
 					"id": 3,
 					"name": "阅读",
 					"pathName": "pages/listen/main",
-					"query": "id=1111624192804098050",
+					"query": "id=1111624192804098050&share=1",
 					"scene": null
 				},
 				{
 					"id": 4,
 					"name": "分享",
 					"pathName": "pages/share/main",
-					"query": "id=1111192430139002882",
+					"query": "id=1122770679151951874",
 					"scene": null
 				},
 				{

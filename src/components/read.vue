@@ -415,18 +415,15 @@ export default {
 }
 .share-btn {
   @include flex-center;
+  margin: 0 auto;
   margin-top: 15px;
-  width: 327px;
-  height: 42px;
+  width: 186px;
+  height: 48px;
   font-size: 15px;
   font-weight: 500;
-  color: #fff;
-  background: linear-gradient(
-    90deg,
-    rgba(151, 240, 94, 1) 0%,
-    rgba(56, 226, 146, 1) 100%
-  );
-  box-shadow: 0px 3px 8px -3px rgba(183, 242, 175, 0.4);
+  color: #42DBA6;
+  background: #fff;
+  box-shadow:0px 3px 8px -3px rgba(63,213,161,1);
   border-radius: 26px;
 }
 .mask-top {
@@ -468,7 +465,7 @@ export default {
 .control {
   position: absolute;
   padding: 24px;
-  padding-bottom: 45px;
+  padding-bottom: 33px;
   bottom: 0;
   left: 0;
   right: 0;

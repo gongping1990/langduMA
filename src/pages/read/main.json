@@ -1,7 +1,6 @@
 {
   "navigationBarTitleText": "自由朗读",
-  "navigationBarBackgroundColor": "#01141D",
-  "navigationBarTextStyle": "white",
+  "navigationBarBackgroundColor": "#F8FFFD",
   "usingComponents": {
     "wux-circle": "/static/wux/circle/index",
     "wux-popup": "/static/wux/popup/index"

@@ -19,7 +19,7 @@
       </swiper>
       <div class="news">
         <image mode="widthFix"
-               src="https://pub.file.k12.vip/read/home/icon-index-trumpet.png"
+               src="https://pub.file.k12.vip/read/shouye/icon-index-trumpet.png"
                class="news-image" />
         <swiper class="news-swiper"
                 current="0"
@@ -49,7 +49,8 @@
                  :style="'background-image:url(' + item.src + ')'"
                  :class="classIndex == index ? 'active' : ''">
               <text class="class-name">{{item.name}}</text>
-              <text class="class-text" v-if="item.id < 100">{{item.semester == 1 ? '上册' : '下册'}}</text>
+              <text class="class-text"
+                    v-if="item.id < 100">{{item.semester == 1 ? '上册' : '下册'}}</text>
             </div>
           </swiper-item>
         </block>
@@ -61,19 +62,27 @@
            class="home-good_item"
            @tap="goToDetails(item.id)">
         <div class="home-good_left">
-          <text class="home-good_title">{{item.name}}</text>
-          <text class="home-good_text">朗读老师：{{item.teacherName}}</text>
-          <div class="home-good_num">{{item.alreadyread}} 位同学已会读</div>
-        </div>
-        <div class="home-good_right">
           <image class="home-good_image"
                  :src="item.comAchievement"
                  mode="widthFix"
                  lazy-load="false" />
         </div>
+        <div class="home-good_right">
+          <text class="home-good_title">{{item.name}}</text>
+          <text class="home-good_text">{{item.remark}}dsadasd</text>
+          <div class="home-good_footer">
+            <span class="home-good_span"><i class="home-good_span_icon teacher"></i>朗读老师：{{item.teacherName}}</span>
+            <div class="home-good_num">
+              <span class="home-good_span"><i class="home-good_span_icon watch"></i>{{item.nowlistening}}</span>
+              <span class="home-good_span"><i class="home-good_span_icon read"></i>{{item.works}}</span>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
-    <div class="card-mask" @click="clickCard"></div>
+    <div class="card-mask"
+         @click="clickCard"></div>
   </div>
 </template>
 
@@ -115,7 +124,6 @@ export default {
   },
 
   onReachBottom () {
-    console.log(111)
     if (this.courseList.length < this.total) {
       this.page.size += 10
       this.getCourseList()
@@ -124,7 +132,7 @@ export default {
 
 
   methods: {
-    clickCard() {
+    clickCard () {
       wx.navigateTo({ url: '/pages/myCard/main' });
     },
     // 获取banner列表
@@ -145,7 +153,7 @@ export default {
             arr.push(copyObj)
             e.semester = 2
             e.src = '"https://pub.file.k12.vip/read/home/fm/Courses cover' + (i + (i + 2)) + '.png"'
-            console.log(i)
+
             arr.push(e)
           } else {
             e.src = '"https://pub.file.k12.vip/read/home/fm/Courses cover' + 100 + '.png"'
@@ -153,7 +161,7 @@ export default {
             arr.push(e)
           }
         })
-        console.log(arr)
+
         this.classList = arr
       })
     },
@@ -235,6 +243,29 @@ export default {
 <style lang="scss" scoped>
 .home {
   &-good {
+    &_span {
+      @include flex-center;
+      font-size: 10px;
+      color: #707374;
+      &_icon {
+        margin-right: 3px;
+        &.teacher {
+          @include bg('/read/shouye/1.png');
+          width: 10px;
+          height: 12px;
+        }
+        &.watch {
+          @include bg('/read/shouye/icon-index-look.png');
+          width: 12px;
+          height: 8px;
+        }
+        &.read {
+          @include bg("/read/shouye/icon-index-read.png");
+          width: 9px;
+          height: 10px;
+        }
+      }
+    }
     &_image {
       width: 63px;
       height: 84px;
@@ -244,15 +275,26 @@ export default {
     }
     &_item {
       @include flex-center;
+      position: relative;
       justify-content: space-between;
       padding: 20px 25px;
-    }
-    &_left {
-      @include flex-column-center;
-      align-items: flex-start;
-      border-bottom: 1px solid rgba($color: #000000, $alpha: 0.08);
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 24px;
+        width: 248px;
+        height: 1px;
+        background-color: rgba(0, 0, 0, 0.08);
+      }
     }
     &_right {
+      @include flex-column-center;
+      align-items: flex-start;
+      flex: 1;
+    }
+    &_left{
+      margin-right: 20px;
       width: 63px;
       height: 84px;
       box-shadow: 0px 3px 8px 0px rgba(0, 0, 0, 0.1);
@@ -260,28 +302,24 @@ export default {
       overflow: hidden;
     }
     &_title {
-      font-size: 17px;
-      color: #4a4a4a;
+      font-size: 20px;
+      color: #1D1B1B;
       font-weight: 500;
-      line-height: 24px;
+      line-height: 28px;
     }
     &_text {
-      margin-top: 4px;
-      font-size: 12px;
-      font-size: #4a4a4a;
+      font-size: 10px;
+      font-size: #707374;
+      line-height: 14px;
+    }
+    &_footer {
+      @include flex-center;
+      justify-content: space-between;
+      margin-top: 20px;
+      width: 100%;
     }
     &_num {
-      box-sizing: border-box;
-      margin-top: 17px;
-      margin-bottom: 16px;
-      padding-left: 8px;
-      width: 224px;
-      height: 22px;
-      font-size: 12px;
-      line-height: 22px;
-      color: #9b9b9b;
-      background: rgba(247, 247, 247, 1);
-      border-radius: 5px;
+      @include flex-center;
     }
   }
   &-banner {
@@ -289,7 +327,7 @@ export default {
   }
   .class-list {
     padding-top: 24px;
-    background-color: #D5ECF7;
+    background-color: #d5ecf7;
     &_swiper {
       height: 96px;
     }
@@ -340,8 +378,8 @@ export default {
     @include flex-center;
     padding: 24px;
     &-image {
-      width: 31px;
-      margin-right: 12px;
+      width: 18px;
+      margin-right: 16px;
     }
     &-swiper {
       width: 100%;

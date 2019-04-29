@@ -8,6 +8,7 @@
            @touchend="touchend"
            @touchstart="touchstart">
         <div class="lyric-index"
+             :class="{isIos: isIos}"
              v-if="showLine">
           <text class="lyric-index_text">第{{indexArr[lyricIndex]}}句</text>
           <div class="lyric-index_line"></div>
@@ -106,7 +107,7 @@ export default {
     },
     showLine: {
       type: Boolean,
-      default: false
+      default: true
     },
     swiperHeight: {
       type: Number,
@@ -140,7 +141,8 @@ export default {
       proIndex: 0,
       tapSwiper: false,
       timer: null,
-      paused: true
+      paused: true,
+      isIos: false
     }
   },
 
@@ -168,11 +170,9 @@ export default {
 
   methods: {
     play () {
-      console.log('clickPlay')
       this.audio.play()
     },
     pause () {
-      console.log('clickPause')
       this.audio.pause()
     },
     stop () {
@@ -191,7 +191,6 @@ export default {
       return true
     },
     clickPlay () {
-      console.log(this.audio.paused)
       if (this.audio.paused) {
         this.audio.play()
       } else {
@@ -206,19 +205,16 @@ export default {
       this.$emit('next')
     },
     clickPrev () {
-      console.log(this.lyricArr[this.lyricIndex][0])
       this.audio.seek(this.lyricArr[this.lyricIndex - 1][0])
       this.$emit('prev')
     },
     touchend () {
       clearTimeout(this.timer)
       this.timer = setTimeout(() => {
-        console.log('end')
         this.tapSwiper = false
       }, 4000);
     },
     touchstart () {
-      console.log('start')
       this.tapSwiper = true
     },
     changeLyric (e) {
@@ -228,11 +224,9 @@ export default {
       this.$emit('clickList')
     },
     parseLyric (text) {
-      console.log(text, 111)
       let result = [];
       let lines = text.split(/\n/), //切割每一行
         pattern = /\[\d{2}:\d{2}.\d{2}\]/g; //用于匹配时间的正则表达式，匹配的结果类似[xx:xx.xx]
-      console.log(lines)
       //去掉不含时间的行
 
       //上面用'\n'生成数组时，结果中最后一个为空元素，这里将去掉
@@ -267,7 +261,6 @@ export default {
       return result
     },
     initAudio () {
-      console.log(111)
       this.audio.src = this.lyricSrc
       if (this.autoplay) {
         setTimeout(() => {
@@ -277,7 +270,6 @@ export default {
 
       this.audio.onPlay(() => {
         this.paused = false
-        console.log('play')
         this.$emit('paused', this.audio.paused)
         this.$emit('play')
       })
@@ -289,7 +281,6 @@ export default {
       })
 
       this.audio.onStop(() => {
-        console.log('stop')
         this.paused = true
         this.progress = 0
         this.startTime = '00:00'
@@ -297,7 +288,6 @@ export default {
       })
 
       this.audio.onEnded(() => {
-        console.log('end')
         this.progress = 0
         this.lyricIndex = 0
         this.paused = true
@@ -362,8 +352,11 @@ export default {
     }
   },
   mounted () {
-    console.log(111)
-    console.log('show read')
+    wx.getSystemInfo({
+      success: (res) => {
+        this.isIos = res.model.indexOf('iPhone') != -1
+      }
+    })
     if (this.lyricText) {
       this.lyricArr = this.sliceNull(this.parseLyric(this.lyricText))
     }
@@ -381,7 +374,6 @@ export default {
       this.timer = null
       this.paused = true
     }, 1000);
-    console.log('hide')
   },
   onUnload () {
     this.audio.stop()
@@ -394,8 +386,6 @@ export default {
       this.timer = null
       this.paused = true
     }, 1000);
-
-    console.log('Unload ')
   }
 }
 </script>
@@ -405,12 +395,15 @@ export default {
   @include flex-center;
   justify-content: flex-start;
   position: absolute;
-  top: 50%;
+  top: 52%;
   left: 16px;
   right: 16px;
   font-size: 10px;
-  color: rgba($color: #fff, $alpha: 0.75);
+  color: #5E677B;
   transform: translateY(-50%);
+  &.isIos {
+    top: 50%;
+  }
   &-text {
     width: 60px;
   }
@@ -444,8 +437,8 @@ export default {
   height: 21px;
   background: linear-gradient(
     360deg,
-    rgba(1, 20, 29, 0) 0%,
-    rgba(1, 20, 29, 1) 100%
+    rgba(237, 255, 248, 0) 0%,
+    rgba(237, 255, 248, 1) 100%
   );
   z-index: 9;
 }
@@ -457,16 +450,16 @@ export default {
   height: 21px;
   background: linear-gradient(
     180deg,
-    rgba(1, 20, 29, 0) 0%,
-    rgba(1, 20, 29, 1) 100%
+    rgba(237, 255, 248, 0) 0%,
+    rgba(237, 255, 248, 1) 100%
   );
   z-index: 9;
 }
 .play-btn {
   @include bg('/read/msfd-button-pause.png');
   margin: 0 40px;
-  width: 48px;
-  height: 48px;
+  width: 66px;
+  height: 66px;
   border-radius: 50%;
   &.pause {
     @include bg('/read/msfd-button-play.png');
@@ -475,6 +468,7 @@ export default {
 .control {
   position: absolute;
   padding: 24px;
+  padding-bottom: 45px;
   bottom: 0;
   left: 0;
   right: 0;
@@ -483,9 +477,10 @@ export default {
     width: 72px;
     height: 36px;
     font-size: 12px;
+    font-weight: bold;
     color: rgba($color: #fff, $alpha: 0.75);
     border-radius: 18px;
-    border: 1px solid rgba(255, 255, 255, 0.16);
+    border: 1px solid #fff;
   }
   &-content {
     @include flex-center;
@@ -508,24 +503,21 @@ export default {
     .start-time,
     .end-time {
       font-size: 12px;
-      color: rgba($color: #fff, $alpha: 0.4);
-    }
-    .end-time {
-      color: rgba($color: #fff, $alpha: 0.75);
+      color: #fff;
     }
     .progress {
       flex: 1;
       position: relative;
       margin: 0 8px;
       height: 2px;
-      background-color: #979797;
+      background-color: rgba($color: #fff, $alpha: 0.6);
       border-radius: 20px;
       &-bar {
         position: absolute;
         left: 0;
         top: 50%;
         height: 4px;
-        background-color: #30c0ff;
+        background-color: #fff;
         border-radius: 20px;
         transform: translateY(-50%);
       }
@@ -536,13 +528,13 @@ export default {
   @include flex-column-center;
   &-title {
     font-size: 24px;
-    color: rgba($color: #fff, $alpha: 0.75);
+    color: #324062;
     margin-bottom: 8px;
   }
   &-subtitle {
     margin-bottom: 12px;
     font-size: 12px;
-    color: rgba($color: #fff, $alpha: 0.4);
+    color: #5E677B;
   }
   &-scroll,
   &-swiper {
@@ -558,24 +550,25 @@ export default {
     padding: 0 10px;
     height: 40px;
     font-size: 15px;
-    color: rgba($color: #fff, $alpha: 0.4);
-    background-color: #01141d;
+    color: rgba($color: #324062, $alpha: 0.4);
 
     &.active {
       font-size: 18px;
       font-weight: 500;
-      color: #30c0ff;
+      color: #324062;
     }
     &.isReady {
       font-size: 17px !important;
-      color: #fff;
+      color: rgba(50,64,98,0.4);
     }
   }
 }
 
 .readPage {
   .lyric-text.active {
-    color: #38e292 !important;
+    font-size: 20px;
+    font-weight: 600;
+    color: #324062 !important;
   }
 }
 </style>

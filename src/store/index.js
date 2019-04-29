@@ -10,7 +10,6 @@ const store = new Vuex.Store({
   mutations: {
     updateUserInfo (state, params) {
       state.userInfo = {...state.userInfo, ...params}
-      console.log(state.userInfo)
     }
   }
 })

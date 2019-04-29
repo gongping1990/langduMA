@@ -174,7 +174,7 @@ export default {
       } else {
         this.isShowHeader = false;
       }
-      console.log(e.mp.detail.scrollTop);
+
     },
     bindLoadItem () {
       if (this.page.current < Math.ceil(this.page.total / this.page.size)) {
@@ -183,7 +183,7 @@ export default {
       }
     },
     toJump () {
-      console.log(1);
+
       wx.navigateTo({
         url: `/pages/popularityRank/main?type=1`
       });

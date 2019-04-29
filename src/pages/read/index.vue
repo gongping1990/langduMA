@@ -1,5 +1,6 @@
 <template>
-  <div class="read">
+  <div class="read"
+       :class="{isIos: isIos}">
     <div class="mask"
          v-if="showMask">
       <div class="mask-content"
@@ -9,8 +10,8 @@
                     :size="60"
                     :speed="5000"
                     :percent="percentOne"
-                    backgroundColor="#01141D"
-                    color="#66FFF8">
+                    backgroundColor="#27DCA3"
+                    color="#fff">
           <div class="circle-text">{{percent}}<text>%</text></div>
         </wux-circle>
         <text class="mask-text">资源正在加载···</text>
@@ -21,13 +22,18 @@
         <text class="mask-text">请准备···</text>
       </div>
     </div>
-    <div class="introduce">
+    <!-- <div class="introduce">
       <image :src="userInfo.headimgurl"
              mode="widthFix"
              class="introduce-image" />
       <div class="introduce-title">朗读者：<text class="introduce-weight">{{userInfo.nickname}}</text></div>
+    </div> -->
+    <div class="read-line"
+         v-if="isStart">
+      <i class="read-line-left"></i>
+      <i class="read-line-center"></i>
+      <i class="read-line-right"></i>
     </div>
-
     <read ref="read"
           v-if="showRead"
           className="readPage"
@@ -38,6 +44,7 @@
           :lyricText="courseData.introduction"
           :showControl="false"
           :disabled="disabled"
+          :showLine="false"
           @paused="bindPaused"
           @ended="bindEnded"
           @progress="changeProgress"
@@ -64,7 +71,7 @@
         </div>
         <div class="reset-btn"
              v-if="isPlay == false || isEnd"
-             @tap="clickReset">重录</div>
+             @tap="clickReset">重新录制</div>
         <div class="play-btn ly"
              v-if="!isEnd"
              @tap="clickRecorderStart">
@@ -95,15 +102,12 @@
     </wux-popup>
     <wux-popup :visible="showSuccessTwo"
                @close="changeSuccessPopupTwo">
-      <div class="reset-popup">
-        <div class="reset-popup_close"
-             @tap="changeSuccessPopupTwo"></div>
-        <div class="reset-popup_icon"></div>
-        <text class="reset-popup_text">恭喜你录制完成 </text>
-        <text class="reset-popup_content">赶快分享到班级群</text>
-        <text class="reset-popup_content">集赞争做“人气之星”</text>
-        <div class="reset-popup_btn">
-          <button class="reset-popup_confim reset-popup_share"
+      <div class="success-tc ">
+        <text class="success-tc_text">恭喜你录制完成 </text>
+        <text class="success-tc_content">赶快分享到班级群</text>
+        <text class="success-tc_content">集赞争做“人气之星”</text>
+        <div class="success-tc_btn">
+          <button class="success-tc_confim"
                   open-type="share">
             分享到班级群
           </button>
@@ -113,17 +117,18 @@
     <wux-popup :visible="showSuccess"
                closable
                @close="changeSuccessPopup">
-      <div class="success-popup">
-        <text class="success-popup_text">解锁新成就</text>
-        <text class="success-popup_title">《{{courseData.name}}》</text>
-        <image class="success-popup_image"
+      <div class="success-tc js">
+        <image class="success-tc_image"
                :src="courseData.comAchievement" />
-        <text class="success-popup_text">快去跟同学们秀一下吧！</text>
-        <text class="success-popup_text"> 获得同学们的点赞，可以登上人气榜做明星哟~</text>
-        <button class="success-popup_btn"
-                open-type="share">
-          分享到班级群
-        </button>
+        <text class="success-tc_text">{{courseData.name}}</text>
+        <text class="success-tc_content">快去跟同学们秀一下吧！</text>
+        <text class="success-tc_content">获得同学们的点赞，可以登上人气榜做明星哟</text>
+        <div class="success-tc_btn">
+          <button class="success-tc_confim"
+                  open-type="share">
+            分享到班级群
+          </button>
+        </div>
       </div>
     </wux-popup>
   </div>
@@ -135,7 +140,6 @@ import store from '../../store'
 import api from '../../request/api'
 import baseApi from '../../request/base.js'
 import base from '../../request/base.js'
-
 var COS = require('cos-wx-sdk-v5')
 
 var cos = new COS({
@@ -147,7 +151,7 @@ var cos = new COS({
       method: 'POST',
       data: {
         //  Method: options.Method,
-          path: options.Pathname
+        path: options.Pathname
       },
       header: {
         'content-type': 'application/x-www-form-urlencoded' // 默认值
@@ -190,7 +194,8 @@ export default {
       isReset: false,
       percentOne: 0,
       isAuth: true,
-      destroy: false
+      destroy: false,
+      isIos: false,
     }
   },
 
@@ -276,10 +281,10 @@ export default {
     },
     clickSave () {
       let nowd = new Date();
-      let filename = this.userInfo.id + (nowd.getTime()+this.recorderSrc.substr(this.recorderSrc.lastIndexOf('.')));
-      let path = "declaim_audio/"+nowd.getFullYear()+"/"+nowd.getMonth()+"/"+nowd.getDate()+"/"+filename
-      console.log(filename,path)
-      console.log('this.recorderSrc',this.recorderSrc)
+      let filename = this.userInfo.id + (nowd.getTime() + this.recorderSrc.substr(this.recorderSrc.lastIndexOf('.')));
+      let path = "declaim_audio/" + nowd.getFullYear() + "/" + nowd.getMonth() + "/" + nowd.getDate() + "/" + filename
+      console.log(filename, path)
+      console.log('this.recorderSrc', this.recorderSrc)
       wx.showLoading({
         title: '保存中...', //提示的内容,
         mask: true, //显示透明蒙层，防止触摸穿透,
@@ -292,23 +297,23 @@ export default {
         Key: path,
         FilePath: this.recorderSrc,
         onProgress: function (info) {
-          console.log("上传进度==>",JSON.stringify(info));
+          console.log("上传进度==>", JSON.stringify(info));
         }
       }, (err, data) => {
         wx.hideLoading();
-        if(err){
-          console.log("postObject err",err);
+        if (err) {
+          console.log("postObject err", err);
 
           wx.showToast({
             title: '保存失败', //提示的内容,
             icon: 'error', //图标,
             duration: 2000, //延迟时间,
             mask: true, //显示透明蒙层，防止触摸穿透,
-            success: res => {}
+            success: res => { }
           });
-        }else if(data && data.statusCode==200){
-          console.log("postObject data",data);
-          this.saveFile("https://pub.file.k12.vip"+data.Location.substr(data.Location.indexOf('/')))
+        } else if (data && data.statusCode == 200) {
+          console.log("postObject data", data);
+          this.saveFile("https://pub.file.k12.vip" + data.Location.substr(data.Location.indexOf('/')))
         }
       });
       // wx.uploadFile({
@@ -475,23 +480,14 @@ export default {
     setTimeout(() => {
       this.showRead = true
     }, 500);
+
+    wx.getSystemInfo({
+      success: (res) => {
+        this.isIos = res.model.indexOf('iPhone') != -1
+      }
+    })
     this.destroy = false
     this.recorder = wx.getRecorderManager()
-    // this.audio = wx.createInnerAudioContext()
-    // this.audio.onPlay(() => {
-    //   this.audioPause = false
-    // })
-    // this.audio.onPause(() => {
-    //   this.audioPause = true
-    // })
-
-    // this.audio.onStop(() => {
-    //   this.audioPause = true
-    // })
-
-    // this.audio.onEnded(() => {
-    //   this.audioPause = true
-    // })
     this.initRecorder()
     wx.getSetting({
       success: (res) => {
@@ -532,6 +528,7 @@ export default {
           this.isAuth = true
         }
       }    });
+
   },
 
   onUnload () {
@@ -587,10 +584,97 @@ export default {
 
 <style lang="scss" scoped>
 .read {
-  padding-top: 1px;
+  @include bg('/read/luzhi/background copy 2.png');
+  box-sizing: border-box;
+  background-position-y: bottom;
+  padding-top: 60px;
   height: 100vh;
-  background-color: #01141d;
+  background-color: #edfff8;
   line-height: 20px;
+  &.isIos {
+    .read-line {
+      top: 204px;
+    }
+  }
+  .read-line {
+    position: absolute;
+    left: 50%;
+    top: 208px;
+    width: 300px;
+    border-top: 1px #36dba4 dashed;
+    transform: translateX(-50%);
+    &-left,
+    &-right {
+      @include bg('/read/luzhi/zyld-icon-microphone-2.png');
+      position: absolute;
+      top: 50%;
+      width: 22px;
+      height: 23px;
+      transform: translateY(-50%);
+    }
+    &-right {
+      right: 0;
+    }
+    &-left {
+      @include bg('/read/luzhi/zyld-icon-microphone-l.png');
+      left: 0;
+    }
+  }
+  .success-tc {
+    @include flex-column-center;
+    @include bg('/read/tc/4.png');
+    box-sizing: border-box;
+    padding-top: 148px;
+    margin: 0 auto;
+    width: 310px;
+    height: 377px;
+    &.js {
+      @include bg('/read/tc/3.png');
+      height: 428px;
+      .success-tc_content {
+        font-size: 12px;
+      }
+      .success-tc_text {
+        font-size: 18px;
+        margin-top: 12px;
+      }
+      .success-tc_btn {
+        margin-top: 12px;
+      }
+    }
+    &_image {
+      width: 80px;
+      height: 106px;
+    }
+    &_btn {
+      @include flex-center;
+      margin-top: 24px;
+      width: 180px;
+      height: 40px;
+      background: rgba(54, 219, 164, 1);
+      border-radius: 26px;
+      font-size: 15px;
+      font-family: PingFangSC-Medium;
+      font-weight: 500;
+    }
+    &_confim {
+      color: #fff;
+    }
+    &_text {
+      font-size: 20px;
+      font-family: PingFangSC-Medium;
+      font-weight: 500;
+      color: rgba(50, 64, 98, 1);
+      line-height: 28px;
+    }
+    &_content {
+      font-size: 16px;
+      font-family: PingFangSC-Regular;
+      font-weight: 400;
+      color: rgba(94, 103, 123, 1);
+      line-height: 22px;
+    }
+  }
   .success-popup {
     @include flex-column-center;
     &_text {
@@ -627,12 +711,12 @@ export default {
   .reset-popup {
     position: relative;
     @include flex-column-center;
-    padding: 24px 0;
+    padding-top: 29px;
     width: 327px;
     line-height: 26px;
-    background: rgba(3, 26, 36, 1);
-    box-shadow: 0px 2px 10px 0px rgba(1, 21, 31, 1);
+    background: #ffffff;
     border-radius: 16px;
+    overflow: hidden;
     &_close {
       @include bg('/read/button-icon-close.png');
       position: absolute;
@@ -642,32 +726,33 @@ export default {
       height: 15px;
     }
     &_text {
-      font-size: 20px;
-      color: rgba($color: #fff, $alpha: 1);
+      font-size: 18px;
+      color: rgba($color: #000, $alpha: 0.75);
     }
     &_content {
-      font-size: 16px;
-      color: rgba($color: #fff, $alpha: 0.75);
+      font-size: 14px;
+      color: rgba($color: #000, $alpha: 0.75);
     }
     &_btn {
       @include flex-center;
-      margin-top: 32px;
-      width: 236px;
+      margin-top: 40px;
+      width: 100%;
+      border-top: 1px solid #f4f4f4;
     }
     &_cancel,
     &_confim {
       @include flex-center;
+      flex: 1;
       box-sizing: border-box;
-      width: 100px;
-      height: 40px;
-      font-size: 15px;
+      height: 53px;
+      font-size: 18px;
       font-weight: 500;
-      border-radius: 26px;
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: rgba($color: #000, $alpha: 0.4);
+      background-color: #fff;
     }
     &_confim {
-      margin-left: 31px;
-      color: #30c0ff;
+      color: #fff;
+      background-color: #27dca3;
     }
     &_share {
       margin-left: 0;
@@ -688,14 +773,14 @@ export default {
     top: 0;
     width: 327px;
     height: 1px;
-    background-color: #979797;
+    background-color: #36dba4;
     &-bar {
       position: absolute;
       left: 0;
       top: 50%;
       height: 3px;
       border-radius: 2px;
-      background-color: #38e292;
+      background-color: #36dba4;
       transform: translateY(-50%);
     }
   }
@@ -707,7 +792,7 @@ export default {
     top: 0;
     bottom: 0;
     z-index: 100;
-    background-color: #01141d;
+    background-color: #27dca3;
     &-content {
       @include flex-column-center;
     }
@@ -723,26 +808,15 @@ export default {
       border-radius: 50%;
       font-weight: 600;
       font-size: 22px;
-      color: rgba(255, 255, 255, 1);
+      color: #27dca3;
       line-height: 30px;
-      background: linear-gradient(
-        360deg,
-        rgba(102, 255, 248, 1) 0%,
-        rgba(48, 192, 255, 1) 100%
-      );
+      background: #fff;
     }
     .circle-text {
       font-size: 22px;
       font-weight: 600;
-      color: rgba(255, 255, 255, 1);
+      color: #fff;
       line-height: 30px;
-      background: linear-gradient(
-        90deg,
-        rgba(102, 255, 248, 1) 0%,
-        rgba(48, 192, 255, 1) 100%
-      );
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
       text {
         font-size: 12px;
       }
@@ -782,59 +856,61 @@ export default {
       box-sizing: border-box;
       flex-direction: row;
       padding: 24px;
-      height: 136px;
+      padding-bottom: 120px;
+      height: 215px;
     }
     .play-btn {
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      margin: 0 36px;
-      width: 72px;
-      height: 72px;
-      background-color: #01151f;
+      position: absolute;
+      margin: 0;
+      left: 50%;
+      top: 30px;
+      transform: translate(-50%, 0);
+      width: 64px;
+      height: 64px;
       &.ly {
-        position: absolute;
-        margin: 0;
-        left: 50%;
-        top: 50%;
-        transform: translate(-50%, -50%);
-        @include bg('/read/zyld-button-start.png');
+        @include bg('/read/luzhi/zyld-button-start.png');
       }
       &.bf {
-        @include bg('/read/zyld-button-play.png');
+        @include bg('/read/langdushiting/zyld-button-stop.png');
       }
       &.paused {
-        @include bg('/read/zyld-button-pause.png');
+        @include bg('/read/langdushiting/zyld-button-pause.png');
       }
       &_text {
-        font-size: 13px;
-        margin-bottom: 15px;
+        position: absolute;
+        left: 50%;
+        top: -22px;
+        font-size: 16px;
+        font-family: PingFangSC-Medium;
+        font-weight: 500;
+        color: rgba(50, 64, 98, 1);
+        transform: translateX(-50%);
       }
     }
     .reset-btn,
     .save-btn {
       position: absolute;
-      top: 50%;
+      top: 42px;
       @include flex-center;
-      width: 92px;
-      height: 52px;
-      color: rgba($color: #fff, $alpha: 0.75);
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      width: 72px;
+      height: 36px;
+      color: #27dca3;
+      border: 1px solid #27dca3;
       border-radius: 26px;
-      transform: translateY(-50%);
+      z-index: 10;
     }
     .save-btn {
-      right: 24px;
+      right: 36px;
     }
     .reset-btn {
-      left: 24px;
+      left: 36px;
     }
     &-btn {
-      @include bg('/read/zyld-button-go.png');
-      margin-top: 12px;
-      margin-bottom: 40px;
-      width: 260px;
-      height: 52px;
+      @include bg('/read/luzhi/zyld-button-start.png');
+      margin-top: 4px;
+      margin-bottom: 120px;
+      width: 64px;
+      height: 64px;
     }
   }
   .read-popup {

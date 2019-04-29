@@ -1,6 +1,6 @@
 <template>
   <div class="read">
-    <div class="introduce"
+    <!-- <div class="introduce"
          v-if="!hideIntroduce"
          :class="{'show': showIntroduce}">
       <image class="introduce-image"
@@ -10,7 +10,7 @@
         <div class="introduce-title">朗读老师：<text class="introduce-weight">{{courseData.teacherName}}</text></div>
         <text class="introduce-text">{{courseData.teacherIntroduce}}</text>
       </div>
-    </div>
+    </div> -->
 
     <read ref="read"
           v-if="showReadComponent"
@@ -31,6 +31,7 @@
         <scroll-view scroll-y
                      @scrolltolower="bindscrolltolower"
                      scroll-with-animation
+                     lower-threshold="100"
                      class="popup-scroll">
           <div class="popup-list ">
             <div class="popup-item"
@@ -41,6 +42,7 @@
               <div class="popup-item_icon"></div>
               <text class="popup-item_text">{{(i + 1) + '.' + item.name}}</text>
             </div>
+            <span class="popup-item-more" v-if="courseList.length >= total">已经到底啦～</span>
           </div>
         </scroll-view>
         <div class="popup-close_btn"
@@ -50,9 +52,6 @@
     <wux-popup :visible="showRead"
                @close="changeRead">
       <div class="read-popup">
-        <div class="read-popup_close"
-             @tap="changeRead"></div>
-        <div class="read-popup_icon"></div>
         <text class="read-popup_text">听完了范读，</text>
         <text class="read-popup_content">自己来朗读一遍吧！</text>
         <div class="read-popup_btn"
@@ -99,11 +98,11 @@ export default {
 
   computed: {
     subtitle () {
-      if(!this.courseData.grade) {
+      if (!this.courseData.grade) {
         return ''
       }
 
-      if(this.courseData.grade == 100) {
+      if (this.courseData.grade == 100) {
         return '古诗'
       } else {
         return `${this.gradeArr[this.courseData.grade - 1]}·${this.courseData.semester == 1 ? '上册' : '下册'}`
@@ -157,8 +156,8 @@ export default {
         this.total = data.resultData.total
       })
     },
-    bindscrolltolower() {
-      if(this.courseList.length < this.total) {
+    bindscrolltolower () {
+      if (this.courseList.length < this.total) {
         this.page.size += 10
         this.getCourseList()
       }
@@ -250,7 +249,7 @@ export default {
       current: 1,
       size: 10
     }
-    console.log('unload')
+
     this.globalData.audio.src = ''
     this.globalData.audio.stop()
   },
@@ -270,47 +269,49 @@ export default {
 
 <style lang="scss" scoped>
 .read {
-  padding-top: 1px;
+  box-sizing: border-box;
+  padding-top: 60px;
   height: 100vh;
-  background-color: #01141d;
+  background-color: #edfff8;
   overflow: hidden;
+  background: url('https://pub.file.k12.vip/read/mingshifandu/backgroud.png')
+    no-repeat 0 80%;
+  background-size: 100%;
   .more-course {
     @include flex-center;
     position: absolute;
     right: 0;
     top: 45%;
-    width: 86px;
-    height: 30px;
-    z-index: 10;
+    width: 84px;
+    height: 29px;
+    z-index: 100;
     font-size: 12px;
     color: #fff;
-    background: rgba(255, 255, 255, 0.16);
-    border-radius: 100px 0px 0px 100px;
+    background: #FF9F24;
+    border-radius: 15px 0px 0px 15px;
     &_icon {
       @include bg('/read/kczy-button-more.png');
-      margin-left: 8px;
+      margin-left: 4px;
       margin-top: 2px;
-      width: 8px;
-      height: 13.3px;
+      width: 6px;
+      height: 11px;
     }
   }
   .read-popup {
     position: relative;
     @include flex-column-center;
-    width: 327px;
-    height: 246px;
-    font-size: 16px;
-    line-height: 32px;
-    color: rgba($color: #fff, $alpha: 0.75);
-    background: #031a24;
-    border-radius: 16px;
-    &_icon {
-      @include bg('/read/mike.png');
-      width: 56px;
-      height: 70px;
-    }
+    @include bg('/read/tc/2.png');
+    box-sizing: border-box;
+    padding-top: 177px;
+    margin: 0 auto;
+    width: 311px;
+    height: 378px;
+    font-size: 20px;
+    line-height: 28px;
+    color: #324062;
     &_content {
-      font-size: 20px;
+      font-size: 24px;
+      font-weight: bold;
     }
     &_close {
       @include bg('/read/button-icon-close.png');
@@ -322,11 +323,11 @@ export default {
     }
     &_btn {
       @include flex-center;
-      margin-top: 32px;
-      width: 263px;
+      margin-top: 24px;
+      width: 179px;
       height: 40px;
-      color: #30c0ff;
-      border: 1px solid rgba(255, 255, 255, 0.16);
+      color: #fff;
+      background: rgba(54, 219, 164, 1);
       border-radius: 26px;
     }
   }
@@ -357,14 +358,14 @@ export default {
   .popup {
     padding-bottom: 1px;
     border-radius: 16px 16px 0px 0px;
-    background: rgba(3, 26, 36, 1);
-    box-shadow: 0px 2px 10px 0px rgba(1, 21, 31, 1);
+    background: #fff;
+    box-shadow: 0px 2px 10px 0px rgba(91, 107, 115, 1);
     &-title {
       @include flex-center;
       justify-content: flex-start;
       height: 60px;
       font-size: 20px;
-      color: rgba($color: #fff, $alpha: 0.75);
+      color: #324062;
       padding-left: 24px;
     }
     &-scroll {
@@ -374,25 +375,36 @@ export default {
       @include flex-center;
       justify-content: flex-start;
       height: 68px;
-      padding-left: 24px;
+      margin: 0 24px;
       font-size: 15px;
-      color: rgba($color: #fff, $alpha: 0.4);
+      border-bottom: 1px #e4e4e4 solid;
+      color: rgba($color: #99a3b6, $alpha: 0.8);
       &_icon {
         display: none;
-        @include bg('/read/msfd-icon-playing.png');
-        width: 16px;
-        height: 17px;
+        @include bg('/read/fandukewenxuanzhe/msfd-icon-playing.png');
+        width: 14px;
+        height: 16px;
         margin-right: 12px;
       }
+      &-more {
+        display: block;
+        margin-top: 8px;
+        text-align: center;
+        font-size: 14px;
+        font-family: PingFangSC-Regular;
+        font-weight: 400;
+        color: rgba(153, 163, 182, 0.8);
+        line-height: 20px;
+      }
       &.active {
-        color: #30c0ff;
+        color: #38dca4;
         .popup-item_icon {
           display: block;
         }
       }
     }
     &-close_btn {
-      @include bg('/read/msfd-icon-close.png');
+      @include bg('/read/fandukewenxuanzhe/msfd-icon-close.png');
       margin: 15px auto;
       width: 36px;
       height: 36px;

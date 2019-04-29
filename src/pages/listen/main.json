@@ -1,7 +1,6 @@
 {
   "navigationBarTitleText": "名师范读",
-  "navigationBarBackgroundColor": "#01141D",
-  "navigationBarTextStyle": "white",
+  "navigationBarBackgroundColor": "#F8FFFD",
   "usingComponents": {
     "wux-popup": "/static/wux/popup/index"
   }

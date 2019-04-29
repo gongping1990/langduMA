@@ -135,7 +135,7 @@ export default {
       });
     },
     init () {
-      console.log('初始化播放')
+
       this.innerAudioContext = wx.createInnerAudioContext();
       this.innerAudioContext.src = this.shareInfo.voiceUrl;
       this.innerAudioContext.onPlay(() => {
@@ -251,11 +251,11 @@ export default {
     }
   },
   onHide () {
-    console.log('share, hide')
+
     this.innerAudioContext.destroy()
   },
   onUnload () {
-    console.log('share, onUnload')
+
     this.innerAudioContext.destroy()
   },
   onShareAppMessage () {

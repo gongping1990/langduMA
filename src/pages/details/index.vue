@@ -1,22 +1,12 @@
 <template>
   <div class="details">
     <div class="introduce">
-      <image class="introduce-image"
-             :src="detailData.headImage"
-             mode="widthFix"
-             lazy-load="false" />
-      <div class="introduce-content">
-        <div class="introduce-title">朗读老师：<text class="introduce-weight">{{detailData.teacherName}}</text></div>
-        <text class="introduce-text">{{detailData.teacherIntroduce}}</text>
-      </div>
-    </div>
-    <div class="details-content">
       <div class="details-cover"
            @tap="changePopup">
         <div class="details-cover_mask"
              v-if="!detailData.unlocktype">
           <div class="details-cover_bg"></div>
-          <image src="https://pub.file.k12.vip/read/lesson/kczy-button-lock.png"
+          <image src="https://pub.file.k12.vip/read/kechengzhuyi/kczy-icon-lock.png"
                  mode="widthFix" />
         </div>
         <image class="details-cover-image"
@@ -35,40 +25,53 @@
           <text>{{detailData.courselikes}}</text>
         </div>
       </div>
-      <text class="details-title">{{detailData.name}}</text>
+      <div class="introduce-content">
+        <div class="introduce-content-header">
+          <div class="introduce-content-left">
+            <p>{{detailData.name}}</p>
+            <span>朗读老师：{{detailData.teacherName}}</span>
+          </div>
+          <div class="introduce-content-right">
+            <wux-badge :count="detailData.uploadworks">
+              <div class="wdzp-btn">
+                <image class="action-image"
+                       mode="widthFix"
+                       src="https://pub.file.k12.vip/read/kechengzhuyi/kczy-icon-Reading.png"
+                       @click="myWork" />
+                <text class="action-text"
+                      @click="myWork">我的朗读</text>
+              </div>
+            </wux-badge>
+          </div>
+        </div>
+        <text class="introduce-text">{{detailData.teacherIntroduce}}</text>
+      </div>
+    </div>
+    <div class="details-content">
+
+      <!-- <text class="details-title">{{detailData.name}}</text>
       <div class="details-info">
         <div class="details-info_left">
           <i class="details-info_line"></i>
           <text class="details-info_text">{{detailData.alreadyread}} 位同学已会读</text>
         </div>
         <text class="details-info_text">{{detailData.nowlistening}} 位同学正在听</text>
+      </div> -->
+
+      <div class="play-btn"
+           @tap="navigateTo('listen')">
+        <image class="action-image"
+               mode="widthFix"
+               src="https://pub.file.k12.vip/read/kechengzhuyi/kczy-card-msfd.png" />
+        <text>{{detailData.nowlistening}} 位同学正在听</text>
       </div>
-    </div>
-    <div class="action">
       <div class="zyld-btn"
            @tap="navigateTo('read')">
         <image class="action-image"
                mode="widthFix"
-               src="https://pub.file.k12.vip/read/lesson/kczy-button-read.png" />
-        <text class="action-text">朗读课文</text>
+               src="https://pub.file.k12.vip/read/kechengzhuyi/kczy-card-zyld.png" />
+        <text>{{detailData.alreadyread}} 位同学已会读</text>
       </div>
-      <!-- <button v-if="!userInfo.phone"
-              class="play-btn"
-              open-type="getPhoneNumber"
-              @getphonenumber="getPhoneNumber">
-      </button> -->
-      <div class="play-btn"
-           @tap="navigateTo('listen')"></div>
-      <wux-badge :count="detailData.uploadworks">
-        <div class="wdzp-btn">
-          <image class="action-image"
-                 mode="widthFix"
-                 src="https://pub.file.k12.vip/read/lesson/kczy-button-works.png"
-                 @click="myWork" />
-          <text class="action-text"
-                @click="myWork">我的作品</text>
-        </div>
-      </wux-badge>
     </div>
     <div class="details-footer">
       <div class="details-footer_content"
@@ -88,7 +91,7 @@
             @click="toJump">查看人气排行 ></text>
     </div>
 
-    <wux-popup :visible="showPopup">
+    <wux-popup :visible="showPopup" @close="changePopup">
       <div class="popup">
         <image class="popup-image"
                :src="detailData.comAchievement"
@@ -134,7 +137,6 @@ export default {
       });
     },
     getPhoneNumber (res) {
-      console.log(res)
       let { encryptedData, iv } = res.mp.detail
       if (encryptedData && iv) {
         api.user.updateUserPhoneByMa({
@@ -189,38 +191,66 @@ export default {
 
 <style lang="scss" scoped>
 .details {
-  .zyld-btn,
+  background-color: #f6f6f6;
   .wdzp-btn {
     @include flex-column-center;
+  }
+  .play-btn,
+  .zyld-btn {
+    position: relative;
+    margin-bottom: 32px;
+    width: 327px;
+    height: 149px;
+    border-radius: 8px;
+    text {
+      position: absolute;
+      top: 66px;
+      left: 190px;
+      font-size: 10px;
+      font-family: PingFangSC-Medium;
+      font-weight: 500;
+      color: rgba(255, 255, 255, 1);
+      line-height: 14px;
+    }
+    image {
+      width: 327px;
+      height: 149px;
+      border-radius: 8px;
+    }
   }
 
   .popup {
     @include flex-column-center;
+    @include bg('/read/tc/1.png');
+    box-sizing: border-box;
+    margin: 0 auto;
+    padding-top: 154px;
+    width: 315px;
+    height: 379px;
     &-image {
       margin-bottom: 12px;
-      width: 180px;
-      height: 240px;
+      width: 80px;
+      height: 106px !important;
       border-radius: 6px;
+      box-shadow: 0px 0px 16px -2px rgba(174, 194, 203, 0.4);
     }
     &-text {
-      font-size: 14px;
+      font-size: 18px;
+      font-family: PingFangSC-Regular;
       font-weight: 400;
-      color: rgba(255, 255, 255, 0.75);
-      line-height: 20px;
+      color: rgba(0, 0, 0, 0.75);
+      line-height: 25px;
     }
     &-btn {
       @include flex-center;
-      margin-top: 24px;
-      width: 263px;
+      margin-top: 12px;
+      width: 179px;
       height: 40px;
       font-size: 15px;
+      font-family: PingFangSC-Medium;
       font-weight: 500;
       color: rgba(255, 255, 255, 1);
-      background: linear-gradient(
-        90deg,
-        rgba(102, 255, 248, 1) 0%,
-        rgba(48, 192, 255, 1) 100%
-      );
+      background: rgba(54, 219, 164, 1);
       border-radius: 26px;
     }
   }
@@ -268,25 +298,6 @@ export default {
     font-size: 12px;
     color: #707374;
   }
-
-  .action {
-    @include flex-center;
-    &-text {
-      font-size: 10px;
-      color: #707374;
-    }
-    &-image {
-      width: 40px;
-    }
-    .play-btn {
-      @include bg('/read/lesson/kczy-button-play.png');
-      width: 80px;
-      height: 90px;
-      margin: 0 50px;
-      border: none;
-      background-color: transparent;
-    }
-  }
   &-title {
     margin-top: 24px;
     font-size: 24px;
@@ -313,15 +324,16 @@ export default {
   }
   &-content {
     @include flex-column-center;
-    margin-top: 40px;
-    margin-bottom: 30px;
+    margin-top: 6px;
+    padding-top: 24px;
+    background-color: #fff;
   }
 
   &-cover {
     position: relative;
-    margin-bottom: 24p;
-    width: 120px;
-    height: 160px;
+    margin-right: 23px;
+    width: 70px;
+    height: 92px;
 
     &_bg {
       position: absolute;
@@ -329,9 +341,8 @@ export default {
       right: 0;
       top: 0;
       bottom: 0;
-      background: rgba(48, 192, 255, 0.5);
-      border-radius: 6px;
-      filter: blur(2px);
+      background: rgba(0, 0, 0, 0.4);
+      border-radius: 3px;
     }
     &_mask {
       @include flex-center;
@@ -340,32 +351,33 @@ export default {
       right: 0;
       top: 0;
       bottom: 0;
+      z-index: 10;
 
       image {
         position: absolute;
         left: 50%;
         top: 50%;
-        width: 60px;
-        height: 60px;
+        width: 24px;
+        height: 30px;
         transform: translate(-50%, -50%);
       }
     }
     &-image {
-      width: 120px;
-      height: 160px;
-      border-radius: 6px;
-      box-shadow: 0px 6px 16px 0px rgba(0, 0, 0, 0.1);
+      width: 70px;
+      height: 92px;
+      border-radius: 3px;
+      box-shadow: 0px 5px 9px -2px rgba(187, 217, 206, 1);
     }
     &_popover {
       @include flex-center;
       position: absolute;
-      right: -103px;
-      top: 0;
+      right: -80px;
+      top: 5px;
       width: 90px;
       height: 24px;
       font-size: 12px;
       color: #fff;
-      background: #ff668e;
+      background: #ff9f24;
       border-radius: 3px;
       z-index: 100;
     }
@@ -374,15 +386,15 @@ export default {
       position: absolute;
       bottom: 0;
       right: 0;
-      width: 68px;
-      height: 24px;
-      font-size: 12px;
+      width: 39px;
+      height: 14px;
+      font-size: 7px;
       color: #fff;
       background: rgba(0, 0, 0, 0.16);
-      border-radius: 100px 0px 6px 0px;
+      border-radius: 58px 0px 3px 0px;
       image {
-        width: 11px;
-        height: 11px;
+        width: 6px;
+        height: 6px;
         margin-right: 3px;
       }
     }
@@ -392,19 +404,51 @@ export default {
       left: -10px;
       margin-top: -6px;
       border: 6px transparent solid;
-      border-right-color: #ff668e;
+      border-right-color: #ff9f24;
     }
   }
   .introduce {
     box-sizing: border-box;
-    margin: 16px auto;
-    padding: 16px;
+    padding: 24px;
+    padding-bottom: 33px;
     display: flex;
-    width: 327px;
-    height: 108px;
     background: rgba(255, 255, 255, 1);
-    box-shadow: 0px 2px 10px 0px rgba(222, 232, 237, 1);
-    border-radius: 16px;
+    &-content {
+      &-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+      &-left {
+        font-size: 12px;
+        font-family: PingFangSC-Regular;
+        font-weight: 400;
+        color: rgba(50, 64, 98, 0.8);
+        line-height: 17px;
+        p {
+          margin-bottom: 3px;
+          font-size: 22px;
+          font-family: PingFangSC-Semibold;
+          font-weight: 600;
+          color: rgba(50, 64, 98, 1);
+          line-height: 30px;
+        }
+      }
+      &-right {
+        .action-image {
+          margin-bottom: 6px;
+          width: 18px;
+          height: 28px;
+        }
+        .action-text {
+          font-size: 8px;
+          font-family: PingFangSC-Regular;
+          font-weight: 400;
+          color: rgba(50, 64, 98, 1);
+          line-height: 11px;
+        }
+      }
+    }
     &-image {
       width: 48px;
       height: 48px;
@@ -419,11 +463,12 @@ export default {
       font-weight: 500;
     }
     &-text {
-      @include line-clamp(3);
+      @include line-clamp(2);
+      margin-top: 8px;
       width: 231px;
       font-size: 12px;
       line-height: 17px;
-      color: #707374;
+      color: #324062;
     }
   }
 }

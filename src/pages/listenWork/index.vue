@@ -70,7 +70,7 @@ export default {
       }
     },
     workId (n, o) {
-      console.log(n)
+
       if (this.userInfo.id && n) {
         this.getWorkDetail()
       }
@@ -132,7 +132,7 @@ export default {
 
   mounted () {
     this.workId = this.$root.$mp.query.id
-    console.log(this.workId, 111)
+
     this.share = this.$root.$mp.query.share
     setTimeout(() => {
       this.showIntroduce = true
@@ -150,7 +150,7 @@ export default {
   },
 
   onUnload () {
-    console.log('unload')
+
     this.globalData.audio.stop()
   },
   onShareAppMessage () {

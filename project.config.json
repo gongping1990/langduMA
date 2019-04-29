@@ -39,7 +39,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 3,
+			"current": 13,
 			"list": [
 				{
 					"id": 0,
@@ -130,6 +130,13 @@
 					"name": "周排行",
 					"pathName": "pages/popularityRank/main",
 					"query": "type=1",
+					"scene": null
+				},
+				{
+					"id": -1,
+					"name": "单课作品",
+					"pathName": "pages/popularityRank/main",
+					"query": "type=2&id=1111624285481439234&name=识字2.金木水火土",
 					"scene": null
 				}
 			]

@@ -5,55 +5,60 @@
                  scroll-y
                  @scroll="scrollTopFn"
                  scroll-with-animation>
-      <div class="ld-user-header"></div>
+      <div class="ld-user-header">
+        <div class="ld-user-header-avthor">
+          <img class="-img" :src="userInfo.headimage"/>
+          <div class="-name">{{userInfo.nikename}}</div>
+        </div>
+      </div>
       <div class="ld-user-footer">
-        <div class="-footer-title">作品集</div>
+        <div class="-footer-title">
+          <span></span>作品集
+        </div>
 
         <div class="-footer-wrap" v-for="(item, index) of dataList" :key="index" >
           <van-swipe-cell :right-width="65">
-            <button open-type='share' :data-item="item" class="-share-btn">
-              <img class="-share-img" src="https://pub.file.k12.vip/read/my/zp-button-share.png"/>
-            </button>
             <div class="-footer-item" @click="lookOtherRead(item.id)">
               <div class="-item-left">
                 <div class="-item-title">
-                  <span>《{{item.coursename}}》</span>
-                  <img class="-img" src="https://pub.file.k12.vip/read/my/msfd-button-play.png"/>
+                  <img class="-img" src="https://pub.file.k12.vip/read/gerenzhuye/msfd-button-play copy.png"/>
+                  <span>{{item.coursename}}</span>
                 </div>
+                <button open-type='share' :data-item="item" class="-share-btn" @click.stop="stopPropagation">
+                  <img class="-share-img" src="https://pub.file.k12.vip/read/gerenzhuye/zp-button-share.png"/>
+                </button>
               </div>
               <div class="-item-down">
-                <div class="-item-time">日期: {{item.gmtCreate}}</div>
                 <div class="-item-num">
-                  <img class="-img" src="https://pub.file.k12.vip/read/icon-good.png"/>
+                  <img class="-img" src="https://pub.file.k12.vip/read/gerenzhuye/icon-good.png"/>
                   <span>{{item.likes || 0}}</span>
                 </div>
+                <div class="-item-time">{{item.grade}} · {{item.semester}} 日期: {{item.gmtCreate}}</div>
               </div>
             </div>
 
             <div slot="right" @click="openDel(item)" class="-footer-action">
-              <img class="-right-img" src="https://pub.file.k12.vip/read/my/zp-icon-delete.png"/>
+              <img class="-right-img" src="https://pub.file.k12.vip/read/gerenzhuye/zp-icon-delete.png"/>
             </div>
           </van-swipe-cell>
         </div>
 
-        <img class="-footer-bg" v-if="!dataList.length" src="https://pub.file.k12.vip/ldcard/icon-none-read.png"/>
+        <img class="-footer-bg" v-if="!dataList.length" src="https://pub.file.k12.vip/read/gerenzhuye/2.png"/>
         <div class="-footer-bg-text" v-if="!dataList.length">你还没有朗读作品，快去朗读吧～</div>
 
       </div>
       <div class="ld-user-wrap">
-        <img class="-img" :src="userInfo.headimage"/>
-        <div class="-name">{{userInfo.nikename}}</div>
         <div class="-text">
           <div>
-            <div class="-text-num-one">{{userInfo.likes}}</div>
+            <div class="-text-num">{{userInfo.likes}}</div>
             <div class="-text-tip">赞</div>
           </div>
           <div>
-            <div class="-text-num-two">{{userInfo.achCards}}</div>
+            <div class="-text-num">{{userInfo.achCards}}</div>
             <div class="-text-tip">成就卡</div>
           </div>
           <div>
-            <div class="-text-num-three">{{userInfo.readdays}}</div>
+            <div class="-text-num">{{userInfo.readdays}}</div>
             <div class="-text-tip">朗读(天)</div>
           </div>
 
@@ -66,7 +71,7 @@
         <div class="-del-title">提示</div>
         <div class="-del-content">确认删除该作品吗？</div>
         <div class="-del-footer">
-          <div class="-btn" @click="openDel()">取消</div>
+          <div class="-btn -one" @click="openDel()">取消</div>
           <div class="-btn -two" @click="delItem()">确认</div>
         </div>
       </div>
@@ -96,33 +101,34 @@
     },
 
     onShow() {
-      wx.hideShareMenu()
+      wx.hideShareMenu();
       this.getWorkList();
       this.getMessageInfo();
     },
 
     components: {},
 
-    onShareAppMessage (options) {
-      const item = options.target.dataset.item
+    onShareAppMessage(options) {
+      const item = options.target.dataset.item;
 
       return {
         title: `我的孩子刚朗读了《${item.coursename}》，非常棒，请给TA点个赞吧！`,
-        path: '/pages/share/main?id=' + item.id,
-        imageUrl: 'https://pub.file.k12.vip/read/zpshare.jpeg',
+        path: "/pages/share/main?id=" + item.id,
+        imageUrl: "https://pub.file.k12.vip/read/zpshare.jpeg",
         success: res => {
           wx.showToast({
-            title: '分享成功',
+            title: "分享成功",
             icon: "none",
             duration: 2000
-          })
+          });
         }
       };
     },
-
     methods: {
+      stopPropagation () {
+      },
       clickCard() {
-        wx.navigateTo({ url: '/pages/myCard/main' });
+        wx.navigateTo({ url: "/pages/myCard/main" });
       },
       openDel(data) {
         this.dataItem = data;
@@ -169,6 +175,7 @@
             }
             this.page.total = data.resultData.total;
             this.isFetching = false;
+
           }, () => {
             this.isFetching = false;
           });
@@ -198,37 +205,45 @@
 
     &-header {
       width: 375px;
-      height: 131px;
-      background: url("https://pub.file.k12.vip/read/backgroud-my.png") no-repeat;
-      background-size: 100%;
+      height: 149px;
+      background: rgba(54, 219, 164, 1);
+
+      &-avthor {
+        margin-left: 24px;
+        padding-top: 25px;
+        display: flex;
+        align-items: center;
+
+        .-img {
+          width: 56px;
+          height: 56px;
+          border-radius: 50%;
+          border: 3px solid rgba(255, 255, 255, 1);
+        }
+
+        .-name {
+          margin-left: 17px;
+          font-size: 18px;
+          font-weight: 500;
+          color: rgba(255, 255, 255, 1)
+        }
+      }
+
     }
 
     &-footer {
 
       .-footer-wrap {
         position: relative;
-
-        .-share-btn {
-          position: absolute;
-          top: -18px;
-          right: 24px;
-          background: none;
-          padding: 0;
-          line-height: 0;
-          z-index: 999;
-
-          .-share-img {
-            width: 36px;
-            height: 36px;
-          }
-        }
       }
 
       .-footer-action {
-        position: relative;
-        width: 40px;
-        height: 40px;
-        top: 40%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width:58px;
+        height:60px;
+        background:rgba(255,96,36,1);
 
         .-right-img {
           width: 20px;
@@ -237,66 +252,62 @@
       }
 
       .-footer-title {
-        margin: 130px 24px 0;
-        background: url("https://pub.file.k12.vip/read/rank/icon-tittle.png") 0% no-repeat;
-        background-size: contain;
-        height: 46px;
-        line-height: 46px;
-        font-size: 17px;
+        display: flex;
+        align-items: center;
+        margin: 70px 24px 0;
+        height: 28px;
+        font-size: 20px;
         font-weight: 500;
         color: rgba(74, 74, 74, 1);
+
+        span {
+          display: inline-block;
+          width: 6px;
+          height: 21px;
+          background: rgba(56, 220, 164, 1);
+          border-radius: 3px;
+          margin-right: 8px;
+        }
       }
 
       .-footer-item {
         position: relative;
         align-items: center;
-        padding: 26px 16px 19px;
-        margin: 21px 24px;
-
+        margin: 26px 24px;
         background: rgba(255, 255, 255, 1);
-        box-shadow: 0px 2px 10px 0px rgba(222, 232, 237, 1);
-        border-radius: 6px;
-
-        .-item-img {
-          position: absolute;
-          top: -18px;
-          right: 0;
-          width: 36px;
-          height: 36px;
-        }
-
-        .-item-tip {
-          position: absolute;
-          top: 0;
-          left: 0;
-          font-size: 10px;
-          font-weight: 400;
-          width: 56px;
-          height: 18px;
-          background: linear-gradient(45deg, rgba(255, 82, 128, 1) 0%, rgba(255, 102, 142, 1) 100%);
-          border-radius: 86px 0 100px 0;
-          color: rgba(255, 255, 255, 1);
-          line-height: 18px;
-          text-align: center;
-          padding-left: 4px;
-        }
 
         .-item-left {
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
 
           .-item-title {
             display: flex;
             align-items: center;
             font-size: 16px;
             font-weight: 500;
-            color: #1D1B1B;
+            color: #324062;
             line-height: 22px;
 
             .-img {
               display: inline-block;
-              margin-left: 4px;
-              color: #30C0FF;
-              width: 16px;
-              height: 16px;
+              margin-right: 5px;
+              width: 18px;
+              height: 19px;
+            }
+          }
+
+          .-share-btn {
+            margin: 0;
+            width: 28px;
+            height: 30px;
+            background: none;
+            padding: 0;
+            line-height: 0;
+
+            .-share-img {
+              width: 28px;
+              height: 29px;
             }
           }
         }
@@ -305,131 +316,65 @@
           display: flex;
           justify-content: space-between;
           align-items: center;
-          margin-top: 11px;
+          margin-top: 9px;
 
           .-item-time {
             font-size: 10px;
             font-weight: 300;
-            color: #707374;
+            color: #CDCDCD;
             line-height: 14px;
           }
 
           .-item-num {
-            font-size: 14px;
-            font-weight: 400;
-            color: #FF668E;
-            line-height: 20px;
-
-            .-img {
-              margin-right: 8px;
-              width: 15px;
-              height: 15px;
-            }
-          }
-        }
-      }
-
-      .-other-item {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-
-        .-other-left {
-          .-other-title {
-            max-width: 240px;
-            text-overflow: ellipsis;
-            overflow: hidden;
-            white-space: nowrap;
-            height: 22px;
-            font-size: 16px;
-            font-weight: 600;
-            color: rgba(29, 27, 27, 1);
-            line-height: 22px;
-            margin-bottom: 8px;
-          }
-
-          .-other-time {
-            height: 14px;
-            font-size: 10px;
-            font-weight: 300;
-            color: rgba(112, 115, 116, 1);
-            line-height: 14px;
-            margin-bottom: 12px;
-          }
-
-          .-other-num {
-            height: 17px;
             font-size: 12px;
-            font-weight: 500;
-            color: rgba(112, 115, 116, 1);
+            font-weight: 400;
+            color: #FF5F0A;
             line-height: 17px;
 
             .-img {
-              margin-right: 4px;
+              margin-right: 6px;
               width: 11px;
-              height: 11px;
+              height: 13px;
             }
           }
-        }
-
-        .-other-img {
-          width: 32px;
-          height: 32px;
         }
       }
 
       .-footer-bg {
-        margin-left: 54px;
-        margin-top: 61px;
-        width: 237px;
-        height: 112px;
+        margin-left: 56px;
+        margin-top: 57px;
+        width: 262px;
+        height: 135px;
       }
 
       .-footer-bg-text {
-        margin-top: 10px;
-        text-align: center;
-        width: 100%;
+        width:180px;
         height:17px;
         font-size:12px;
-        font-weight:400;
-        color:rgba(112,115,116,1);
+        font-weight:500;
+        color:rgba(153,163,182,1);
         line-height:17px;
+        margin: 10px auto 0;
+        text-align: center;
       }
     }
 
     &-wrap {
       position: absolute;
-      top: 80px;
+      top: 113px;
       left: 24px;
       width: 327px;
-      height: 142px;
-      text-align: center;
+      height: 79px;
       background: rgba(255, 255, 255, 1);
+      border-radius: 8px;
       box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
-      border-radius: 16px;
-
-      .-img {
-        position: absolute;
-        top: -28px;
-        left: 136px;
-        width: 56px;
-        height: 56px;
-        border-radius: 50%;
-        border: 3px solid rgba(255, 255, 255, 1);
-      }
-
-      .-name {
-        margin-top: 36px;
-        font-size: 16px;
-        font-weight: 500;
-        color: rgba(74, 74, 74, 1);
-      }
+      text-align: center;
 
       .-text {
         display: flex;
         justify-content: space-between;
         align-content: center;
-        padding: 24px 24px 17px;
+        padding: 18px 32px;
 
         &-wrap {
           display: flex;
@@ -445,20 +390,9 @@
           }
         }
 
-        &-num-one {
+        &-num {
           font-size: 22px;
-          font-weight: bold;
-          color: #FF668E;
-        }
-        &-num-two {
-          font-size: 22px;
-          font-weight: bold;
-          color: #30C0FF;
-        }
-        &-num-three {
-          font-size: 22px;
-          font-weight: bold;
-          color: #38E292;
+          color: #FF9F24;
         }
 
         &-tip {
@@ -470,42 +404,57 @@
     }
 
     &-del {
-      padding: 32px 36px 24px;
-      background: rgba(3, 26, 36, 1);
-      box-shadow: 0px 2px 10px 0px rgba(1, 21, 31, 1);
-      border-radius: 16px;
+      position: relative;
+      width:327px;
+      height:178px;
+      background:rgba(255,255,255,1);
+      box-shadow:0px 2px 10px 0px rgba(0,0,0,0.2);
+      border-radius:16px;
 
       .-del-title {
-        font-size: 20px;
-        font-weight: 500;
-        color: rgba(255, 255, 255, 0.75);
-        line-height: 28px;
+        padding-top: 29px;
+        height:25px;
+        font-size:18px;
+        font-weight:500;
+        color:rgba(0,0,0,0.75);
+        line-height:25px;
       }
 
       .-del-content {
-        line-height: 28px;
-        font-size: 16px;
+        margin-top: 11px;
+        height:25px;
+        font-size:18px;
+        font-weight:500;
+        color:rgba(0,0,0,0.75);
+        line-height:25px;
       }
 
       .-del-footer {
+        position: absolute;
+        bottom: 0;
         display: flex;
         justify-content: space-between;
         align-items: center;
         margin-top: 32px;
 
         .-btn {
-          width: 100px;
-          height: 40px;
-          border-radius: 26px;
-          border: 1px solid rgba(255, 255, 255, 0.16);
-          font-size: 15px;
-          font-weight: 500;
-          color: rgba(255, 255, 255, 0.4);
-          line-height: 40px;
+          display: inline-block;
+          font-size:18px;
+          width: calc( 327px / 2);
+          height:53px;
+          line-height: 53px;
+          background:#ffffff;
+          color:rgba(0,0,0,0.4);
         }
 
         .-two {
-          color: #30C0FFFF;
+          border-radius: 0 0 16px 0;
+          background:rgba(39,220,163,1);
+          color:rgba(255,255,255,1);
+        }
+
+        .-one {
+          border-radius: 0 0 0 16px;
         }
       }
     }

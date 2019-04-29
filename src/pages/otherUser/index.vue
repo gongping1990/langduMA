@@ -5,45 +5,47 @@
                  scroll-y
                  @scroll="scrollTopFn"
                  scroll-with-animation>
-      <div class="ld-user-header"></div>
+      <div class="ld-user-header">
+        <div class="ld-user-header-avthor">
+          <img class="-img" :src="userInfo.headimage"/>
+          <div class="-name">{{userInfo.nikename}}</div>
+        </div>
+      </div>
       <div class="ld-user-footer">
-        <div class="-footer-title">作品集</div>
+        <div class="-footer-title"><span></span>作品集</div>
 
-        <div class="-footer-item -other-item"
+        <div class="-footer-item"
              v-for="(item, index) of dataList"
              :key="index"
              @click="lookOtherRead(item.id)">
-          <div class="-other-left">
-            <div class="-other-title">《{{item.coursename|| "这是一本测试"}}》</div>
-            <div class="-other-time">{{grade || '一年级'}} · {{semester || '上学期'}} | 日期: {{item.gmtCreate || "2019-04-21"}}</div>
-            <div class="-other-num">
+          <div class="-item-left">
+            <div class="-item-title">{{item.coursename}}</div>
+            <img class="-item-img" src="https://pub.file.k12.vip/read/gerenzhuye/msfd-button-play.png"/>
+          </div>
+          <div class="-item-down">
+            <div class="-item-num">
               <img class="-img"
                    src="https://pub.file.k12.vip/read/rank/icon-good2.png" />
               <span>{{item.likes || 0}}</span>
             </div>
+            <div class="-item-time">{{item.grade}} · {{item.semester}} 日期: {{item.gmtCreate}}</div>
           </div>
-          <img class="-other-img"
-               src="https://pub.file.k12.vip/read/course/kczy-button-play.png" />
         </div>
       </div>
       <div class="ld-user-wrap">
-        <img class="-img"
-             :src="userInfo.headimage" />
-        <div class="-name">{{userInfo.nikename}}</div>
         <div class="-text">
           <div>
-            <div class="-num-one">{{userInfo.likes}}</div>
+            <div class="-text-num">{{userInfo.likes}}</div>
             <div class="-text-tip">赞</div>
           </div>
           <div>
-            <div class="-num-two">{{userInfo.achCards}}</div>
+            <div class="-text-num">{{userInfo.achCards}}</div>
             <div class="-text-tip">成就卡</div>
           </div>
           <div>
-            <div class="-num-three">{{userInfo.readdays}}</div>
+            <div class="-text-num">{{userInfo.readdays}}</div>
             <div class="-text-tip">朗读(天)</div>
           </div>
-
         </div>
       </div>
     </scroll-view>
@@ -145,17 +147,41 @@ export default {
 
   &-header {
     width: 375px;
-    height: 131px;
-    background: url('https://pub.file.k12.vip/read/backgroud-my.png') no-repeat;
-    background-size: 100%;
+    height: 149px;
+    background: rgba(54, 219, 164, 1);
+
+    &-avthor {
+      margin-left: 24px;
+      padding-top: 25px;
+      display: flex;
+      align-items: center;
+
+      .-img {
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        border: 3px solid rgba(255, 255, 255, 1);
+      }
+
+      .-name {
+        margin-left: 17px;
+        font-size: 18px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 1)
+      }
+    }
+
   }
 
   &-footer {
+
     .-footer-action {
-      position: relative;
-      width: 40px;
-      height: 40px;
-      top: 40%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width:58px;
+      height:60px;
+      background:rgba(255,96,36,1);
 
       .-right-img {
         width: 20px;
@@ -164,51 +190,48 @@ export default {
     }
 
     .-footer-title {
-      margin: 130px 24px 0;
-      background: url('https://pub.file.k12.vip/read/rank/icon-tittle.png') 0%
-        no-repeat;
-      background-size: contain;
-      height: 46px;
-      line-height: 46px;
-      font-size: 17px;
+      display: flex;
+      align-items: center;
+      margin: 70px 24px 0;
+      height: 28px;
+      font-size: 20px;
       font-weight: 500;
       color: rgba(74, 74, 74, 1);
+
+      span {
+        display: inline-block;
+        width: 6px;
+        height: 21px;
+        background: rgba(56, 220, 164, 1);
+        border-radius: 3px;
+        margin-right: 8px;
+      }
     }
 
     .-footer-item {
       position: relative;
       align-items: center;
-      padding: 26px 16px 19px;
-      margin: 21px 24px;
-
+      margin: 24px 24px;
       background: rgba(255, 255, 255, 1);
-      box-shadow: 0px 2px 10px 0px rgba(222, 232, 237, 1);
-      border-radius: 6px;
-
-      .-item-img {
-        position: absolute;
-        top: -18px;
-        right: 0;
-        width: 36px;
-        height: 36px;
-      }
 
       .-item-left {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
         .-item-title {
           display: flex;
           align-items: center;
           font-size: 16px;
           font-weight: 500;
-          color: #1d1b1b;
+          color: #324062;
           line-height: 22px;
+        }
 
-          .-img {
-            display: inline-block;
-            margin-left: 4px;
-            color: #30c0ff;
-            width: 16px;
-            height: 16px;
-          }
+        .-item-img {
+          display: inline-block;
+          width: 34px;
+          height: 35px;
         }
       }
 
@@ -216,113 +239,47 @@ export default {
         display: flex;
         justify-content: space-between;
         align-items: center;
-        margin-top: 11px;
+        margin-top: 9px;
 
         .-item-time {
           font-size: 10px;
           font-weight: 300;
-          color: #707374;
+          color: #CDCDCD;
           line-height: 14px;
         }
 
         .-item-num {
-          font-size: 14px;
-          font-weight: 400;
-          color: #ff668e;
-          line-height: 20px;
-
-          .-img {
-            margin-right: 8px;
-            width: 15px;
-            height: 15px;
-          }
-        }
-      }
-    }
-
-    .-other-item {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      .-other-left {
-        .-other-title {
-          max-width: 240px;
-          text-overflow: ellipsis;
-          overflow: hidden;
-          white-space: nowrap;
-          height: 22px;
-          font-size: 16px;
-          font-weight: 600;
-          color: rgba(29, 27, 27, 1);
-          line-height: 22px;
-          margin-bottom: 8px;
-        }
-
-        .-other-time {
-          height: 14px;
-          font-size: 10px;
-          font-weight: 300;
-          color: rgba(112, 115, 116, 1);
-          line-height: 14px;
-          margin-bottom: 12px;
-        }
-
-        .-other-num {
-          height: 17px;
           font-size: 12px;
-          font-weight: 500;
-          color: rgba(112, 115, 116, 1);
+          font-weight: 400;
+          color: #5E677B;
           line-height: 17px;
 
           .-img {
-            margin-right: 4px;
+            margin-right: 6px;
             width: 11px;
-            height: 11px;
+            height: 13px;
           }
         }
-      }
-
-      .-other-img {
-        width: 32px;
-        height: 32px;
       }
     }
   }
 
   &-wrap {
     position: absolute;
-    top: 80px;
+    top: 113px;
     left: 24px;
     width: 327px;
-    height: 142px;
-    text-align: center;
+    height: 79px;
     background: rgba(255, 255, 255, 1);
+    border-radius: 8px;
     box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.1);
-    border-radius: 16px;
-
-    .-img {
-      position: absolute;
-      top: -28px;
-      left: 136px;
-      width: 56px;
-      height: 56px;
-      border-radius: 50%;
-      border: 3px solid rgba(255, 255, 255, 1);
-    }
-
-    .-name {
-      margin-top: 36px;
-      font-size: 16px;
-      font-weight: 500;
-      color: rgba(74, 74, 74, 1);
-    }
+    text-align: center;
 
     .-text {
       display: flex;
       justify-content: space-between;
       align-content: center;
-      padding: 24px 24px 17px;
+      padding: 18px 32px;
 
       &-wrap {
         display: flex;
@@ -330,7 +287,7 @@ export default {
         &-line {
           border: 1px;
           height: 16px;
-          color: #0000001a;
+          color: #0000001A;
         }
 
         &-item {
@@ -338,20 +295,9 @@ export default {
         }
       }
 
-      .-num-one {
+      &-num {
         font-size: 22px;
-        font-weight: bold;
-        color: #ff668e;
-      }
-      .-num-two {
-        font-size: 22px;
-        font-weight: bold;
-        color: #30c0ff;
-      }
-      .-num-three {
-        font-size: 22px;
-        font-weight: bold;
-        color: #38e292;
+        color: #FF9F24;
       }
 
       &-tip {

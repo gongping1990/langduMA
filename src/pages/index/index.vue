@@ -256,9 +256,9 @@ export default {
           height: 12px;
         }
         &.watch {
-          @include bg('/read/shouye/icon-index-look.png');
-          width: 12px;
-          height: 8px;
+          @include bg('/2019/04/30/1123037383097708545.png');
+          width: 9px;
+          height: 9px;
         }
         &.read {
           @include bg("/read/shouye/icon-index-read.png");

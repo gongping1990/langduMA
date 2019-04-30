@@ -47,10 +47,6 @@
       </div>
     </scroll-view>
 
-    <div class="ld-my-work-btn">
-      <div class="-btn" @click="backJump">返回课程主页</div>
-    </div>
-
     <wux-popup :visible="isShowDel" @close="openDel">
       <div class="ld-my-work-del">
         <div class="-del-title">提示</div>
@@ -127,11 +123,6 @@
       this.getList();
     },
     methods: {
-      backJump () {
-        wx.navigateTo({
-          url: `/pages/details/main?id=${this.queryInfo.id}`
-        })
-      },
       init() {
         this.innerAudioContext = wx.createInnerAudioContext();
       },
@@ -243,7 +234,7 @@
     background: #ffffff;
 
     &-wrap {
-      height: calc(100vh - 60px);
+      height: 100vh;
     }
 
     &-header {
@@ -507,29 +498,6 @@
         font-weight: 500;
         color: rgba(255, 255, 255, 1);
         line-height: 40px;
-      }
-    }
-
-    &-btn {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: absolute;
-      bottom: 0;
-      background: #ffffff;
-      height: 60px;
-      width: 100%;
-
-      .-btn {
-        width:179px;
-        height:40px;
-        background:rgba(54,219,164,1);
-        border-radius:26px;
-        font-size:15px;
-        font-weight:500;
-        color:rgba(255,255,255,1);
-        line-height:40px;
-        text-align: center;
       }
     }
   }

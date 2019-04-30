@@ -332,7 +332,7 @@
             line-height: 22px;
 
             .-item-color {
-              color: #FF5F0A
+              color: #FF9F24
             }
 
             .-img {

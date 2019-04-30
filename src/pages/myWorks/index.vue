@@ -14,11 +14,12 @@
       <div class="ld-my-work-footer">
         <div class="-footer-wrap" v-for="(item, index) of dataList" :key="index">
           <van-swipe-cell :right-width="65">
-            <div class="-footer-item" @click="lookOtherRead(item.id)">
+            <div class="-footer-item" @click="audioPlay(item)">
 
               <div class="-item-left">
                 <div class="-item-title">
-                  <img class="-img" src="https://pub.file.k12.vip/read/gerenzhuye/msfd-button-play copy.png"/>
+                  <img v-if="!item.isPlay" class="-img" src="https://pub.file.k12.vip/read/gerenzhuye/msfd-button-play copy.png"/>
+                  <img v-else class="-img" src="https://pub.file.k12.vip/2019/04/30/1123037383097708545.png"/>
                   <span>{{item.coursename}}</span>
                   <div class="-item-tip" v-if="index==0 && item.likes!=0">
                     <img src="https://pub.file.k12.vip/read/gerenzhuye/1.png"/>
@@ -86,7 +87,8 @@
         isShowNoData: false,
         dataList: [],
         queryInfo: "",
-        dataItem: ""
+        dataItem: "",
+        innerAudioContext: '',
       };
     },
 
@@ -119,8 +121,41 @@
       this.queryInfo = this.$root.$mp.query;
       this.getList();
     },
-
     methods: {
+      init () {
+        this.innerAudioContext = wx.createInnerAudioContext();
+      },
+      audioPlay (data) {
+        this.innerAudioContext.src = data.voiceUrl;
+        if (!data.isPlay) {
+          this.innerAudioContext.play();
+        } else {
+          this.innerAudioContext.pause();
+        }
+
+        this.innerAudioContext.onPlay(() => {
+          this.changeStatus(true,data);
+        });
+        this.innerAudioContext.onPause(() => {
+          this.changeStatus(false,data);
+        });
+        this.innerAudioContext.onEnded(() => {
+          this.changeStatus(false,data);
+        });
+        this.innerAudioContext.onStop(() => {
+          this.changeStatus(false,data);
+        });
+      },
+      changeStatus(bool,data) {
+        this.dataList.forEach(item => {
+          if(data.id == item.id) {
+            item.isPlay = bool
+          } else {
+            item.isPlay = false
+          }
+        })
+        this.$forceUpdate()
+      },
       stopPropagation() {
       },
       openModal() {
@@ -131,11 +166,6 @@
           url: `/pages/read/main?id=${this.queryInfo.id}`
         });
         this.isShowNoData = false;
-      },
-      lookOtherRead(id) {
-        wx.navigateTo({
-          url: `/pages/listenWork/main?id=${id}`
-        });
       },
       openDel(data) {
         this.dataItem = data;
@@ -177,11 +207,23 @@
           this.page.total = data.resultData.total;
           this.isShowNoData = this.dataList.length == "0";
           this.isFetching = false;
+          this.dataList.forEach(item => {
+            item.isPlay = false
+          })
+          this.init()
         }, () => {
           this.isFetching = false;
         });
       }
-    }
+    },
+
+    onHide () {
+      this.innerAudioContext.destroy()
+    },
+
+    onUnload () {
+      this.innerAudioContext.destroy()
+    },
   };
 </script>
 

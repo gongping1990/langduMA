@@ -39,7 +39,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 14,
+			"current": 11,
 			"list": [
 				{
 					"id": 0,
@@ -121,8 +121,8 @@
 				{
 					"id": 11,
 					"name": "分享",
-					"pathName": "pages/popularityRank/main",
-					"query": "id=1111192430139002882&type=2",
+					"pathName": "pages/user/main",
+					"query": "",
 					"scene": null
 				},
 				{
@@ -143,7 +143,7 @@
 					"id": 14,
 					"name": "我的成就卡",
 					"pathName": "pages/myWorks/main",
-					"query": "id=1111624192804098050&name=识字1.天地人",
+					"query": "id=1111624285481439234&name=识字2.金木水火土",
 					"scene": null
 				}
 			]

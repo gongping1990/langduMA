@@ -18,10 +18,11 @@
 
         <div class="-footer-wrap" v-for="(item, index) of dataList" :key="index" >
           <van-swipe-cell :right-width="65">
-            <div class="-footer-item" @click="lookOtherRead(item.id)">
+            <div class="-footer-item" @click="audioPlay(item)">
               <div class="-item-left">
                 <div class="-item-title">
-                  <img class="-img" src="https://pub.file.k12.vip/read/gerenzhuye/msfd-button-play copy.png"/>
+                  <img v-if="!item.isPlay" class="-img" src="https://pub.file.k12.vip/read/gerenzhuye/msfd-button-play copy.png"/>
+                  <img v-else class="-img" src="https://pub.file.k12.vip/2019/04/30/1123037383097708545.png"/>
                   <span>{{item.coursename}}</span>
                 </div>
                 <button open-type='share' :data-item="item" class="-share-btn" @click.stop="stopPropagation">
@@ -96,7 +97,8 @@
         isShowDel: false,
         dataList: [],
         userInfo: "",
-        dataItem: ""
+        dataItem: "",
+        innerAudioContext: '',
       };
     },
 
@@ -104,6 +106,7 @@
       wx.hideShareMenu();
       this.getWorkList();
       this.getMessageInfo();
+      this.init()
     },
 
     components: {},
@@ -125,6 +128,40 @@
       };
     },
     methods: {
+      init () {
+        this.innerAudioContext = wx.createInnerAudioContext();
+      },
+      audioPlay (data) {
+        this.innerAudioContext.src = data.voiceUrl;
+        if (!data.isPlay) {
+          this.innerAudioContext.play();
+        } else {
+          this.innerAudioContext.pause();
+        }
+
+        this.innerAudioContext.onPlay(() => {
+          this.changeStatus(true,data);
+        });
+        this.innerAudioContext.onPause(() => {
+          this.changeStatus(false,data);
+        });
+        this.innerAudioContext.onEnded(() => {
+          this.changeStatus(false,data);
+        });
+        this.innerAudioContext.onStop(() => {
+          this.changeStatus(false,data);
+        });
+      },
+      changeStatus(bool,data) {
+        this.dataList.forEach(item => {
+          if(data.id == item.id) {
+            item.isPlay = bool
+          } else {
+            item.isPlay = false
+          }
+        })
+        this.$forceUpdate()
+      },
       stopPropagation () {
       },
       clickCard() {
@@ -150,11 +187,6 @@
           }
         });
       },
-      lookOtherRead(id) {
-        wx.navigateTo({
-          url: `/pages/listenWork/main?id=${id}`
-        });
-      },
       bindLoadItem() {
         if (this.page.current < Math.ceil(this.page.total / this.page.size)) {
           this.page.current++;
@@ -175,7 +207,9 @@
             }
             this.page.total = data.resultData.total;
             this.isFetching = false;
-
+            this.dataList.forEach(item => {
+              item.isPlay = false
+            })
           }, () => {
             this.isFetching = false;
           });
@@ -190,7 +224,15 @@
             this.isFetching = false;
           });
       }
-    }
+    },
+
+    onHide () {
+      this.innerAudioContext.destroy()
+    },
+
+    onUnload () {
+      this.innerAudioContext.destroy()
+    },
   };
 </script>
 

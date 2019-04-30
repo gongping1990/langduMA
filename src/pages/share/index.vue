@@ -391,7 +391,7 @@ export default {
           position: absolute;
           width: 150px;
           height: 200px;
-          background: rgba(48, 192, 255, 0.5);
+          background: rgba(128,128,128,0.5);
           border-radius: 6px;
           filter: blur(2px);
         }

@@ -13,11 +13,6 @@
                :src="detailData.impAchievement"
                mode="scaleToFill"
                lazy-load="false" />
-        <div class="details-cover_popover"
-             v-if="!detailData.unlocktype">
-          <text>快来解锁我吧</text>
-          <i class="details-cover_arrow"></i>
-        </div>
         <div class="details-cover_tag"
              v-if="detailData.unlocktype">
           <image src="https://pub.file.k12.vip/read/lesson/kczy-icon-good.png"
@@ -32,14 +27,14 @@
             <span>朗读老师：{{detailData.teacherName}}</span>
           </div>
           <div class="introduce-content-right">
-            <wux-badge :count="detailData.uploadworks">
-              <div class="wdzp-btn">
+            <wux-badge :showZero="true"
+                       :count="detailData.uploadworks">
+              <div class="wdzp-btn" @click="myWork">
                 <image class="action-image"
                        mode="widthFix"
                        src="https://pub.file.k12.vip/read/kechengzhuyi/kczy-icon-Reading.png"
-                       @click="myWork" />
-                <text class="action-text"
-                      @click="myWork">我的朗读</text>
+                        />
+                <text class="action-text">我的朗读</text>
               </div>
             </wux-badge>
           </div>
@@ -91,7 +86,8 @@
             @click="toJump">查看人气排行 ></text>
     </div>
 
-    <wux-popup :visible="showPopup" @close="changePopup">
+    <wux-popup :visible="showPopup"
+               @close="changePopup">
       <div class="popup">
         <image class="popup-image"
                :src="detailData.comAchievement"
@@ -99,6 +95,17 @@
         <text class="popup-text">朗读课文就能解锁我哟~</text>
         <div class="popup-btn"
              @tap="changePopup">我知道了</div>
+      </div>
+    </wux-popup>
+    <wux-popup :visible="isShowNoData"
+               @close="openModal">
+      <div class="ld-my-work-popup-no">
+        <div class="popup-wrap">
+          <div class="popup-text-one">你还没有朗读作品</div>
+          <div class="popup-text-two">快去朗读吧！</div>
+          <div class="popup-btn"
+               @tap="openModal">我知道了</div>
+        </div>
       </div>
     </wux-popup>
   </div>
@@ -114,6 +121,7 @@ export default {
       detailData: {},
       list: [],
       showPopup: false,
+      isShowNoData: false,
       isAuth: false
     }
   },
@@ -127,6 +135,10 @@ export default {
 
   methods: {
     myWork () {
+      if(!this.detailData.uploadworks) {
+        this.openModal()
+        return
+      }
       wx.navigateTo({
         url: `/pages/myWorks/main?id=${this.detailData.id}&name=${this.detailData.name}`
       });
@@ -135,6 +147,9 @@ export default {
       wx.navigateTo({
         url: `/pages/popularityRank/main?type=2&id=${this.detailData.id}&name=${this.detailData.name}`
       });
+    },
+    openModal () {
+      this.isShowNoData = !this.isShowNoData;
     },
     getPhoneNumber (res) {
       let { encryptedData, iv } = res.mp.detail
@@ -190,6 +205,46 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.ld-my-work-popup-no {
+  position: relative;
+  width: 315px;
+  height: 379px;
+  @include bg('/read/tc/1.png');
+
+  .popup-wrap {
+    padding-top: 208px;
+    text-align: center;
+  }
+
+  .popup-text-one {
+    height: 28px;
+    font-size: 20px;
+    font-weight: 400;
+    color: rgba(50, 64, 98, 1);
+    line-height: 28px;
+  }
+
+  .popup-text-two {
+    margin-top: 4px;
+    height: 33px;
+    font-size: 24px;
+    font-weight: 500;
+    color: rgba(50, 64, 98, 1);
+    line-height: 33px;
+  }
+
+  .popup-btn {
+    margin: 24px auto 0;
+    width: 179px;
+    height: 40px;
+    background: rgba(54, 219, 164, 1);
+    border-radius: 26px;
+    font-size: 15px;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 1);
+    line-height: 40px;
+  }
+}
 .details {
   background-color: #f6f6f6;
   .wdzp-btn {

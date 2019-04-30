@@ -15,7 +15,7 @@
           <span class="-user-title" :class="{'-active1': tabType == '1'}" @click="changeTab(1)">本周排行</span>
           <span class="-user-title" :class="{'-active2': tabType == '2'}" @click="changeTab(2)">上周排行</span>
         </div>
-        <div class="item-wrap -user-item">
+        <div class="item-wrap -user-item" @click="lookOtherWorks(myInfo.userId)">
           <div class="-item-left" :class="{'-user-no': myInfo.rank=='-1'}">
             {{myInfo.rank=="-1" ? "未上榜" : myInfo.rank }}
           </div>
@@ -84,8 +84,9 @@
       </div>
     </div>
 
-    <wux-popup :visible="isOpenPopup" :position="!dataShareList.length ? 'center' : 'bottom'" @close="closePopup">
-      <div class="ld-popularityRank-popup-content" :class="{'-more': isOpenMore}" v-if="dataShareList.length">
+    <wux-popup :visible="isOpenPopup" :position="(!myInfo.workId && !dataShareList.length) ? 'center' : 'bottom'"
+               @close="closePopup">
+      <div class="ld-popularityRank-popup-content" :class="{'-more': isOpenMore}" v-if="myInfo.workId || dataShareList.length">
         <div class="-popup-title">叫大家来给你的作品点赞吧</div>
 
         <div class="-popup-item" v-if="!isOpenMore">
@@ -134,7 +135,7 @@
         <div class="-popup-more" @click="openMore" v-if="!isOpenMore">选择其他作品 ></div>
       </div>
 
-      <div class="ld-popularityRank-popup-no" v-if="!dataShareList.length">
+      <div class="ld-popularityRank-popup-no" v-if="!myInfo.workId && !dataShareList.length">
         <div class="popup-wrap">
           <div class="popup-text-one">你还没有朗读作品</div>
           <div class="popup-text-two">快去朗读吧！</div>
@@ -142,7 +143,7 @@
         </div>
       </div>
 
-      <button open-type="share" class="ld-popularityRank-popup-btn" v-if="dataShareList.length">分享到班级群</button>
+      <button open-type="share" class="ld-popularityRank-popup-btn" v-if="myInfo.workId || dataShareList.length">分享到班级群</button>
 
     </wux-popup>
   </div>
@@ -381,7 +382,8 @@
                 likes: "0",
                 headimage: this.userInfo.headimgurl,
                 nickname: this.userInfo.nickname,
-                rank: "-1"
+                rank: "-1",
+                userId: this.userInfo.id
               };
             }
           });
@@ -541,7 +543,7 @@
         height: 100%;
 
         .-footer-item {
-         float: right;
+          float: right;
 
         }
 
@@ -555,11 +557,11 @@
 
         .-footer-text {
           margin-top: 4px;
-          height:17px;
-          font-size:12px;
-          font-weight:500;
-          color:rgba(29,27,27,1);
-          line-height:17px;
+          height: 17px;
+          font-size: 12px;
+          font-weight: 500;
+          color: rgba(29, 27, 27, 1);
+          line-height: 17px;
         }
       }
     }
@@ -680,32 +682,32 @@
       }
 
       .popup-text-one {
-        height:28px;
-        font-size:20px;
-        font-weight:400;
-        color:rgba(50,64,98,1);
-        line-height:28px;
+        height: 28px;
+        font-size: 20px;
+        font-weight: 400;
+        color: rgba(50, 64, 98, 1);
+        line-height: 28px;
       }
 
       .popup-text-two {
         margin-top: 4px;
-        height:33px;
-        font-size:24px;
-        font-weight:500;
-        color:rgba(50,64,98,1);
-        line-height:33px;
+        height: 33px;
+        font-size: 24px;
+        font-weight: 500;
+        color: rgba(50, 64, 98, 1);
+        line-height: 33px;
       }
 
       .popup-btn {
         margin: 24px auto 0;
-        width:179px;
-        height:40px;
-        background:rgba(54,219,164,1);
-        border-radius:26px;
-        font-size:15px;
-        font-weight:500;
-        color:rgba(255,255,255,1);
-        line-height:40px;
+        width: 179px;
+        height: 40px;
+        background: rgba(54, 219, 164, 1);
+        border-radius: 26px;
+        font-size: 15px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 1);
+        line-height: 40px;
       }
     }
 

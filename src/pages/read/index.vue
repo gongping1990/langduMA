@@ -552,7 +552,7 @@ export default {
     this.disabled = false
     this.showMask = false
     this.percent = 0
-    this.downTime = 3
+    this.downTime = 0
     this.timer = null
     this.isStart = false
     this.paused = false

@@ -12,7 +12,7 @@
       </div>
 
       <div class="ld-my-card-content">
-        <div class="-content-item" v-for="(item, index) of dataList" :key="index">
+        <div class="-content-item" v-for="(item, index) of dataList" :key="index" @click="toDetail(item)">
           <div class="-content-item-img" :style="{background: 'url('+item.impAchievement+') no-repeat;background-size: cover;'}">
             <div class="-content-item-img-header" v-if="item.rank!=-1">
               <div class="-header-bg">
@@ -67,6 +67,11 @@
     },
 
     methods: {
+      toDetail (data) {
+        wx.navigateTo({
+          url: `/pages/popularityRank/main?type=2&id=${data.courseId}&name=${data.coursename}`
+        });
+      },
       toJump () {
         wx.switchTab({ url: '/pages/index/main' });
       },

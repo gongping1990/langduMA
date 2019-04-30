@@ -52,7 +52,7 @@
     </read>
     <div class="control"
          v-if="!isStart">
-      <text class="control-text">请阅读课文，准备朗读</text>
+      <text class="control-text">{{downTime ? '朗读即将开始' : '请阅读课文，准备朗读'}}</text>
       <div class="down-time control-btn"
            v-if="downTime">{{downTime}}</div>
       <div class="control-btn"
@@ -114,10 +114,10 @@
             分享到班级群
           </button>
         </div>
+        <div class="success-tc-close" @click="changeSuccessPopupTwo"></div>
       </div>
     </wux-popup>
     <wux-popup :visible="showSuccess"
-               closable
                @close="changeSuccessPopup">
       <div class="success-tc js">
         <image class="success-tc_image"
@@ -131,6 +131,7 @@
             分享到班级群
           </button>
         </div>
+        <div class="success-tc-close" @click="changeSuccessPopup"></div>
       </div>
     </wux-popup>
   </div>
@@ -627,14 +628,14 @@ export default {
   .success-tc {
     @include flex-column-center;
     @include bg('/read/tc/4.png');
-    box-sizing: border-box;
     padding-top: 148px;
+    padding-bottom: 40px;
     margin: 0 auto;
     width: 310px;
-    height: 377px;
+    height: 229px;
     &.js {
       @include bg('/read/tc/3.png');
-      height: 428px;
+      height: 280px;
       .success-tc_content {
         font-size: 12px;
       }
@@ -645,6 +646,15 @@ export default {
       .success-tc_btn {
         margin-top: 12px;
       }
+    }
+    &-close {
+      @include bg('/read/fandukewenxuanzhe/msfd-icon-close.png');
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      margin-left: -12px;
+      width: 24px;
+      height: 24px;
     }
     &_image {
       width: 80px;

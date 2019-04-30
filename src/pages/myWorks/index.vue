@@ -164,7 +164,7 @@
       },
       toRead() {
         wx.navigateTo({
-          url: `/pages/read/main?id=${this.queryInfo.id}`
+          url: `/pages/details/main?id=${this.queryInfo.id}`
         });
         this.isShowNoData = false;
       },

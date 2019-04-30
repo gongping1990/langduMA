@@ -1,9 +1,9 @@
 <template>
   <div class="ld-ranking">
-    <div class="-scroll"
-         v-if="isShowHeader">
-      <div class="-scroll-bg">佳作推荐</div>
-    </div>
+    <!--<div class="-scroll"-->
+         <!--v-if="isShowHeader">-->
+      <!--<div class="-scroll-bg">佳作推荐</div>-->
+    <!--</div>-->
     <scroll-view class="ld-ranking-wrap"
                  @scrolltolower="bindLoadItem"
                  scroll-y

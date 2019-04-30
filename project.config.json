@@ -39,7 +39,7 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 3,
+			"current": 11,
 			"list": [
 				{
 					"id": 0,
@@ -105,9 +105,9 @@
 					"scene": null
 				},
 				{
-					"id": -1,
-					"name": "我的",
-					"pathName": "pages/user/main",
+					"id": 9,
+					"name": "风采",
+					"pathName": "pages/ranking/main",
 					"query": "",
 					"scene": null
 				},
@@ -121,8 +121,8 @@
 				{
 					"id": 11,
 					"name": "分享",
-					"pathName": "pages/popularityRank/main",
-					"query": "id=1111192430139002882&type=2",
+					"pathName": "pages/user/main",
+					"query": "",
 					"scene": null
 				},
 				{
@@ -137,6 +137,13 @@
 					"name": "单课作品",
 					"pathName": "pages/popularityRank/main",
 					"query": "type=2&id=1111624285481439234&name=识字2.金木水火土",
+					"scene": null
+				},
+				{
+					"id": 14,
+					"name": "我的成就卡",
+					"pathName": "pages/myWorks/main",
+					"query": "id=1111624285481439234&name=识字2.金木水火土",
 					"scene": null
 				}
 			]

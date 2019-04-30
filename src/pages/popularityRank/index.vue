@@ -132,16 +132,17 @@
 
         <div class="-popup-more" @click="openMore" v-if="!isOpenMore">选择其他作品 ></div>
       </div>
+
       <div class="ld-popularityRank-popup-no" v-if="!myInfo.workId">
-        <div class="-text-one">你还没有朗读作品</div>
-        <div class="-text-two">快去朗读吧</div>
-        <div class="-text-btn-wrap">
-          <div class="-btn-one" @click="closePopup" v-if="queryInfo.type == 2">取消</div>
-          <div class="-btn-two" @click="toRead" v-if="queryInfo.type == 2">我要朗读</div>
-          <div class="-btn-three" @click="closePopup" v-if="queryInfo.type == 1">我知道了</div>
+        <div class="popup-wrap">
+          <div class="popup-text-one">你还没有朗读作品</div>
+          <div class="popup-text-two">快去朗读吧！</div>
+          <div class="popup-btn" @tap="closePopup">我知道了</div>
         </div>
       </div>
+
       <button open-type="share" class="ld-popularityRank-popup-btn" v-if="myInfo.workId">分享到班级群</button>
+
     </wux-popup>
   </div>
 </template>
@@ -652,63 +653,43 @@
     }
 
     &-popup-no {
-      width: 327px;
-      height: 178px;
-      background: rgba(255, 255, 255, 1);
-      border-radius: 16px;
+      position: relative;
+      width: 315px;
+      height: 379px;
+      @include bg('/read/tc/1.png');
 
-      .-text-one {
-        color: #1D1B1B;
-        font-size: 20px;
-        line-height: 28px;
-        padding-top: 32px;
+      .popup-wrap {
+        padding-top: 208px;
+        text-align: center;
       }
 
-      .-text-two {
-        color: #1D1B1B;
-        font-size: 16px;
-        line-height: 28px;
-        margin-bottom: 32px;
+      .popup-text-one {
+        height:28px;
+        font-size:20px;
+        font-weight:400;
+        color:rgba(50,64,98,1);
+        line-height:28px;
       }
 
-      .-text-btn-wrap {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin: 0 48px;
+      .popup-text-two {
+        margin-top: 4px;
+        height:33px;
+        font-size:24px;
+        font-weight:500;
+        color:rgba(50,64,98,1);
+        line-height:33px;
+      }
 
-        .-btn-one {
-          width: 100px;
-          height: 40px;
-          border-radius: 26px;
-          border: 1px solid rgba(0, 0, 0, 0.16);
-          font-size: 15px;
-          font-weight: 500;
-          color: rgba(112, 115, 116, 1);
-          line-height: 40px;
-        }
-
-        .-btn-two {
-          width: 100px;
-          height: 40px;
-          background: linear-gradient(90deg, rgba(102, 255, 248, 1) 0%, rgba(48, 192, 255, 1) 100%);
-          border-radius: 26px;
-          font-size: 15px;
-          font-weight: 500;
-          color: rgba(255, 255, 255, 1);
-          line-height: 40px;
-        }
-
-        .-btn-three {
-          font-size: 15px;
-          font-weight: 500;
-          color: rgba(255, 255, 255, 1);
-          line-height: 40px;
-          width: 263px;
-          height: 40px;
-          background: linear-gradient(90deg, rgba(102, 255, 248, 1) 0%, rgba(48, 192, 255, 1) 100%);
-          border-radius: 26px;
-        }
+      .popup-btn {
+        margin: 24px auto 0;
+        width:179px;
+        height:40px;
+        background:rgba(54,219,164,1);
+        border-radius:26px;
+        font-size:15px;
+        font-weight:500;
+        color:rgba(255,255,255,1);
+        line-height:40px;
       }
     }
 

@@ -10,7 +10,7 @@
                  @scroll="scrollTopFn"
                  scroll-with-animation>
       <div class="ld-ranking-top"
-           :class="{'ld-ranking-bg': isShowTop }">
+           :class="[isShowTop ? 'ld-ranking-bg' : 'ld-ranking-no-bg']">
         <div class="-top-title">
           <div class="-top-title-left">上周人气之星</div>
           <div class="-top-title-right"
@@ -29,11 +29,9 @@
             </div>
             <div class="-one-num">
               <img class="-one-num-img"
-                   src="https://pub.file.k12.vip/read/wind/icon-good2.png" />
+                   src="https://pub.file.k12.vip/2019/04/29/1122763456161116162.png" />
               <span>{{twoInfo.likes}}</span>
             </div>
-            <img class="-one-image"
-                 src="https://pub.file.k12.vip/read/wind/2.png" />
           </div>
           <div class="-two">
             <div class="-two-img">
@@ -46,11 +44,9 @@
             <div class="-two-name">{{oneInfo.nickname}}</div>
             <div class="-two-num">
               <img class="-two-num-img"
-                   src="https://pub.file.k12.vip/read/wind/icon-good1.png" />
+                   src="https://pub.file.k12.vip/2019/04/29/1122763456161116162.png" />
               <span>{{oneInfo.likes}}</span>
             </div>
-            <img class="-two-image"
-                 src="https://pub.file.k12.vip/read/wind/1.png" />
           </div>
           <div class="-one">
             <div class="-one-img">
@@ -61,16 +57,10 @@
             <div class="-one-name">{{threeInfo.nickname}}</div>
             <div class="-one-num -three-num">
               <img class="-one-num-img"
-                   src="https://pub.file.k12.vip/read/wind/icon-good3.png" />
+                   src="https://pub.file.k12.vip/2019/04/29/1122763456161116162.png" />
               <span>{{threeInfo.likes}}</span>
             </div>
-            <img class="-one-image -three-image"
-                 src="https://pub.file.k12.vip/read/wind/3.png" />
           </div>
-        </div>
-        <div v-if="!isShowTop">
-          <img class="-top-no-bg"
-               src="https://pub.file.k12.vip/read/week-rank-bg.png" />
         </div>
       </div>
       <div class="ld-ranking-down">
@@ -80,36 +70,41 @@
              v-for="(item,index) of dataList"
              :key="index"
              @click="lookOtherRead(item)">
-          <div class="-down-item-tip"
-               v-if="item.recommend!=0"
-               :class="{'-rq':item.recommend == '2','-tj':item.recommend=='1'}">
-            {{tagList[item.recommend-1]}}
-          </div>
+
           <div class="-down-item-left">
-            <div class="-left-top">
-              <img class="-left-top-img"
+            <div class="-left-img">
+              <img class="-img"
                    :src="item.headimgurl" />
-              <div class="-left-top-text">
-                <div class="-user-name">{{item.nickname}}</div>
-                <div class="-book-name">《{{item.course}}》</div>
-              </div>
             </div>
-            <div class="-left-down">
-              <div class="-left-down-text">
-                <img class="-left-down-text-img"
-                     src="https://pub.file.k12.vip/read/wind/icon-playing.png" />
-                {{item.pv}}
+            <div class="-left-text">
+              <div class="-left-top">
+                <div class="-left-top-text">
+                  <div class="-text-wrap">
+                    <div class="-tip" v-if="item.recommend==2">
+                     <img src="https://pub.file.k12.vip/read/fengcai/bg3.png"/>
+                    </div>
+                    <div class="-user-name">{{item.nickname}}</div>
+                  </div>
+                  <div class="-book-name">{{item.course}}</div>
+                </div>
               </div>
-              <div class="-left-down-text">
-                <img class="-left-down-text-img-two"
-                     src="https://pub.file.k12.vip/read/rank/icon-good2.png" />
-                {{item.likes}}
+              <div class="-left-down">
+                <div class="-left-down-text">
+                  <img class="-left-down-text-img"
+                       src="https://pub.file.k12.vip/read/wind/icon-playing.png" />
+                  {{item.pv}}
+                </div>
+                <div class="-left-down-text">
+                  <img class="-left-down-text-img-two"
+                       src="https://pub.file.k12.vip/read/rank/icon-good2.png" />
+                  {{item.likes}}
+                </div>
               </div>
             </div>
           </div>
           <div class="-down-item-right">
             <img class="-right-img"
-                 src="https://pub.file.k12.vip/read/lesson/kczy-button-play.png" />
+                 src="https://pub.file.k12.vip/read/fengcai/msfd-button-play.png" />
           </div>
         </div>
       </div>
@@ -239,6 +234,7 @@ export default {
 .ld-ranking {
   &-wrap {
     height: 100vh;
+    position: relative;
   }
 
   .-scroll {
@@ -255,14 +251,6 @@ export default {
     font-size: 20px;
     font-weight: 500;
     color: rgba(74, 74, 74, 1);
-
-    &-bg {
-      height: 46px;
-      line-height: 46px;
-      background: url('https://pub.file.k12.vip/read/rank/icon-tittle.png') 0%
-        no-repeat;
-      background-size: contain;
-    }
   }
 
   @keyframes -scroll {
@@ -277,9 +265,15 @@ export default {
   }
 
   &-bg {
-    background: url('https://pub.file.k12.vip/read/wind/backgroud.png');
+    background: url('https://pub.file.k12.vip/read/fengcai/bg.png') no-repeat;
     background-size: cover;
-    height: 351px;
+    height: 377px;
+  }
+
+  &-no-bg {
+    background: url('https://pub.file.k12.vip/read/fengcai/bg1.png') no-repeat;
+    background-size: cover;
+    height: 377px;
   }
 
   &-top {
@@ -292,32 +286,30 @@ export default {
       color: rgba(255, 255, 255, 1);
 
       &-left {
-        background: url('https://pub.file.k12.vip/read/rank/icon-tittle.png')
-          10% no-repeat;
-        background-size: contain;
-        color: rgba(29, 27, 27, 1);
+        margin-top: 20px;
         font-size: 20px;
         font-weight: 500;
-        height: 46px;
-        line-height: 46px;
       }
 
       &-right {
-        color: #30c0ff;
+        margin-top: 25px;
         font-size: 12px;
         font-weight: 400;
       }
     }
 
     .-top-content {
+      position: relative;
       display: flex;
       justify-content: space-around;
       align-items: flex-end;
-      margin-top: 62px;
+      margin-top: 35px;
       text-align: center;
+      padding: 0 20px;
+      height: 148px;
 
       .-one {
-        width: 25%;
+        width: 33%;
 
         &-img {
           margin: 0 auto;
@@ -335,24 +327,25 @@ export default {
           overflow: hidden;
           white-space: nowrap;
           height: 18px;
-          font-size: 13px;
+          font-size: 10px;
           font-weight: 500;
           line-height: 18px;
           margin: 8px 0 4px 0;
+          color: #FFFFFF;
         }
 
         &-num {
           height: 17px;
           font-size: 12px;
           font-weight: 400;
-          color: #fea1baff;
+          color: #ffffff;
           line-height: 17px;
           margin-bottom: 8px;
 
           &-img {
             margin-right: 4px;
-            width: 15px;
-            height: 15px;
+            width: 11px;
+            height: 11px;
           }
         }
 
@@ -370,7 +363,9 @@ export default {
         }
       }
       .-two {
-        width: 50%;
+        position: relative;
+        top: -30px;
+        width: 34%;
 
         &-img {
           position: relative;
@@ -381,7 +376,7 @@ export default {
           &-crown {
             position: absolute;
             top: -29px;
-            left: 19px;
+            left: 15px;
             width: 53px;
             height: 33px;
           }
@@ -389,24 +384,25 @@ export default {
           &-header {
             border: 3px solid rgba(226, 198, 92, 1);
             border-radius: 50%;
-            width: 80px;
-            height: 80px;
+            width: 70px;
+            height: 70px;
           }
         }
 
         &-name {
           height: 18px;
-          font-size: 16px;
+          font-size: 14px;
           font-weight: 500;
           line-height: 22px;
-          margin: 8px 0 4px 0;
+          margin: 0 0 3px 0;
+          color: #FFFFFF;
         }
 
         &-num {
           height: 17px;
           font-size: 14px;
           font-weight: 400;
-          color: #e2c65cff;
+          color: #ffffff;
           line-height: 20px;
 
           &-img {
@@ -433,18 +429,18 @@ export default {
   }
 
   &-down {
-    padding: 0 24px;
+    position: absolute;
+    top: 363px;
+    border-radius:15px 15px 0px 0px;
+    padding: 22px 18px 0 24px;
+    background: #ffffff;
+    width: 100%;
+    box-sizing: border-box;
 
     .-down-title {
-      background: url('https://pub.file.k12.vip/read/rank/icon-tittle.png') 0%
-        no-repeat;
-      background-size: contain;
-      margin-top: 32px;
       font-size: 20px;
       font-weight: 500;
       color: rgba(74, 74, 74, 1);
-      line-height: 46px;
-      height: 46px;
     }
 
     .-down-item {
@@ -452,25 +448,7 @@ export default {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin: 16px 0;
-      height: 102px;
-      border-radius: 16px;
-      box-shadow: 0px 2px 10px 0px rgba(222, 232, 237, 1);
-
-      &-tip {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 64px;
-        height: 18px;
-        background: rgba(155, 155, 155, 1);
-        border-radius: 100px 0 100px 0;
-        font-size: 10px;
-        font-weight: 400;
-        color: rgba(255, 255, 255, 1);
-        line-height: 18px;
-        text-align: center;
-      }
+      margin-top: 25px;
 
       .-rq {
         background: linear-gradient(
@@ -490,7 +468,18 @@ export default {
       }
 
       &-left {
-        padding: 28px 0 15px 24px;
+        display: flex;
+        align-items: center;
+
+        .-left-img {
+          margin-right: 10px;
+
+          img {
+            border-radius: 50%;
+            width: 42px;
+            height: 42px;
+          }
+        }
 
         .-left-top {
           display: flex;
@@ -498,26 +487,35 @@ export default {
           align-items: center;
           margin-bottom: 16px;
 
-          &-img {
-            margin-right: 12px;
-            border-radius: 50%;
-            width: 36px;
-            height: 36px;
-          }
 
           &-text {
+
+            .-text-wrap {
+              display: flex;
+            }
+
             .-user-name {
               font-size: 16px;
               font-weight: bold;
-              color: rgba(74, 74, 74, 1);
+              color: #324062;
               line-height: 22px;
+            }
+
+            .-tip {
+              margin-right: 8px;
+
+              img {
+                width: 64px;
+                height: 18px;
+              }
             }
 
             .-book-name {
               font-size: 12px;
               font-weight: 400;
-              color: rgba(74, 74, 74, 1);
+              color: #5E677B;
               line-height: 17px;
+              margin-top: 4px;
             }
           }
         }
@@ -551,11 +549,10 @@ export default {
       }
 
       &-right {
-        padding-right: 24px;
         .-right-img {
           border-radius: 50%;
-          width: 32px;
-          height: 32px;
+          width: 40px;
+          height: 40px;
         }
       }
     }

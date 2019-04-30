@@ -79,12 +79,13 @@
         <div class="item-wrap -footer-item">
           <img @click="openPopup" class="-footer-img"
                src="https://pub.file.k12.vip/read/paihangbang/zp-button-share.png"/>
+          <div class="-footer-text">集攒冲榜</div>
         </div>
       </div>
     </div>
 
-    <wux-popup :visible="isOpenPopup" :position="!myInfo.workId ? 'center' : 'bottom'" @close="closePopup">
-      <div class="ld-popularityRank-popup-content" :class="{'-more': isOpenMore}" v-if="myInfo.workId">
+    <wux-popup :visible="isOpenPopup" :position="!dataShareList.length ? 'center' : 'bottom'" @close="closePopup">
+      <div class="ld-popularityRank-popup-content" :class="{'-more': isOpenMore}" v-if="dataShareList.length">
         <div class="-popup-title">叫大家来给你的作品点赞吧</div>
 
         <div class="-popup-item" v-if="!isOpenMore">
@@ -133,7 +134,7 @@
         <div class="-popup-more" @click="openMore" v-if="!isOpenMore">选择其他作品 ></div>
       </div>
 
-      <div class="ld-popularityRank-popup-no" v-if="!myInfo.workId">
+      <div class="ld-popularityRank-popup-no" v-if="!dataShareList.length">
         <div class="popup-wrap">
           <div class="popup-text-one">你还没有朗读作品</div>
           <div class="popup-text-two">快去朗读吧！</div>
@@ -141,7 +142,7 @@
         </div>
       </div>
 
-      <button open-type="share" class="ld-popularityRank-popup-btn" v-if="myInfo.workId">分享到班级群</button>
+      <button open-type="share" class="ld-popularityRank-popup-btn" v-if="dataShareList.length">分享到班级群</button>
 
     </wux-popup>
   </div>
@@ -210,6 +211,7 @@
       if (this.queryInfo.type == 1) {
         this.getWeekList();
         this.getMyWeekInfo();
+        this.getShareWorksList();
       } else {
         this.getMyRankInfo();
         this.getItemList();
@@ -238,7 +240,7 @@
       openPopup() {
         this.isOpenPopup = true;
         if (this.queryInfo.type == 1) {
-          this.getShareWorksList();
+          // this.getShareWorksList()
           this.isOpenMore = true;
         }
       },
@@ -538,12 +540,26 @@
         padding: 0 24px;
         height: 100%;
 
+        .-footer-item {
+         float: right;
+
+        }
+
         .-footer-img {
           position: absolute;
           right: 24px;
           top: -24px;
           width: 48px;
           height: 52px;
+        }
+
+        .-footer-text {
+          margin-top: 4px;
+          height:17px;
+          font-size:12px;
+          font-weight:500;
+          color:rgba(29,27,27,1);
+          line-height:17px;
         }
       }
     }

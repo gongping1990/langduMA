@@ -18,9 +18,10 @@
 
               <div class="-item-left">
                 <div class="-item-title">
-                  <img v-if="!item.isPlay" class="-img" src="https://pub.file.k12.vip/read/gerenzhuye/msfd-button-play copy.png"/>
-                  <img v-else class="-img" src="https://pub.file.k12.vip/2019/04/30/1123037383097708545.png"/>
-                  <span>{{item.coursename}}</span>
+                  <img v-if="!item.isPlay" class="-img"
+                       src="https://pub.file.k12.vip/read/gerenzhuye/msfd-button-play copy.png"/>
+                  <img v-else class="-img" src="https://pub.file.k12.vip/2019/04/30/1123118476090011649.png"/>
+                  <span :class="{'-item-color':item.isPlay}">{{item.coursename}}</span>
                   <div class="-item-tip" v-if="index==0 && item.likes!=0">
                     <img src="https://pub.file.k12.vip/read/gerenzhuye/1.png"/>
                   </div>
@@ -45,6 +46,10 @@
         </div>
       </div>
     </scroll-view>
+
+    <div class="ld-my-work-btn">
+      <div class="-btn" @click="backJump">返回课程主页</div>
+    </div>
 
     <wux-popup :visible="isShowDel" @close="openDel">
       <div class="ld-my-work-del">
@@ -88,7 +93,7 @@
         dataList: [],
         queryInfo: "",
         dataItem: "",
-        innerAudioContext: '',
+        innerAudioContext: ""
       };
     },
 
@@ -122,10 +127,15 @@
       this.getList();
     },
     methods: {
-      init () {
+      backJump () {
+        wx.navigateTo({
+          url: `/pages/details/main?id=${this.queryInfo.id}`
+        })
+      },
+      init() {
         this.innerAudioContext = wx.createInnerAudioContext();
       },
-      audioPlay (data) {
+      audioPlay(data) {
         this.innerAudioContext.src = data.voiceUrl;
         if (!data.isPlay) {
           this.innerAudioContext.play();
@@ -134,27 +144,27 @@
         }
 
         this.innerAudioContext.onPlay(() => {
-          this.changeStatus(true,data);
+          this.changeStatus(true, data);
         });
         this.innerAudioContext.onPause(() => {
-          this.changeStatus(false,data);
+          this.changeStatus(false, data);
         });
         this.innerAudioContext.onEnded(() => {
-          this.changeStatus(false,data);
+          this.changeStatus(false, data);
         });
         this.innerAudioContext.onStop(() => {
-          this.changeStatus(false,data);
+          this.changeStatus(false, data);
         });
       },
-      changeStatus(bool,data) {
+      changeStatus(bool, data) {
         this.dataList.forEach(item => {
-          if(data.id == item.id) {
-            item.isPlay = bool
+          if (data.id == item.id) {
+            item.isPlay = bool;
           } else {
-            item.isPlay = false
+            item.isPlay = false;
           }
-        })
-        this.$forceUpdate()
+        });
+        this.$forceUpdate();
       },
       stopPropagation() {
       },
@@ -208,22 +218,22 @@
           this.isShowNoData = this.dataList.length == "0";
           this.isFetching = false;
           this.dataList.forEach(item => {
-            item.isPlay = false
-          })
-          this.init()
+            item.isPlay = false;
+          });
+          this.init();
         }, () => {
           this.isFetching = false;
         });
       }
     },
 
-    onHide () {
-      this.innerAudioContext.destroy()
+    onHide() {
+      this.innerAudioContext.destroy();
     },
 
-    onUnload () {
-      this.innerAudioContext.destroy()
-    },
+    onUnload() {
+      this.innerAudioContext.destroy();
+    }
   };
 </script>
 
@@ -233,7 +243,7 @@
     background: #ffffff;
 
     &-wrap {
-      height: 100vh;
+      height: calc(100vh - 60px);
     }
 
     &-header {
@@ -305,6 +315,10 @@
         align-items: center;
         margin: 26px 24px;
         background: rgba(255, 255, 255, 1);
+
+        .-item-color {
+          color: #FF9F24
+        }
 
         .-item-tip {
           display: inline-block;
@@ -467,24 +481,46 @@
       }
 
       .popup-text-one {
-        height:28px;
-        font-size:20px;
-        font-weight:400;
-        color:rgba(50,64,98,1);
-        line-height:28px;
+        height: 28px;
+        font-size: 20px;
+        font-weight: 400;
+        color: rgba(50, 64, 98, 1);
+        line-height: 28px;
       }
 
       .popup-text-two {
         margin-top: 4px;
-        height:33px;
-        font-size:24px;
-        font-weight:500;
-        color:rgba(50,64,98,1);
-        line-height:33px;
+        height: 33px;
+        font-size: 24px;
+        font-weight: 500;
+        color: rgba(50, 64, 98, 1);
+        line-height: 33px;
       }
 
       .popup-btn {
         margin: 24px auto 0;
+        width: 179px;
+        height: 40px;
+        background: rgba(54, 219, 164, 1);
+        border-radius: 26px;
+        font-size: 15px;
+        font-weight: 500;
+        color: rgba(255, 255, 255, 1);
+        line-height: 40px;
+      }
+    }
+
+    &-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: absolute;
+      bottom: 0;
+      background: #ffffff;
+      height: 60px;
+      width: 100%;
+
+      .-btn {
         width:179px;
         height:40px;
         background:rgba(54,219,164,1);
@@ -493,6 +529,7 @@
         font-weight:500;
         color:rgba(255,255,255,1);
         line-height:40px;
+        text-align: center;
       }
     }
   }

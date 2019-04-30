@@ -139,7 +139,7 @@ export default {
         this.openModal()
         return
       }
-      wx.navigateTo({
+      wx.reLaunch({
         url: `/pages/myWorks/main?id=${this.detailData.id}&name=${this.detailData.name}`
       });
     },

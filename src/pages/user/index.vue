@@ -22,8 +22,8 @@
               <div class="-item-left">
                 <div class="-item-title">
                   <img v-if="!item.isPlay" class="-img" src="https://pub.file.k12.vip/read/gerenzhuye/msfd-button-play copy.png"/>
-                  <img v-else class="-img" src="https://pub.file.k12.vip/2019/04/30/1123037383097708545.png"/>
-                  <span>{{item.coursename}}</span>
+                  <img v-else class="-img" src="https://pub.file.k12.vip/2019/04/30/1123118476090011649.png"/>
+                  <span :class="{'-item-color':item.isPlay}">{{item.coursename}}</span>
                 </div>
                 <button open-type='share' :data-item="item" class="-share-btn" @click.stop="stopPropagation">
                   <img class="-share-img" src="https://pub.file.k12.vip/read/gerenzhuye/zp-button-share.png"/>
@@ -330,6 +330,10 @@
             font-weight: 500;
             color: #324062;
             line-height: 22px;
+
+            .-item-color {
+              color: #FF5F0A
+            }
 
             .-img {
               display: inline-block;

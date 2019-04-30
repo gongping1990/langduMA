@@ -16,11 +16,11 @@
         </wux-circle>
         <text class="mask-text">资源正在加载···</text>
       </div>
-      <div class="mask-content"
+      <!-- <div class="mask-content"
            v-else>
         <div class="down-time">{{downTime}}</div>
         <text class="mask-text">请准备···</text>
-      </div>
+      </div> -->
     </div>
     <!-- <div class="introduce">
       <image :src="userInfo.headimgurl"
@@ -53,8 +53,10 @@
     <div class="control"
          v-if="!isStart">
       <text class="control-text">请阅读课文，准备朗读</text>
+      <div class="down-time control-btn"
+           v-if="downTime">{{downTime}}</div>
       <div class="control-btn"
-           v-if="isAuth"
+           v-else-if="isAuth"
            @tap="clickStart">
       </div>
       <button open-type="openSetting"
@@ -179,7 +181,7 @@ export default {
       disabled: false,
       showMask: false,
       percent: 0,
-      downTime: 3,
+      downTime: 0,
       timer: null,
       isStart: false,
       paused: false,
@@ -431,13 +433,14 @@ export default {
           } else {
             this.showMask = true
             this.percentOne = 100
-            this.isStart = true
             this.timer = setInterval(() => {
               let random = Math.floor(10 * Math.random())
               if (this.percent != 100) {
                 console.log(this.percent, Math.floor(10 * Math.random()))
                 this.percent = this.percent + random <= 100 ? this.percent + random : 100
               } else {
+                this.showMask = false
+                this.downTime = 3
                 clearInterval(this.timer)
                 this.donwTimeStart()
               }
@@ -454,12 +457,12 @@ export default {
         if (!this.downTime) {
           clearInterval(this.timer)
           this.$refs.read.setIndex()
-          this.downTime = 3
+          this.downTime = 0
           this.percent = 0
-          this.showMask = false
+          this.isStart = true
           setTimeout(() => {
             this.clickRecorderStart()
-          }, 1000);
+          }, 200);
         }
       }, 1000);
     },
@@ -591,6 +594,7 @@ export default {
   height: 100vh;
   background-color: #edfff8;
   line-height: 20px;
+
   &.isIos {
     .read-line {
       top: 204px;
@@ -801,17 +805,7 @@ export default {
       font-size: 12px;
       color: #fff;
     }
-    .down-time {
-      @include flex-center;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      font-weight: 600;
-      font-size: 22px;
-      color: #27dca3;
-      line-height: 30px;
-      background: #fff;
-    }
+
     .circle-text {
       font-size: 22px;
       font-weight: 600;
@@ -911,6 +905,17 @@ export default {
       margin-bottom: 120px;
       width: 64px;
       height: 64px;
+      &.down-time {
+        @include flex-center;
+        width: 64px;
+        height: 64px;
+        border-radius: 50%;
+        font-weight: 600;
+        font-size: 22px;
+        color: #fff;
+        line-height: 30px;
+        background: #36DBA4;
+      }
     }
   }
   .read-popup {

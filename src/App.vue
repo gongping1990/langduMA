@@ -137,7 +137,7 @@ button {
 }
 .card-mask {
   position: fixed;
-  left: 0;
+  right: 0;
   bottom: 54px;
   width: 58px;
   height: 74px;

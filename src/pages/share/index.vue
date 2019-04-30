@@ -192,7 +192,7 @@ export default {
       api.user.likeContent({
         id: this.$root.$mp.query.id
       }).then(({ data }) => {
-        this.getShareDetail();
+        this.getShareDetail(1);
         wx.showToast({
           title: "点赞成功",
           icon: "none",
@@ -234,28 +234,30 @@ export default {
         url: "/pages/popularityRank/main"
       });
     },
-    getShareDetail () {
+    getShareDetail (num) {
       this.isFetching = true;
       api.work.shareDetail({
         id: this.$root.$mp.query.id
       }).then(({ data }) => {
         this.shareInfo = data.resultData;
         this.isFetching = false;
-        this.init();
-        setTimeout(() => {
-          this.audioPlay()
-        }, 1000)
+        if (!num) {
+          this.init();
+          setTimeout(() => {
+            this.audioPlay()
+          }, 1000)
+        }
       }, () => {
         this.isFetching = false;
       });
     }
   },
   onHide () {
-
+    console.log(1)
     this.innerAudioContext.destroy()
   },
   onUnload () {
-
+    console.log(2)
     this.innerAudioContext.destroy()
   },
   onShareAppMessage () {

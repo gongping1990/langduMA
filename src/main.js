@@ -13,7 +13,7 @@ getApp().globalData = {
   audio: wx.createInnerAudioContext(),
   shareFn: function (data) {
     api.work.shared({
-      id: data
+      workId: data
     }).then();
   }
 }

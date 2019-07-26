@@ -573,6 +573,7 @@ export default {
   },
 
   onShareAppMessage () {
+    this.globalData.shareFn(this.workId)
     return {
       title: `我的孩子刚朗读了《${this.courseData.name}》，非常棒，请给TA点个赞吧！`,
       path: '/pages/share/main?id=' + this.workId,

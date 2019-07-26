@@ -113,7 +113,7 @@
 
     onShareAppMessage(options) {
       const item = options.target.dataset.item;
-
+      this.globalData.shareFn(item.id)
       return {
         title: `我的孩子刚朗读了《${item.coursename}》，非常棒，请给TA点个赞吧！`,
         path: "/pages/share/main?id=" + item.id,

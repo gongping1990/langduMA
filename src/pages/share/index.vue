@@ -253,14 +253,13 @@ export default {
     }
   },
   onHide () {
-    console.log(1)
     this.innerAudioContext.destroy()
   },
   onUnload () {
-    console.log(2)
     this.innerAudioContext.destroy()
   },
   onShareAppMessage () {
+    this.globalData.shareFn(this.$root.$mp.query.id)
     return {
       title: '[获课朗读]一线名师和你一起朗读',
       path: '/pages/index/main',

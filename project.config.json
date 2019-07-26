@@ -39,12 +39,12 @@
 			"list": []
 		},
 		"miniprogram": {
-			"current": 11,
+			"current": 0,
 			"list": [
 				{
 					"id": 0,
 					"name": "我的",
-					"pathName": "pages/otherUser/main",
+					"pathName": "pages/user/main",
 					"query": "userId=1107283166437564417",
 					"scene": null
 				},

@@ -182,6 +182,7 @@
     },
 
     onShareAppMessage() {
+      this.globalData.shareFn(this.isOpenMore ? this.popupItem.id : this.myInfo.workId)
       return {
         title: `我的孩子刚朗读了《${this.isOpenMore ? this.popupItem.coursename : this.queryInfo.name}》，非常棒，请给TA点个赞吧！`,
         path: `/pages/share/main?id=${this.isOpenMore ? this.popupItem.id : this.myInfo.workId}`,
